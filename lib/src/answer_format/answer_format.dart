@@ -13,6 +13,7 @@ import 'package:survey_kit/src/answer_format/agreement_answer_format.dart';
 import 'package:survey_kit/src/answer_format/single_choice_answer_format.dart';
 import 'package:survey_kit/src/answer_format/text_answer_format.dart';
 import 'package:survey_kit/src/answer_format/time_answer_formart.dart';
+import 'package:survey_kit/src/answer_format/api_call_answer_format.dart';
 import 'package:survey_kit/src/steps/predefined_steps/answer_format_not_defined_exception.dart';
 
 abstract class AnswerFormat {
@@ -46,6 +47,8 @@ abstract class AnswerFormat {
         return AgreementAnswerFormat.fromJson(json);
       case 'file':
         return ImageAnswerFormat.fromJson(json);
+      case 'api_call':
+        return APICallAnswerFormat.fromJson(json);
       default:
         throw AnswerFormatNotDefinedException();
     }

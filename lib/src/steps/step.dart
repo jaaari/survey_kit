@@ -30,6 +30,7 @@ abstract class Step {
 
   factory Step.fromJson(Map<String, dynamic> json) {
     final type = json['type'];
+    print('Step type: $type');
     if (type == 'intro') {
       return InstructionStep.fromJson(json);
     } else if (type == 'question') {

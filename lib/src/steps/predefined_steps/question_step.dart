@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:survey_kit/src/answer_format/answer_format.dart';
+import 'package:survey_kit/src/answer_format/api_call_answer_format.dart';
 import 'package:survey_kit/src/answer_format/boolean_answer_format.dart';
 import 'package:survey_kit/src/answer_format/date_answer_format.dart';
 import 'package:survey_kit/src/answer_format/double_answer_format.dart';
@@ -14,6 +15,7 @@ import 'package:survey_kit/src/answer_format/agreement_answer_format.dart';
 import 'package:survey_kit/src/answer_format/single_choice_answer_format.dart';
 import 'package:survey_kit/src/answer_format/text_answer_format.dart';
 import 'package:survey_kit/src/answer_format/time_answer_formart.dart';
+import 'package:survey_kit/src/result/question/api_call_result.dart';
 import 'package:survey_kit/src/result/question/boolean_question_result.dart';
 import 'package:survey_kit/src/result/question/date_question_result.dart';
 import 'package:survey_kit/src/result/question/double_question_result.dart';
@@ -30,6 +32,7 @@ import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/steps/identifier/step_identifier.dart';
 import 'package:survey_kit/src/steps/predefined_steps/answer_format_not_defined_exception.dart';
 import 'package:survey_kit/src/steps/step.dart';
+import 'package:survey_kit/src/views/api_call_view.dart';
 import 'package:survey_kit/src/views/boolean_answer_view.dart';
 import 'package:survey_kit/src/views/date_answer_view.dart';
 import 'package:survey_kit/src/views/double_answer_view.dart';
@@ -75,6 +78,7 @@ class QuestionStep extends Step {
   @override
   Widget createView({required QuestionResult? questionResult}) {
     final key = ObjectKey(this.stepIdentifier.id);
+    print('key: $key');
 
     switch (answerFormat.runtimeType) {
       case IntegerAnswerFormat:
@@ -145,10 +149,18 @@ class QuestionStep extends Step {
           result: questionResult as MultipleChoiceQuestionResult?,
         );
       case AgreementAnswerFormat:
+        print('loading agreement view');
         return AgreementAnswerView(
           key: key,
           questionStep: this,
           result: questionResult as AgreementQuestionResult?,
+        );
+      case APICallAnswerFormat:
+        print('loading API call view');
+        return APICallView(
+          key: key,
+          questionStep: this,
+          result: questionResult as APICallResult?,
         );
       case ImageAnswerFormat:
         return ImageAnswerView(
@@ -161,7 +173,10 @@ class QuestionStep extends Step {
     }
   }
 
-  factory QuestionStep.fromJson(Map<String, dynamic> json) =>
-      _$QuestionStepFromJson(json);
+  factory QuestionStep.fromJson(Map<String, dynamic> json) {
+    print("Deserializing QuestionStep: $json");
+    return _$QuestionStepFromJson(json);
+  }
+
   Map<String, dynamic> toJson() => _$QuestionStepToJson(this);
 }

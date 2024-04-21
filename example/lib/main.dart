@@ -20,7 +20,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp( 
       home: Scaffold(
         body: Container(
           color: Colors.white,
@@ -289,10 +289,11 @@ class _MyAppState extends State<MyApp> {
 
   Future<Task> getJsonTask() async {
     try {
+      print('Loading task from JSON...');
       final String taskJson =
           await rootBundle.loadString('assets/example_json.json');
       final Map<String, dynamic> taskMap = json.decode(taskJson);
-
+      print('Task loaded from JSON');
       return Task.fromJson(taskMap);
     } catch (e) {
       rethrow;
