@@ -1,4 +1,5 @@
 import 'package:survey_kit/src/result/question/agreement_question_result.dart';
+import 'package:survey_kit/src/result/question/api_call_result.dart';
 import 'package:survey_kit/src/result/question/boolean_question_result.dart';
 import 'package:survey_kit/src/result/question/date_question_result.dart';
 import 'package:survey_kit/src/result/question/double_question_result.dart';
@@ -65,6 +66,10 @@ class _Converter implements JsonConverter<List<QuestionResult>, Object> {
       } else if (qr is DateQuestionResult) {
         final qrJson = qr.toJson();
         qrJson['type'] = (DateQuestionResult).toString();
+        allQuestionResultsEncoded.add(qrJson);
+      } else if (qr is APICallResult) {
+        final qrJson = qr.toJson();
+        qrJson['type'] = (APICallResult).toString();
         allQuestionResultsEncoded.add(qrJson);
       } else if (qr is DoubleQuestionResult) {
         final qrJson = qr.toJson();

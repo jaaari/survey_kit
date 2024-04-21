@@ -33,11 +33,9 @@ abstract class Task {
   /// If not it will throw a [TaskNotDefinedException].
   factory Task.fromJson(Map<String, dynamic> json) {
     final type = json['type'];
-    print('Type: $type');
     if (type == 'ordered') {
       return OrderedTask.fromJson(json);
     } else if (type == 'navigable') {
-      print('NavigableTask.fromJson(json) ${NavigableTask.fromJson(json)}');
       return NavigableTask.fromJson(json);
     }
     throw TaskNotDefinedException();

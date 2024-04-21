@@ -35,6 +35,8 @@ class _MyAppState extends State<MyApp> {
                   final Task task = snapshot.data!;
                   return SurveyKit(
                     onResult: (SurveyResult result) {
+                      print('Survey finished!');
+                      print(jsonEncode(result.toJson()));
                       print(result.finishReason);
                       Navigator.pushNamed(context, '/');
                     },
