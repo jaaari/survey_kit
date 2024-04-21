@@ -12,6 +12,16 @@
             }
         },
         {
+            "type": "conditional",
+            "triggerStepIdentifier": {
+                "id": "15"
+            },
+            "values": {
+                "yes": "3",
+                "no": "2"
+            }
+        },
+        {
             "type": "direct",
             "triggerStepIdentifier": {
                 "id": "1"
@@ -84,7 +94,7 @@
             "title": "Call API",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://mocki.io/v1/780b9984-7d94-43c5-b8a3-2e67f04a678c"
+                "endpointUrl": "https://mocki.io/v1/b7a3fddd-d78d-4152-b1c7-41bf1cb60ee5"
             }
         },
         {
@@ -281,49 +291,6 @@
             "text": "Thanks for taking the survey, we will contact you soon!",
             "title": "Done!",
             "buttonText": "Restart"
-        },
-        {
-            "stepIdentifier": {
-                "id": "11"
-            },
-            "type": "question",
-            "title": "Pets",
-            "text": "What type of pet(s) do you have?",
-            "answerFormat": {
-                "type": "multiple",
-                "textChoices": [{
-                        "text": "Dog",
-                        "value": "Dog"
-                    },
-                    {
-                        "text": "Cat",
-                        "value": "Cat"
-                    },
-                    {
-                        "text": "Fish",
-                        "value": "Fish"
-                    },
-                    {
-                        "text": "Small Animal",
-                        "value": "Small Animal"
-                    }
-                ]
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "12"
-            },
-            "type": "question",
-            "title": "Upload a selfie",
-            "answerFormat": {
-                "type": "file",
-                "defaultValue": "https://www.maxicolor.com.br/wp-content/uploads/2019/11/placeholder-3x4-450x600.jpg",
-                "buttonText": "Selfie",
-                "useGallery": true,
-                "hintImage": "https://www.maxicolor.com.br/wp-content/uploads/2019/11/placeholder-3x4-450x600.jpg",
-                "hintTitle": "How the image should look"
-            }
         }
     ]
 }

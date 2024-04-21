@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:survey_kit/src/answer_format/text_choice.dart';
 import 'package:survey_kit/src/result/question/api_call_result.dart';
 import 'package:survey_kit/src/answer_format/api_call_answer_format.dart';
 import 'dart:convert';
@@ -25,13 +26,12 @@ class APICallView extends StatefulWidget {
 class _APICallViewState extends State<APICallView> {
   late final DateTime _startDate;
   late final APICallAnswerFormat _apiCallAnswerFormat;
-  Map? _apiResponse;
+  List<TextChoice> _apiResponse = [];
 
   @override
   void initState() {
     super.initState();
-    _apiCallAnswerFormat =
-        widget.questionStep.answerFormat as APICallAnswerFormat;
+    _apiCallAnswerFormat = widget.questionStep.answerFormat as APICallAnswerFormat;
     _startDate = DateTime.now();
     _fetchData();
   }
@@ -41,8 +41,9 @@ class _APICallViewState extends State<APICallView> {
       print('API call to ${_apiCallAnswerFormat.endpointUrl}');
       final response = await http.get(Uri.parse(_apiCallAnswerFormat.endpointUrl));
       if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
         setState(() {
-          _apiResponse = json.decode(response.body);
+          _apiResponse = data.map((item) => TextChoice.fromJson(item as Map<String, dynamic>)).toList();
         });
       } else {
         throw Exception('Failed to load data from API');
@@ -60,7 +61,7 @@ class _APICallViewState extends State<APICallView> {
         id: widget.questionStep.stepIdentifier,
         startDate: _startDate,
         endDate: DateTime.now(),
-        valueIdentifier: 'API response',
+        valueIdentifier: _apiResponse.map((choice) => choice.value).join(','),
         result: _apiResponse,
       ),
       isValid: true,
@@ -69,11 +70,9 @@ class _APICallViewState extends State<APICallView> {
         style: Theme.of(context).textTheme.displayMedium,
         textAlign: TextAlign.center,
       ),
-      child: _apiResponse == null
+      child: _apiResponse.isEmpty
           ? Center(child: Text('Loading...'))
-          : SingleChildScrollView(
-              child: Text(_apiResponse.toString()),
-            ),
+          : Center(child: Text('Received ${_apiResponse.length} items from API'))
     );
   }
 }

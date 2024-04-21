@@ -78,7 +78,6 @@ class QuestionStep extends Step {
   @override
   Widget createView({required QuestionResult? questionResult}) {
     final key = ObjectKey(this.stepIdentifier.id);
-    print('key: $key');
 
     switch (answerFormat.runtimeType) {
       case IntegerAnswerFormat:
@@ -149,14 +148,12 @@ class QuestionStep extends Step {
           result: questionResult as MultipleChoiceQuestionResult?,
         );
       case AgreementAnswerFormat:
-        print('loading agreement view');
         return AgreementAnswerView(
           key: key,
           questionStep: this,
           result: questionResult as AgreementQuestionResult?,
         );
       case APICallAnswerFormat:
-        print('loading API call view');
         return APICallView(
           key: key,
           questionStep: this,
@@ -174,7 +171,6 @@ class QuestionStep extends Step {
   }
 
   factory QuestionStep.fromJson(Map<String, dynamic> json) {
-    print("Deserializing QuestionStep: $json");
     return _$QuestionStepFromJson(json);
   }
 
