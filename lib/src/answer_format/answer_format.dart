@@ -20,6 +20,7 @@ abstract class AnswerFormat {
   const AnswerFormat();
 
   factory AnswerFormat.fromJson(Map<String, dynamic> json) {
+    print('AnswerFormat type: ${json['type']}');
     switch (json['type'] as String) {
       case 'bool':
         return BooleanAnswerFormat.fromJson(json);

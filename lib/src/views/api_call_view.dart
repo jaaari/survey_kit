@@ -37,16 +37,30 @@ class _APICallViewState extends State<APICallView> {
   }
 
   Future<void> _fetchData() async {
+    var headers = {
+      'Content-Type': 'application/json'
+    };
+
     try {
-      print('API call to ${_apiCallAnswerFormat.endpointUrl}');
-      final response = await http.get(Uri.parse(_apiCallAnswerFormat.endpointUrl));
+      var url = Uri.parse(_apiCallAnswerFormat.endpointUrl);
+      var parameters = json.encode(_apiCallAnswerFormat.parameters);
+      http.Response response;
+
+      print('API call to ${_apiCallAnswerFormat.endpointUrl} with parameters: $parameters');
+
+      if (_apiCallAnswerFormat.requestType == "POST") {
+        response = await http.post(url, headers: headers, body: parameters);
+      } else {
+        response = await http.get(url, headers: headers);
+      }
+
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
           _apiResponse = data.map((item) => TextChoice.fromJson(item as Map<String, dynamic>)).toList();
         });
       } else {
-        throw Exception('Failed to load data from API');
+        throw Exception('Failed to load data from API with status code ${response.statusCode}');
       }
     } catch (e) {
       print('API call error: $e');
