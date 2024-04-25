@@ -295,11 +295,11 @@ class _MyAppState extends State<MyApp> {
       print('Loading task from JSON...');
       // initialize global state manager (add creator_user_id to global state)
       final Map<String, dynamic> data = <String, dynamic>{
-        'creator_user_id': '1234',
+        'user_id': 'VUuZfqDLnsZissgtTobpdorbppC2',
       };
       GlobalStateManager().updateData(data);
       final String taskJson =
-          await rootBundle.loadString('assets/example_json.json');
+          await rootBundle.loadString('adult_customizer_flow.json');
       final Map<String, dynamic> taskMap = json.decode(taskJson);
       print('Task loaded from JSON');
       return Task.fromJson(taskMap);

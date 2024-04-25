@@ -1,0 +1,280 @@
+{
+    "id": "adult_customizer_flow",
+    "type": "navigable",
+    "rules": [
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": { "id": "q1" },
+            "values": {
+                "POSITIVE": "q2",
+                "NEGATIVE": "q2"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": { "id": "q2" },
+            "values": {
+                "romance": "a1"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": { "id": "q3" },
+            "destinationStepIdentifier": {
+                "id": "q5"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": { "id": "a1" },
+            "values": {
+                "true": "q3",
+                "false": "q5"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": { "id": "q5" },
+            "values": {
+                "POSITIVE": "a2",
+                "NEGATIVE": "q8"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": { "id": "q8" },
+            "values": {
+                "POSITIVE": "a4",
+                "NEGATIVE": "a4"
+            }
+        }
+    ],
+    "steps": [
+        {
+            "stepIdentifier": {
+                "id": "0"
+            },
+            "type": "intro",
+            "title": "Welcome to the\nAudiobook\nTest Configurator",
+            "text": "Get ready for a bunch of super random questions!",
+            "buttonText": "Let's go!"
+        },
+        {
+            "stepIdentifier": { "id": "q1" },
+            "type": "question",
+            "title": "Is this audiobook for you or a child?",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "A Child",
+                "negativeAnswer": "Me",
+                "result": "POSITIVE"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q2" },
+            "type": "question",
+            "title": "What genre should your story be?",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    { "text": "Adventure", "value": "adventure" },
+                    { "text": "Fantasy", "value": "fantasy" },
+                    { "text": "Science Fiction", "value": "science fiction" },
+                    { "text": "Romance", "value": "romance" },
+                    { "text": "Mystery", "value": "mystery" },
+                    { "text": "Horror", "value": "horror" },
+                    { "text": "Comedy", "value": "comedy" },
+                    { "text": "Tragedy", "value": "tragedy" },
+                    { "text": "Historical Fiction", "value": "historical fiction" },
+                    { "text": "Realism", "value": "realism" },
+                    { "text": "Thriller", "value": "thriller" }
+                ]
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q5" },
+            "type": "question",
+            "title": "Do you want to pick the story characters manually? (CURRENTLY BOTH YES AND NO LEAD TO THE SAME RESULT)",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Yes",
+                "negativeAnswer": "No, choose for me!",
+                "result": "POSITIVE"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "a1" },
+            "type": "question",
+            "title": "Checking User Age",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/check_if_user_is_adult",
+                "parameters": {"creator_user_id": "$user_id"},
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q3" },
+            "type": "question",
+            "title": "Should your story be explicit?",
+            "relatedParameter": "user_input_explicit",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Yes please ;)",
+                "negativeAnswer": "No waay!",
+                "result": "POSITIVE"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "a2" },
+            "type": "question",
+            "title": "Getting existing characters",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/get_existing_characters",
+                "parameters": {"creator_user_id": "$user_id"},
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q8" },
+            "type": "question",
+            "title": "Do you have a clear vision for the story?",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Yes, I have something in mind!",
+                "negativeAnswer": "No",
+                "result": "POSITIVE"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q9" },
+            "type": "question",
+            "title": "Where should the story take place?",
+            "text": "",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5,
+                "placeholder": "A {genre} story about..."
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q10" },
+            "type": "question",
+            "title": "When does your story happen?",
+            "text": "E.g. 2020, 19th century, future, etc.",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q11" },
+            "type": "question",
+            "title": "What is your vision?",
+            "text": "A {genre} story about...",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": { "id": "a4" },
+            "type": "question",
+            "title": "Generating Ideas",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/generate_ideas_adult",
+                "parameters": {"creator_user_id": "$user_id", "user_input_genre": "$user_input_genre", "user_input_explicit": "$user_input_explicit", "user_input_character_ids": "$user_input_character_ids", "user_input_main_character_id": "$user_input_main_character_id", "wanted_number_of_ideas": 5},
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q12" },
+            "type": "question",
+            "title": "Choose an idea for your story:",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "$generated_ideas"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q13" },
+            "type": "question",
+            "title": "If you want you can edit the story here:",
+            "text": "",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5,
+                "placeholder": "$generated_idea"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q14" },
+            "type": "question",
+            "title": "How long should the audiobook circa be?",
+            "answerFormat": {
+                "type": "scale",
+                "step": 0.5,
+                "minimumValue": 1,
+                "maximumValue": 4,
+                "defaultValue": 2.5,
+                "minimumValueDescription": "1h",
+                "maximumValueDescription": "4h"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q15" },
+            "type": "question",
+            "title": "How complex should the language be?",
+            "answerFormat": {
+                "type": "scale",
+                "step": 1,
+                "minimumValue": 1,
+                "maximumValue": 10,
+                "defaultValue": 4,
+                "minimumValueDescription": "simple",
+                "maximumValueDescription": "fancy and complex"
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q16" },
+            "type": "question",
+            "title": "Who do you want to narrate your audiobook (should be a custom type that plays sample on click)?",
+            "text": "",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    { "text": "Onyx", "value": "onyx" },
+                    { "text": "Fable", "value": "fable" },
+                    { "text": "Echo", "value": "echo"}
+                ]
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q17" },
+            "type": "question",
+            "title": "What language should the audiobook be in?",
+            "text": "",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    { "text": "English", "value": "english" },
+                    { "text": "German", "value": "german" },
+                    { "text": "French", "value": "french" },
+                    { "text": "Spanish", "value": "spanish" },
+                    { "text": "Italian", "value": "italian" },
+                    { "text": "Finnish", "value": "finnish" }
+                ]
+            }
+        },
+        {
+            "stepIdentifier": { "id": "q18" },
+            "type": "completion",
+            "text": "Here could be a overview with links back to the questions.",
+            "title": "Done!",
+            "buttonText": "Generate Audiobook!"
+        }
+    ]
+}
