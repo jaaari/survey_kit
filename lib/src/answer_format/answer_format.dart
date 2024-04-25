@@ -16,19 +16,17 @@ import 'package:survey_kit/src/answer_format/time_answer_formart.dart';
 import 'package:survey_kit/src/answer_format/api_call_answer_format.dart';
 import 'package:survey_kit/src/steps/predefined_steps/answer_format_not_defined_exception.dart';
 
-import 'package:survey_kit/src/views/global_state_manager.dart';
 
 abstract class AnswerFormat {
   const AnswerFormat();
 
   factory AnswerFormat.fromJson(Map<String, dynamic> json) {
     print('AnswerFormat type: ${json['type']}');
-    // This loop checks for dynamic references in json and replaces them with data from GlobalStateManager
-    //json = resolveDynamicReferences(json);
-
     switch (json['type'] as String) {
       case 'bool':
         return BooleanAnswerFormat.fromJson(json);
+      case 'api_call':
+        return APICallAnswerFormat.fromJson(json);
       case 'integer':
         return IntegerAnswerFormat.fromJson(json);
       case 'double':
@@ -53,37 +51,9 @@ abstract class AnswerFormat {
         return AgreementAnswerFormat.fromJson(json);
       case 'file':
         return ImageAnswerFormat.fromJson(json);
-      case 'api_call':
-        return APICallAnswerFormat.fromJson(json);
       default:
         throw AnswerFormatNotDefinedException();
     }
   }
-
   Map<String, dynamic> toJson();
-
-    static Map<String, dynamic> resolveDynamicReferences(Map<String, dynamic> json) {
-    final manager = GlobalStateManager();
-    var newJson = <String, dynamic>{};
-
-    json.forEach((key, value) {
-      if (value is String && value.startsWith('\$')) {
-        print("Resolving dynamic reference: $value");
-        String dynamicKey = value.substring(1);
-        dynamic valueFromGlobal = manager.getData(dynamicKey);
-        if (valueFromGlobal != null) {
-          newJson[key] = valueFromGlobal;
-        } else {
-          newJson[key] = value; // Keep original value if not found in global state
-        }
-      } else if (value is Map) {
-        // Ensure that the map is cast to Map<String, dynamic> before recursion
-        newJson[key] = resolveDynamicReferences(Map<String, dynamic>.from(value));
-      } else {
-        newJson[key] = value;
-      }
-    });
-    return newJson;
-  }
-
 }

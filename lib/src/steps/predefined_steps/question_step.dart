@@ -57,6 +57,8 @@ class QuestionStep extends Step {
   final String text;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final Widget content;
+  @JsonKey(defaultValue: '')
+  final String relatedParameter;
   final AnswerFormat answerFormat;
 
   QuestionStep({
@@ -66,6 +68,7 @@ class QuestionStep extends Step {
     bool showAppBar = true,
     this.title = '',
     this.text = '',
+    this.relatedParameter = '',
     this.content = const SizedBox.shrink(),
     required this.answerFormat,
   }) : super(

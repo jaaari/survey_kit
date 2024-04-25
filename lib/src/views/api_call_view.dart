@@ -42,6 +42,7 @@ class _APICallViewState extends State<APICallView> {
   Map<String, dynamic> _resolveParameters(Map<String, dynamic> parameters) {
     var resolvedParameters = Map<String, dynamic>.from(parameters);
     resolvedParameters.forEach((key, value) {
+      print("Resolving parameter: $key with value: $value");
       if (value is String && value.startsWith('\$')) {
         var dynamicKey = value.substring(1); // Remove the '$'
         resolvedParameters[key] =

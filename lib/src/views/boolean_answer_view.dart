@@ -4,6 +4,7 @@ import 'package:survey_kit/src/result/question/boolean_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/selection_list_tile.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
 
 class BooleanAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -32,6 +33,18 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
         _answerFormat.defaultValue ??
         _answerFormat.result;
     _startDate = DateTime.now();
+    _onAnswerChanged(_result);
+  }
+
+  void _onAnswerChanged(BooleanResult? result) {
+    print("tapped a boolean answer");
+    Map<String, dynamic> _resultMap = {
+      widget.questionStep.relatedParameter: result == BooleanResult.POSITIVE
+    };
+    GlobalStateManager().updateData(_resultMap);
+    Map<String, dynamic> _allData = GlobalStateManager().getAllData();
+    print("relatedParameter: ${widget.questionStep.relatedParameter}");
+    print("Global state: $_allData");
   }
 
   @override
@@ -82,6 +95,7 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
                     _result = BooleanResult.POSITIVE;
                   }
                   setState(() {});
+                  _onAnswerChanged(_result);
                 },
                 isSelected: _result == BooleanResult.POSITIVE,
               ),
@@ -94,6 +108,7 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
                     _result = BooleanResult.NEGATIVE;
                   }
                   setState(() {});
+                  _onAnswerChanged(_result);
                 },
                 isSelected: _result == BooleanResult.NEGATIVE,
               ),
