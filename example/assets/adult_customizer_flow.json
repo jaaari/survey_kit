@@ -1,6 +1,20 @@
 {
     "id": "adult_customizer_flow",
     "type": "navigable",
+    "initialValues": {
+        "user_input_target_audience_is_child": false,
+        "user_input_genre": "",
+        "user_input_explicit": false,
+        "user_input_story_place": "",
+        "user_input_story_time": "",
+        "user_input_idea": "",
+        "user_input_target_duration": 2.5,
+        "user_input_language_complexity": 4,
+        "user_input_narrator_voice": "",
+        "user_input_language": "english",
+        "user_input_character_ids": [],
+        "user_input_main_character_id": ""
+    },
     "rules": [
         {
             "type": "conditional",
@@ -62,6 +76,7 @@
         {
             "stepIdentifier": { "id": "q1" },
             "type": "question",
+            "relatedParameter": "user_input_target_audience_is_child",
             "title": "Is this audiobook for you or a child?",
             "answerFormat": {
                 "type": "bool",
@@ -73,6 +88,7 @@
         {
             "stepIdentifier": { "id": "q2" },
             "type": "question",
+            "relatedParameter": "user_input_genre",
             "title": "What genre should your story be?",
             "answerFormat": {
                 "type": "single",
@@ -105,6 +121,7 @@
         {
             "stepIdentifier": { "id": "a1" },
             "type": "question",
+            "relatedParameter": "is_adult",
             "title": "Checking User Age",
             "answerFormat": {
                 "type": "api_call",
@@ -150,6 +167,7 @@
         {
             "stepIdentifier": { "id": "q9" },
             "type": "question",
+            "relatedParameter": "user_input_story_place",
             "title": "Where should the story take place?",
             "text": "",
             "answerFormat": {
@@ -161,6 +179,7 @@
         {
             "stepIdentifier": { "id": "q10" },
             "type": "question",
+            "relatedParameter": "user_input_story_time",
             "title": "When does your story happen?",
             "text": "E.g. 2020, 19th century, future, etc.",
             "answerFormat": {
@@ -171,6 +190,7 @@
         {
             "stepIdentifier": { "id": "q11" },
             "type": "question",
+            "relatedParameter": "user_input_idea",
             "title": "What is your vision?",
             "text": "A {genre} story about...",
             "answerFormat": {
@@ -192,6 +212,7 @@
         {
             "stepIdentifier": { "id": "q12" },
             "type": "question",
+            "relatedParameter": "user_input_idea",
             "title": "Choose an idea for your story:",
             "answerFormat": {
                 "type": "single",
@@ -202,6 +223,7 @@
         {
             "stepIdentifier": { "id": "q13" },
             "type": "question",
+            "relatedParameter": "user_input_idea",
             "title": "If you want you can edit the story here:",
             "text": "",
             "answerFormat": {
@@ -213,6 +235,7 @@
         {
             "stepIdentifier": { "id": "q14" },
             "type": "question",
+            "relatedParameter": "user_input_target_duration",
             "title": "How long should the audiobook circa be?",
             "answerFormat": {
                 "type": "scale",
@@ -227,6 +250,7 @@
         {
             "stepIdentifier": { "id": "q15" },
             "type": "question",
+            "relatedParameter": "user_input_language_complexity",
             "title": "How complex should the language be?",
             "answerFormat": {
                 "type": "scale",
@@ -241,6 +265,7 @@
         {
             "stepIdentifier": { "id": "q16" },
             "type": "question",
+            "relatedParameter": "user_input_narrator_voice",
             "title": "Who do you want to narrate your audiobook (should be a custom type that plays sample on click)?",
             "text": "",
             "answerFormat": {
@@ -255,6 +280,7 @@
         {
             "stepIdentifier": { "id": "q17" },
             "type": "question",
+            "relatedParameter": "user_input_language",
             "title": "What language should the audiobook be in?",
             "text": "",
             "answerFormat": {

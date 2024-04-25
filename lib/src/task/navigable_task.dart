@@ -3,6 +3,7 @@ import 'package:survey_kit/src/steps/step.dart';
 import 'package:survey_kit/src/steps/identifier/step_identifier.dart';
 import 'package:survey_kit/src/task/task.dart';
 import 'package:survey_kit/src/task/identifier/task_identifier.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
 
 /// Definition of task which can handle routing between [Tasks]
 ///
@@ -17,11 +18,12 @@ class NavigableTask extends Task {
     List<Step> steps = const [],
     Step? initialStep,
     Map<StepIdentifier, NavigationRule>? navigationRules,
+    Map<String, dynamic>? initalValues,
   })  : this.navigationRules = navigationRules ?? {},
         super(
           id: id,
           steps: steps,
-          initalStep: initialStep,
+          initalStep: initialStep
         );
 
   /// Adds a [NavigationRule] to the [navigationRule] Map
@@ -41,6 +43,16 @@ class NavigableTask extends Task {
 
   factory NavigableTask.fromJson(Map<String, dynamic> json) {
     final Map<StepIdentifier, NavigationRule> navigationRules = {};
+
+    print("initialValues: ${json['initialValues']}");
+    // add initial values to global state
+    if (json['initialValues'] != null) {
+      final initialValues = json['initialValues'] as Map<String, dynamic>;
+      initialValues.forEach((key, value) {
+        GlobalStateManager().updateData({key: value});
+      });
+    }
+    print("Global state after adding initial values: ${GlobalStateManager().getAllData()}");
 
     if (json['rules'] != null) {
       final rules = json['rules'] as List;
@@ -66,5 +78,6 @@ class NavigableTask extends Task {
         'id': id.toJson(),
         'steps': steps.map((step) => step.toJson()).toList(),
         'navigationRules': navigationRules,
+        'initialValues': GlobalStateManager().getAllData(),
       };
 }

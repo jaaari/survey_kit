@@ -50,6 +50,21 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
     if (_selectedChoice == null && _choices.isNotEmpty) {
       _selectedChoice = _choices.first;
     }
+
+    _onAnswerChanged(_selectedChoice?.value ?? '');
+  }
+
+  void _onAnswerChanged(String selectedValue) {
+    print("tapped a single choice answer");
+    if (widget.questionStep.relatedParameter == "") {
+      return;
+    }
+    Map<String, dynamic> _resultMap = {
+      widget.questionStep.relatedParameter: selectedValue};
+    GlobalStateManager().updateData(_resultMap);
+    Map<String, dynamic> _allData = GlobalStateManager().getAllData();
+    print("relatedParameter: ${widget.questionStep.relatedParameter}");
+    print("Global state: $_allData");
   }
 
   @override
@@ -93,6 +108,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
                       setState(() {
                         _selectedChoice = (_selectedChoice == tc) ? null : tc;
                       });
+                      _onAnswerChanged(_selectedChoice?.value ?? '');
                     },
                     isSelected: _selectedChoice == tc,
                   );

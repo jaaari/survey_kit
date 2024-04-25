@@ -38,6 +38,9 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
 
   void _onAnswerChanged(BooleanResult? result) {
     print("tapped a boolean answer");
+    if (widget.questionStep.relatedParameter == "") {
+      return;
+    }
     Map<String, dynamic> _resultMap = {
       widget.questionStep.relatedParameter: result == BooleanResult.POSITIVE
     };

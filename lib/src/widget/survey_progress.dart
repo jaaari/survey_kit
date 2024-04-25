@@ -45,7 +45,7 @@ class _SurveyProgressState extends State<SurveyProgress> {
                         return AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.linear,
-                          width: (state.currentStepIndex + 1) /
+                          width: (state.questionResults.length + 1) /
                               state.stepCount *
                               constraints.maxWidth,
                           height: progressbarConfiguration.height,

@@ -3,6 +3,7 @@ import 'package:survey_kit/src/answer_format/scale_answer_format.dart';
 import 'package:survey_kit/src/result/question/scale_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
 
 class ScaleAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -29,6 +30,21 @@ class _ScaleAnswerViewState extends State<ScaleAnswerView> {
     _scaleAnswerFormat = widget.questionStep.answerFormat as ScaleAnswerFormat;
     _sliderValue = widget.result?.result ?? _scaleAnswerFormat.defaultValue;
     _startDate = DateTime.now();
+    _onAnswerChanged(_sliderValue);
+  }
+
+  void _onAnswerChanged(double value) {
+    print("tapped a scale answer");
+    if (widget.questionStep.relatedParameter == "") {
+      return;
+    }
+    Map<String, dynamic> _resultMap = {
+      widget.questionStep.relatedParameter: value,
+    };
+    GlobalStateManager().updateData(_resultMap);
+    Map<String, dynamic> _allData = GlobalStateManager().getAllData();
+    print("relatedParameter: ${widget.questionStep.relatedParameter}");
+    print("Global state: $_allData");
   }
 
   @override
@@ -118,6 +134,7 @@ class _ScaleAnswerViewState extends State<ScaleAnswerView> {
                         setState(() {
                           _sliderValue = value;
                         });
+                        _onAnswerChanged(_sliderValue);
                       },
                       min: _scaleAnswerFormat.minimumValue,
                       max: _scaleAnswerFormat.maximumValue,
