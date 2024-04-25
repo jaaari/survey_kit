@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide Step;
 import 'package:flutter/services.dart';
 import 'package:survey_kit/survey_kit.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -292,6 +293,11 @@ class _MyAppState extends State<MyApp> {
   Future<Task> getJsonTask() async {
     try {
       print('Loading task from JSON...');
+      // initialize global state manager (add creator_user_id to global state)
+      final Map<String, dynamic> data = <String, dynamic>{
+        'creator_user_id': '1234',
+      };
+      GlobalStateManager().updateData(data);
       final String taskJson =
           await rootBundle.loadString('assets/example_json.json');
       final Map<String, dynamic> taskMap = json.decode(taskJson);

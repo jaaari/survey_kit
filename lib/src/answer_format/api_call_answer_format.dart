@@ -6,7 +6,7 @@ part 'api_call_answer_format.g.dart';
 @JsonSerializable()
 class APICallAnswerFormat implements AnswerFormat {
   final String endpointUrl;
-  final Map parameters;
+  final Map<String, dynamic> parameters;
   final String requestType;
 
   const APICallAnswerFormat({

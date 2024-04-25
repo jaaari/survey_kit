@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:survey_kit/src/answer_format/single_choice_answer_format.dart';
-import 'package:survey_kit/src/answer_format/text_choice.dart';
-import 'package:survey_kit/src/result/question/single_choice_question_result.dart';
-import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
-import 'package:survey_kit/src/views/widget/selection_list_tile.dart';
-import 'package:survey_kit/src/views/widget/step_view.dart';
+import 'package:survey_kit/survey_kit.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
 
 class SingleChoiceAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -24,15 +20,36 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   late final DateTime _startDate;
   late final SingleChoiceAnswerFormat _singleChoiceAnswerFormat;
   TextChoice? _selectedChoice;
+  List<TextChoice> _choices = [];
 
   @override
   void initState() {
     super.initState();
-    _singleChoiceAnswerFormat =
-        widget.questionStep.answerFormat as SingleChoiceAnswerFormat;
-    _selectedChoice =
-        widget.result?.result ?? _singleChoiceAnswerFormat.defaultSelection;
+    _singleChoiceAnswerFormat = widget.questionStep.answerFormat as SingleChoiceAnswerFormat;
+    _selectedChoice = widget.result?.result ?? _singleChoiceAnswerFormat.defaultSelection;
     _startDate = DateTime.now();
+    print("SingleChoiceAnswerView: Selected choice: $_selectedChoice");
+    _initChoices();
+  }
+
+  void _initChoices() {
+    print("SingleChoiceAnswerView: Initializing choices");
+    print("_singleChoiceAnswerFormat.textChoices.isNotEmpty = ${_singleChoiceAnswerFormat.textChoices.isNotEmpty}");
+    if (_singleChoiceAnswerFormat.textChoices.isNotEmpty) {
+      print('SingleChoiceAnswerView: Using textChoices');
+      _choices = _singleChoiceAnswerFormat.textChoices;
+    } else if (_singleChoiceAnswerFormat.dynamicTextChoices != "") {
+      var manager = GlobalStateManager();
+      var dynamicChoices = manager.getData(_singleChoiceAnswerFormat.dynamicTextChoices);
+      print('SingleChoiceAnswerView: Using dynamicTextChoices: $dynamicChoices');
+      if (dynamicChoices != null && dynamicChoices is List) {
+        _choices = dynamicChoices.map<TextChoice>((choice) => TextChoice.fromJson(choice)).toList();
+      }
+    }
+    // Select default choice if not set
+    if (_selectedChoice == null && _choices.isNotEmpty) {
+      _selectedChoice = _choices.first;
+    }
   }
 
   @override
@@ -68,25 +85,18 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
             ),
             Column(
               children: [
-                Divider(
-                  color: Colors.grey,
-                ),
-                ..._singleChoiceAnswerFormat.textChoices.map(
-                  (TextChoice tc) {
-                    return SelectionListTile(
-                      text: tc.text,
-                      onTap: () {
-                        if (_selectedChoice == tc) {
-                          _selectedChoice = null;
-                        } else {
-                          _selectedChoice = tc;
-                        }
-                        setState(() {});
-                      },
-                      isSelected: _selectedChoice == tc,
-                    );
-                  },
-                ).toList(),
+                Divider(color: Colors.grey),
+                ..._choices.map((TextChoice tc) {
+                  return SelectionListTile(
+                    text: tc.text,
+                    onTap: () {
+                      setState(() {
+                        _selectedChoice = (_selectedChoice == tc) ? null : tc;
+                      });
+                    },
+                    isSelected: _selectedChoice == tc,
+                  );
+                }).toList(),
               ],
             ),
           ],

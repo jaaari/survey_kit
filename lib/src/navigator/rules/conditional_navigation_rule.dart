@@ -8,6 +8,7 @@ class ConditionalNavigationRule implements NavigationRule {
 
   factory ConditionalNavigationRule.fromJson(Map<String, dynamic> json) {
     final inputValues = json['values'] as Map<String, dynamic>;
+    print("checking inputValues: $inputValues");
     return ConditionalNavigationRule(
       resultToStepIdentifierMapper: (input) {
         for (final MapEntry entry in inputValues.entries) {

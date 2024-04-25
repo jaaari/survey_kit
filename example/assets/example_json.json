@@ -4,17 +4,17 @@
     "rules": [
         {
             "type": "conditional",
-            "triggerStepIdentifier": { "id": "1" },
+            "triggerStepIdentifier": { "id": "a1" },
             "values": {
                 "romance": "91",
-                "else": "92"
+                "adventure": "92"
             }
         },
         {
             "type": "conditional",
             "triggerStepIdentifier": { "id": "91" },
             "values": {
-                "false": "92",
+                "adventure": "92",
                 "true": "2"
             }
         }
@@ -30,7 +30,7 @@
             "buttonText": "Let's go!"
         },
         {
-            "stepIdentifier": { "id": "1" },
+            "stepIdentifier": { "id": "a1" },
             "type": "question",
             "title": "What genre should your story be?",
             "answerFormat": {
@@ -46,14 +46,25 @@
         {
             "stepIdentifier": { "id": "91" },
             "type": "question",
-            "title": "Check if user is at least 18.",
+            "title": "Getting suggested genres..",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/check_if_user_is_adult",
-                "parameters": {
-                    "user_id": "VUuZfqDLnsZissgtTobpdorbppC2"
-                },
-                "requestType": "POST"
+                "endpointUrl": "https://mocki.io/v1/9810575c-80cc-4c56-8d92-54a030b2d385",
+                "parameters": {"creator_user_id": "$creator_user_id"},
+                "requestType": "GET"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "77"
+            },
+            "type": "question",
+            "title": "Testing..",
+            "text": "Test if we can dynamically load options...",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "suggested_genres"
             }
         },
         {
@@ -62,8 +73,8 @@
             "title": "Should the story be explicit? (18+)",
             "answerFormat": {
                 "type": "bool",
-                "positiveAnswer": "Yes",
-                "negativeAnswer": "No",
+                "positiveAnswer": "The other Value is the value of the variable is_adult from the previous step.",
+                "negativeAnswer": "$is_adult",
                 "result": "NEGATIVE"
             }
         },
@@ -86,6 +97,19 @@
                     {"text": "a small, quiet town", "value": "a small, quiet town"},
                     {"text": "a dark forest", "value": "a dark forest"}
                 ]
+            }
+        },
+        {
+            "stepIdentifier": { "id": "91" },
+            "type": "question",
+            "title": "Check if user is at least 18.",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/check_if_user_is_adult",
+                "parameters": {
+                    "creator_user_id": "VUuZfqDLnsZissgtTobpdorbppC2"
+                },
+                "requestType": "POST"
             }
         },
         {
