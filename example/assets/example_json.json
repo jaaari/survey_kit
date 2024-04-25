@@ -17,6 +17,14 @@
                 "adventure": "92",
                 "true": "2"
             }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": { "id": "2" },
+            "values": {
+                "POSITIVE": "0",
+                "NEGATIVE": "3"
+            }
         }
     ],
     "steps": [
@@ -28,6 +36,17 @@
             "title": "Welcome to the\nAudiobook\nTest Configurator",
             "text": "Get ready for a bunch of super random questions!",
             "buttonText": "Let's go!"
+        },
+        {
+            "stepIdentifier": { "id": "2" },
+            "type": "question",
+            "title": "Should the story be explicit? (18+)",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Bli bla blu, I am an adult!",
+                "negativeAnswer": "Nope, I am a child!",
+                "result": "NEGATIVE"
+            }
         },
         {
             "stepIdentifier": { "id": "a1" },
@@ -65,17 +84,6 @@
                 "type": "single",
                 "textChoices": [],
                 "dynamicTextChoices": "suggested_genres"
-            }
-        },
-        {
-            "stepIdentifier": { "id": "2" },
-            "type": "question",
-            "title": "Should the story be explicit? (18+)",
-            "answerFormat": {
-                "type": "bool",
-                "positiveAnswer": "The other Value is the value of the variable is_adult from the previous step.",
-                "negativeAnswer": "$is_adult",
-                "result": "NEGATIVE"
             }
         },
         {

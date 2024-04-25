@@ -43,9 +43,9 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
         startDate: _startDate,
         endDate: DateTime.now(),
         valueIdentifier: _result == BooleanResult.POSITIVE
-            ? _answerFormat.positiveAnswer
+            ? "POSITIVE"
             : _result == BooleanResult.NEGATIVE
-                ? _answerFormat.negativeAnswer
+                ? "NEGATIVE"
                 : '',
         result: _result,
       ),
