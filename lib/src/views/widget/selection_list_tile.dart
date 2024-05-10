@@ -4,12 +4,14 @@ class SelectionListTile extends StatelessWidget {
   final String text;
   final Function onTap;
   final bool isSelected;
+  final String? image;  // Optional parameter for image URL
 
   const SelectionListTile({
     Key? key,
     required this.text,
     required this.onTap,
     this.isSelected = false,
+    this.image,  // Accepting an image URL
   }) : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class SelectionListTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: ListTile(
+            leading: image != null ? Image.network(image!) : null,  // Display image if available
             title: Text(
               text,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(

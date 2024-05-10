@@ -18,29 +18,37 @@
     "rules": [
         {
             "type": "conditional",
-            "triggerStepIdentifier": { "id": "q1" },
+            "triggerStepIdentifier": {
+                "id": "q1"
+            },
             "values": {
-                "POSITIVE": "q2",
+                "POSITIVE": "q19",
                 "NEGATIVE": "q2"
             }
         },
         {
             "type": "conditional",
-            "triggerStepIdentifier": { "id": "q2" },
+            "triggerStepIdentifier": {
+                "id": "q2"
+            },
             "values": {
                 "romance": "a1"
             }
         },
         {
             "type": "direct",
-            "triggerStepIdentifier": { "id": "q3" },
+            "triggerStepIdentifier": {
+                "id": "q3"
+            },
             "destinationStepIdentifier": {
                 "id": "q5"
             }
         },
         {
             "type": "conditional",
-            "triggerStepIdentifier": { "id": "a1" },
+            "triggerStepIdentifier": {
+                "id": "a1"
+            },
             "values": {
                 "true": "q3",
                 "false": "q5"
@@ -48,7 +56,9 @@
         },
         {
             "type": "conditional",
-            "triggerStepIdentifier": { "id": "q5" },
+            "triggerStepIdentifier": {
+                "id": "q5"
+            },
             "values": {
                 "POSITIVE": "a2",
                 "NEGATIVE": "q8"
@@ -56,10 +66,79 @@
         },
         {
             "type": "conditional",
-            "triggerStepIdentifier": { "id": "q8" },
+            "triggerStepIdentifier": {
+                "id": "q6"
+            },
             "values": {
-                "POSITIVE": "a4",
+                "choose_existing_characters": "q61",
+                "generate_character": "a3",
+                "create_character_manually": "c1",
+                "done": "q7"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "a3"
+            },
+            "destinationStepIdentifier": {
+                "id": "q6"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "c1"
+            },
+            "destinationStepIdentifier": {
+                "id": "q6"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q61"
+            },
+            "destinationStepIdentifier": {
+                "id": "q6"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": {
+                "id": "q8"
+            },
+            "values": {
+                "POSITIVE": "q9",
                 "NEGATIVE": "a4"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q11"
+            },
+            "destinationStepIdentifier": {
+                "id": "q14"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": {
+                "id": "q22"
+            },
+            "values": {
+                "POSITIVE": "q23",
+                "NEGATIVE": "a8"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q27"
+            },
+            "destinationStepIdentifier": {
+                "id": "q18"
             }
         }
     ],
@@ -74,7 +153,9 @@
             "buttonText": "Let's go!"
         },
         {
-            "stepIdentifier": { "id": "q1" },
+            "stepIdentifier": {
+                "id": "q1"
+            },
             "type": "question",
             "relatedParameter": "user_input_target_audience_is_child",
             "title": "Is this audiobook for you or a child?",
@@ -86,29 +167,67 @@
             }
         },
         {
-            "stepIdentifier": { "id": "q2" },
+            "stepIdentifier": {
+                "id": "q2"
+            },
             "type": "question",
             "relatedParameter": "user_input_genre",
             "title": "What genre should your story be?",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [
-                    { "text": "Adventure", "value": "adventure" },
-                    { "text": "Fantasy", "value": "fantasy" },
-                    { "text": "Science Fiction", "value": "science fiction" },
-                    { "text": "Romance", "value": "romance" },
-                    { "text": "Mystery", "value": "mystery" },
-                    { "text": "Horror", "value": "horror" },
-                    { "text": "Comedy", "value": "comedy" },
-                    { "text": "Tragedy", "value": "tragedy" },
-                    { "text": "Historical Fiction", "value": "historical fiction" },
-                    { "text": "Realism", "value": "realism" },
-                    { "text": "Thriller", "value": "thriller" }
-                ]
+                    {
+                        "text": "Adventure",
+                        "value": "adventure"
+                    },
+                    {
+                        "text": "Fantasy",
+                        "value": "fantasy"
+                    },
+                    {
+                        "text": "Science Fiction",
+                        "value": "science fiction"
+                    },
+                    {
+                        "text": "Romance",
+                        "value": "romance"
+                    },
+                    {
+                        "text": "Mystery",
+                        "value": "mystery"
+                    },
+                    {
+                        "text": "Horror",
+                        "value": "horror"
+                    },
+                    {
+                        "text": "Comedy",
+                        "value": "comedy"
+                    },
+                    {
+                        "text": "Tragedy",
+                        "value": "tragedy"
+                    },
+                    {
+                        "text": "Historical Fiction",
+                        "value": "historical fiction"
+                    },
+                    {
+                        "text": "Realism",
+                        "value": "realism"
+                    },
+                    {
+                        "text": "Thriller",
+                        "value": "thriller"
+                    }
+                ],
+                "buttonChoices": []
             }
         },
         {
-            "stepIdentifier": { "id": "q5" },
+            "stepIdentifier": {
+                "id": "q5"
+            },
             "type": "question",
             "title": "Do you want to pick the story characters manually? (CURRENTLY BOTH YES AND NO LEAD TO THE SAME RESULT)",
             "answerFormat": {
@@ -119,19 +238,25 @@
             }
         },
         {
-            "stepIdentifier": { "id": "a1" },
+            "stepIdentifier": {
+                "id": "a1"
+            },
             "type": "question",
             "relatedParameter": "is_adult",
             "title": "Checking User Age",
             "answerFormat": {
                 "type": "api_call",
                 "endpointUrl": "https://kuluko.com/api/check_if_user_is_adult",
-                "parameters": {"creator_user_id": "$user_id"},
+                "parameters": {
+                    "creator_user_id": "$user_id"
+                },
                 "requestType": "POST"
             }
         },
         {
-            "stepIdentifier": { "id": "q3" },
+            "stepIdentifier": {
+                "id": "q3"
+            },
             "type": "question",
             "title": "Should your story be explicit?",
             "relatedParameter": "user_input_explicit",
@@ -143,18 +268,109 @@
             }
         },
         {
-            "stepIdentifier": { "id": "a2" },
+            "stepIdentifier": {
+                "id": "a2"
+            },
             "type": "question",
             "title": "Getting existing characters",
             "answerFormat": {
                 "type": "api_call",
                 "endpointUrl": "https://kuluko.com/api/get_existing_characters",
-                "parameters": {"creator_user_id": "$user_id"},
+                "parameters": {
+                    "creator_user_id": "$user_id"
+                },
                 "requestType": "POST"
             }
         },
         {
-            "stepIdentifier": { "id": "q8" },
+            "stepIdentifier": {
+                "id": "q6"
+            },
+            "type": "question",
+            "title": "Here you see which characters you have already selected. Press the button to select or create more!",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "$selected_characters",
+                "buttonChoices": [
+                    {
+                        "text": "Choose from your existing characters",
+                        "value": "choose_existing_characters"
+                    },
+                    {
+                        "text": "Generate new character",
+                        "value": "generate_character"
+                    },
+                    {
+                        "text": "Create new character manually",
+                        "value": "create_character_manually"
+                    },
+                    {
+                        "text": "Done",
+                        "value": "done"
+                    }
+                ]
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q61"
+            },
+            "type": "question",
+            "title": "Choose from your existing characters",
+            "relatedParameter": "user_input_character_ids",
+            "relatedTextChoiceParameter": "selected_characters",
+            "answerFormat": {
+                "type": "multiple",
+                "textChoices": [],
+                "dynamicTextChoices": "$existing_characters",
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "a3"
+            },
+            "type": "question",
+            "title": "Generating Character",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/generate_character_adult",
+                "parameters": {
+                    "creator_user_id": "$user_id"
+                },
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c1"
+            },
+            "type": "question",
+            "title": "Creating Character (For now just a placeholder for multiple questions)",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q7"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_main_character_id",
+            "title": "Choose your main character:",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "$selected_characters",
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q8"
+            },
             "type": "question",
             "title": "Do you have a clear vision for the story?",
             "answerFormat": {
@@ -165,7 +381,9 @@
             }
         },
         {
-            "stepIdentifier": { "id": "q9" },
+            "stepIdentifier": {
+                "id": "q9"
+            },
             "type": "question",
             "relatedParameter": "user_input_story_place",
             "title": "Where should the story take place?",
@@ -177,7 +395,9 @@
             }
         },
         {
-            "stepIdentifier": { "id": "q10" },
+            "stepIdentifier": {
+                "id": "q10"
+            },
             "type": "question",
             "relatedParameter": "user_input_story_time",
             "title": "When does your story happen?",
@@ -188,7 +408,9 @@
             }
         },
         {
-            "stepIdentifier": { "id": "q11" },
+            "stepIdentifier": {
+                "id": "q11"
+            },
             "type": "question",
             "relatedParameter": "user_input_idea",
             "title": "What is your vision?",
@@ -199,29 +421,43 @@
             }
         },
         {
-            "stepIdentifier": { "id": "a4" },
+            "stepIdentifier": {
+                "id": "a4"
+            },
             "type": "question",
             "title": "Generating Ideas",
             "answerFormat": {
                 "type": "api_call",
                 "endpointUrl": "https://kuluko.com/api/generate_ideas_adult",
-                "parameters": {"creator_user_id": "$user_id", "user_input_genre": "$user_input_genre", "user_input_explicit": "$user_input_explicit", "user_input_character_ids": "$user_input_character_ids", "user_input_main_character_id": "$user_input_main_character_id", "wanted_number_of_ideas": 5},
+                "parameters": {
+                    "creator_user_id": "$user_id",
+                    "user_input_genre": "$user_input_genre",
+                    "user_input_explicit": "$user_input_explicit",
+                    "user_input_character_ids": "$user_input_character_ids",
+                    "user_input_main_character_id": "$user_input_main_character_id",
+                    "wanted_number_of_ideas": 5
+                },
                 "requestType": "POST"
             }
         },
         {
-            "stepIdentifier": { "id": "q12" },
+            "stepIdentifier": {
+                "id": "q12"
+            },
             "type": "question",
             "relatedParameter": "user_input_idea",
             "title": "Choose an idea for your story:",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [],
-                "dynamicTextChoices": "$generated_ideas"
+                "dynamicTextChoices": "$generated_ideas",
+                "buttonChoices": []
             }
         },
         {
-            "stepIdentifier": { "id": "q13" },
+            "stepIdentifier": {
+                "id": "q13"
+            },
             "type": "question",
             "relatedParameter": "user_input_idea",
             "title": "If you want you can edit the story here:",
@@ -233,7 +469,9 @@
             }
         },
         {
-            "stepIdentifier": { "id": "q14" },
+            "stepIdentifier": {
+                "id": "q14"
+            },
             "type": "question",
             "relatedParameter": "user_input_target_duration",
             "title": "How long should the audiobook circa be?",
@@ -248,7 +486,9 @@
             }
         },
         {
-            "stepIdentifier": { "id": "q15" },
+            "stepIdentifier": {
+                "id": "q15"
+            },
             "type": "question",
             "relatedParameter": "user_input_language_complexity",
             "title": "How complex should the language be?",
@@ -263,7 +503,9 @@
             }
         },
         {
-            "stepIdentifier": { "id": "q16" },
+            "stepIdentifier": {
+                "id": "q16"
+            },
             "type": "question",
             "relatedParameter": "user_input_narrator_voice",
             "title": "Who do you want to narrate your audiobook (should be a custom type that plays sample on click)?",
@@ -271,14 +513,26 @@
             "answerFormat": {
                 "type": "single",
                 "textChoices": [
-                    { "text": "Onyx", "value": "onyx" },
-                    { "text": "Fable", "value": "fable" },
-                    { "text": "Echo", "value": "echo"}
-                ]
+                    {
+                        "text": "Onyx",
+                        "value": "onyx"
+                    },
+                    {
+                        "text": "Fable",
+                        "value": "fable"
+                    },
+                    {
+                        "text": "Echo",
+                        "value": "echo"
+                    }
+                ],
+                "buttonChoices": []
             }
         },
         {
-            "stepIdentifier": { "id": "q17" },
+            "stepIdentifier": {
+                "id": "q17"
+            },
             "type": "question",
             "relatedParameter": "user_input_language",
             "title": "What language should the audiobook be in?",
@@ -286,21 +540,303 @@
             "answerFormat": {
                 "type": "single",
                 "textChoices": [
-                    { "text": "English", "value": "english" },
-                    { "text": "German", "value": "german" },
-                    { "text": "French", "value": "french" },
-                    { "text": "Spanish", "value": "spanish" },
-                    { "text": "Italian", "value": "italian" },
-                    { "text": "Finnish", "value": "finnish" }
-                ]
+                    {
+                        "text": "English",
+                        "value": "english"
+                    },
+                    {
+                        "text": "German",
+                        "value": "german"
+                    },
+                    {
+                        "text": "French",
+                        "value": "french"
+                    },
+                    {
+                        "text": "Spanish",
+                        "value": "spanish"
+                    },
+                    {
+                        "text": "Italian",
+                        "value": "italian"
+                    },
+                    {
+                        "text": "Finnish",
+                        "value": "finnish"
+                    }
+                ],
+                "buttonChoices": []
             }
         },
         {
-            "stepIdentifier": { "id": "q18" },
+            "stepIdentifier": {
+                "id": "q18"
+            },
             "type": "completion",
             "text": "Here could be a overview with links back to the questions.",
             "title": "Done!",
             "buttonText": "Generate Audiobook!"
+        },
+        {
+            "stepIdentifier": {
+                "id": "q19"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_target_listener_age",
+            "title": "How old is the child?",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "0-3",
+                        "value": "0-3"
+                    },
+                    {
+                        "text": "4-6",
+                        "value": "4-6"
+                    },
+                    {
+                        "text": "7-9",
+                        "value": "7-9"
+                    },
+                    {
+                        "text": "10-12",
+                        "value": "10-12"
+                    }
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q20"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_genre",
+            "title": "What kind of story do you want?",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "Adventure",
+                        "value": "adventure"
+                    },
+                    {
+                        "text": "Fantasy",
+                        "value": "fantasy"
+                    },
+                    {
+                        "text": "Education",
+                        "value": "education"
+                    },
+                    {
+                        "text": "Science Fiction",
+                        "value": "science fiction"
+                    },
+                    {
+                        "text": "Mystery",
+                        "value": "mystery"
+                    },
+                    {
+                        "text": "Fairy Talke",
+                        "value": "fairy_tale"
+                    }
+                ],
+                "imageChoices": [
+                    "https://images.squarespace-cdn.com/content/v1/54822a56e4b0b30bd821480c/45ed8ecf-0bb2-4e34-8fcf-624db47c43c8/Golden+Retrievers+dans+pet+care.jpeg",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffantasy.webp?alt=media&token=d9062a10-6928-4fb1-8ec9-bbbaf53f5179",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Flearning.webp?alt=media&token=e57fa484-fc58-4f73-aeb3-416f86170565",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fscience_fiction.webp?alt=media&token=2f03b151-a2dc-4f7e-be0e-eaa15bc28502",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fmystery.webp?alt=media&token=9bc14b75-6d6e-4b31-bbec-1445df2c9ffb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffairy_tale.webp?alt=media&token=e3a6a373-db57-4397-8161-399a7ccb21d5"
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "a7"
+            },
+            "type": "question",
+            "relatedParameter": "existing_characters",
+            "title": "Getting existing characters",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/get_existing_characters",
+                "parameters": {
+                    "creator_user_id": "$user_id"
+                },
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q21"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_main_character_id",
+            "title": "Choose your main character:",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "$existing_characters",
+                "buttonChoices": [
+                    {
+                        "text": "Create new character",
+                        "value": "create_character"
+                    }
+                ]
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c2"
+            },
+            "type": "question",
+            "title": "Creating Character (For now just a placeholder for multiple questions or audio input)",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q22"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_lesson",
+            "title": "Should the story contain a lesson?",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Yes",
+                "negativeAnswer": "No",
+                "result": "POSITIVE"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q23"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_lesson",
+            "title": "What lesson should the story contain?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "a8"
+            },
+            "type": "question",
+            "title": "Generating settings",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/suggest_story_place_children",
+                "parameters": {
+                    "creator_user_id": "$user_id",
+                    "user_input_genre": "$user_input_genre",
+                    "user_input_target_listener_age": "$user_input_target_listener_age",
+                    "wanted_number_of_settings": 3,
+                    "user_input_lesson": "$user_input_lesson"
+                },
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q24"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_story_place",
+            "title": "Where should the story take place?",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "$generated_settings",
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "a9"
+            },
+            "type": "question",
+            "title": "Generating Ideas",
+            "relatedParameter": "generated_ideas",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/generate_ideas_children",
+                "parameters": {
+                    "creator_user_id": "$user_id",
+                    "user_input_genre": "$user_input_genre",
+                    "user_input_target_listener_age": "$user_input_target_listener_age",
+                    "user_input_lesson": "$user_input_lesson",
+                    "user_input_story_place": "$user_input_story_place",
+                    "user_input_main_character_id": "$user_input_main_character_id",
+                    "wanted_number_of_ideas": 4
+                },
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q25"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_idea",
+            "title": "Choose an idea for your story:",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "$generated_ideas",
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q26"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_narrator_voice",
+            "title": "Who do you want to narrate your audiobook?",
+            "text": "",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "Onyx",
+                        "value": "onyx"
+                    },
+                    {
+                        "text": "Fable",
+                        "value": "fable"
+                    },
+                    {
+                        "text": "Echo",
+                        "value": "echo"
+                    }
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q27"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_target_duration",
+            "title": "How long should the audiobook be?",
+            "answerFormat": {
+                "type": "scale",
+                "step": 0.5,
+                "minimumValue": 1,
+                "maximumValue": 4,
+                "defaultValue": 2.5,
+                "minimumValueDescription": "1h",
+                "maximumValueDescription": "4h"
+            }
         }
     ]
 }

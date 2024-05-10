@@ -9,11 +9,15 @@ class SingleChoiceAnswerFormat implements AnswerFormat {
   final List<TextChoice> textChoices;
   final TextChoice? defaultSelection;
   final String dynamicTextChoices;
+  final List<TextChoice> buttonChoices;
+  final List<String> imageChoices;
 
   const SingleChoiceAnswerFormat({
     required this.textChoices,
     this.defaultSelection,
     this.dynamicTextChoices = '',
+    required this.buttonChoices,
+    this.imageChoices = const [],
   }) : super();
 
   factory SingleChoiceAnswerFormat.fromJson(Map<String, dynamic> json) =>

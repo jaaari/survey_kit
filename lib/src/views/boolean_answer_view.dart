@@ -5,6 +5,8 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/selection_list_tile.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:survey_kit/src/controller/survey_controller.dart';
 
 class BooleanAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -29,25 +31,33 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
   void initState() {
     super.initState();
     _answerFormat = widget.questionStep.answerFormat as BooleanAnswerFormat;
-    _result = widget.result?.result ??
-        _answerFormat.defaultValue ??
-        _answerFormat.result;
+    _result = null;  // Start with no selection
     _startDate = DateTime.now();
-    _onAnswerChanged(_result);
   }
 
   void _onAnswerChanged(BooleanResult? result) {
     print("tapped a boolean answer");
-    if (widget.questionStep.relatedParameter == "") {
-      return;
+    setState(() {
+      _result = result;
+    });
+
+    if (widget.questionStep.relatedParameter != "") {
+      Map<String, dynamic> _resultMap = {
+        widget.questionStep.relatedParameter: result == BooleanResult.POSITIVE
+      };
+      GlobalStateManager().updateData(_resultMap);
+      print("Global state updated: ${GlobalStateManager().getAllData()}");
     }
-    Map<String, dynamic> _resultMap = {
-      widget.questionStep.relatedParameter: result == BooleanResult.POSITIVE
-    };
-    GlobalStateManager().updateData(_resultMap);
-    Map<String, dynamic> _allData = GlobalStateManager().getAllData();
-    print("relatedParameter: ${widget.questionStep.relatedParameter}");
-    print("Global state: $_allData");
+
+    // Proceed to next step
+    final resultFunction = () => BooleanQuestionResult(
+      id: widget.questionStep.stepIdentifier,
+      startDate: _startDate,
+      endDate: DateTime.now(),
+      valueIdentifier: _result == BooleanResult.POSITIVE ? "POSITIVE" : "NEGATIVE",
+      result: _result,
+    );
+    Provider.of<SurveyController>(context, listen: false).nextStep(context, resultFunction);
   }
 
   @override
@@ -72,8 +82,7 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
               textAlign: TextAlign.center,
             )
           : widget.questionStep.content,
-      isValid: widget.questionStep.isOptional ||
-          (_result != BooleanResult.NONE && _result != null),
+      isValid: widget.questionStep.isOptional || _result != null,  // Validation requires a choice
       child: Column(
         children: [
           Padding(
@@ -86,33 +95,15 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
           ),
           Column(
             children: [
-              Divider(
-                color: Colors.grey,
-              ),
+              Divider(color: Colors.grey),
               SelectionListTile(
                 text: _answerFormat.positiveAnswer,
-                onTap: () {
-                  if (_result == BooleanResult.POSITIVE) {
-                    _result = null;
-                  } else {
-                    _result = BooleanResult.POSITIVE;
-                  }
-                  setState(() {});
-                  _onAnswerChanged(_result);
-                },
+                onTap: () => _onAnswerChanged(BooleanResult.POSITIVE),
                 isSelected: _result == BooleanResult.POSITIVE,
               ),
               SelectionListTile(
                 text: _answerFormat.negativeAnswer,
-                onTap: () {
-                  if (_result == BooleanResult.NEGATIVE) {
-                    _result = null;
-                  } else {
-                    _result = BooleanResult.NEGATIVE;
-                  }
-                  setState(() {});
-                  _onAnswerChanged(_result);
-                },
+                onTap: () => _onAnswerChanged(BooleanResult.NEGATIVE),
                 isSelected: _result == BooleanResult.NEGATIVE,
               ),
             ],

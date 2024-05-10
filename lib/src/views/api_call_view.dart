@@ -8,6 +8,8 @@ import 'dart:convert';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/result/question_result.dart';
+import 'package:survey_kit/src/controller/survey_controller.dart';
+import 'package:provider/provider.dart';
 import 'global_state_manager.dart';
 
 class APICallView extends StatefulWidget {
@@ -107,6 +109,18 @@ class _APICallViewState extends State<APICallView> {
               "No suitable list found in the API response to update _apiResponse.");
         }
 
+        // navigate to next step
+        final resultFunction = () => APICallResult(
+              id: widget.questionStep.stepIdentifier,
+              startDate: _startDate,
+              endDate: DateTime.now(),
+              valueIdentifier:
+                  _apiResponse.map((choice) => choice.value).join(','),
+              result: _apiResponse,
+            );
+        Provider.of<SurveyController>(context, listen: false)
+            .nextStep(context, resultFunction);
+
         print("Global state: ${GlobalStateManager().getAllData()}");
       } else {
         print(
@@ -131,7 +145,7 @@ class _APICallViewState extends State<APICallView> {
                   _apiResponse.map((choice) => choice.value).join(','),
               result: _apiResponse,
             ),
-        isValid: true,
+        isValid: false,
         title: Text(
           widget.questionStep.title,
           style: Theme.of(context).textTheme.displayMedium,

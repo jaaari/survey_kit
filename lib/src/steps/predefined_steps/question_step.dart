@@ -59,6 +59,7 @@ class QuestionStep extends Step {
   final Widget content;
   @JsonKey(defaultValue: '')
   final String relatedParameter;
+  final String relatedTextChoiceParameter;
   final AnswerFormat answerFormat;
 
   QuestionStep({
@@ -69,6 +70,7 @@ class QuestionStep extends Step {
     this.title = '',
     this.text = '',
     this.relatedParameter = '',
+    this.relatedTextChoiceParameter = '',
     this.content = const SizedBox.shrink(),
     required this.answerFormat,
   }) : super(

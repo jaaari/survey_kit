@@ -4,6 +4,8 @@ import 'package:survey_kit/src/result/question/text_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'dart:convert';
 
 class TextAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -22,7 +24,6 @@ class TextAnswerView extends StatefulWidget {
 class _TextAnswerViewState extends State<TextAnswerView> {
   late final TextAnswerFormat _textAnswerFormat;
   late final DateTime _startDate;
-
   late final TextEditingController _controller;
   bool _isValid = false;
 
@@ -40,12 +41,19 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   void _checkValidation(String text) {
     setState(() {
       if (_textAnswerFormat.validationRegEx != null) {
-        RegExp regExp = new RegExp(_textAnswerFormat.validationRegEx!);
+        RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
         _isValid = regExp.hasMatch(text);
       } else {
-        _isValid = true;
+        _isValid = text.isNotEmpty; // Assume valid if not empty, adjust as needed
       }
     });
+    _updateGlobalState(text);
+  }
+
+  void _updateGlobalState(String text) {
+    // Update the global state with the current text input
+    GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
+    print("Updated global state with text: $text");
   }
 
   @override

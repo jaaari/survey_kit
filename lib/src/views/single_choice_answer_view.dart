@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:survey_kit/survey_kit.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:survey_kit/src/controller/survey_controller.dart';
+import 'package:provider/provider.dart';
 
 class SingleChoiceAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -21,50 +23,94 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   late final SingleChoiceAnswerFormat _singleChoiceAnswerFormat;
   TextChoice? _selectedChoice;
   List<TextChoice> _choices = [];
+  List<String> _imageChoices = [];
 
   @override
   void initState() {
     super.initState();
-    _singleChoiceAnswerFormat = widget.questionStep.answerFormat as SingleChoiceAnswerFormat;
-    _selectedChoice = widget.result?.result ?? _singleChoiceAnswerFormat.defaultSelection;
     _startDate = DateTime.now();
-    print("SingleChoiceAnswerView: Selected choice: $_selectedChoice");
+    _singleChoiceAnswerFormat =
+        widget.questionStep.answerFormat as SingleChoiceAnswerFormat;
+    _selectedChoice = null; // No choice is preselected
     _initChoices();
+    print("SingleChoiceAnswerView: Initialized");
+    _initImages(); // Initialize image choices
+    GlobalStateManager().addListener(_refreshChoices);
+  }
+
+  void _initImages() {
+    // Assuming _singleChoiceAnswerFormat.imageChoices is available
+    print("SingleChoiceAnswerView: Initializing image choices");
+    print("Image urls: ${_singleChoiceAnswerFormat.imageChoices}");
+    _imageChoices = _singleChoiceAnswerFormat.imageChoices;
+    print("Image choices loaded: ${_imageChoices.length}");
+  }
+
+  @override
+  void dispose() {
+    GlobalStateManager().removeListener(_refreshChoices);
+    super.dispose();
+  }
+
+  void _refreshChoices() {
+    _fetchAndUpdateChoices();
   }
 
   void _initChoices() {
     print("SingleChoiceAnswerView: Initializing choices");
-    print("_singleChoiceAnswerFormat.textChoices.isNotEmpty = ${_singleChoiceAnswerFormat.textChoices.isNotEmpty}");
-    if (_singleChoiceAnswerFormat.textChoices.isNotEmpty) {
-      print('SingleChoiceAnswerView: Using textChoices');
-      _choices = _singleChoiceAnswerFormat.textChoices;
-    } else if (_singleChoiceAnswerFormat.dynamicTextChoices != "") {
-      var manager = GlobalStateManager();
-      var dynamicChoices = manager.getData(_singleChoiceAnswerFormat.dynamicTextChoices);
-      print('SingleChoiceAnswerView: Using dynamicTextChoices: $dynamicChoices');
-      if (dynamicChoices != null && dynamicChoices is List) {
-        _choices = dynamicChoices.map<TextChoice>((choice) => TextChoice.fromJson(choice)).toList();
-      }
-    }
-    // Select default choice if not set
-    if (_selectedChoice == null && _choices.isNotEmpty) {
-      _selectedChoice = _choices.first;
-    }
-
-    _onAnswerChanged(_selectedChoice?.value ?? '');
+    _fetchAndUpdateChoices();
   }
 
-  void _onAnswerChanged(String selectedValue) {
-    print("tapped a single choice answer");
-    if (widget.questionStep.relatedParameter == "") {
-      return;
+  void _fetchAndUpdateChoices() {
+    final prevChoices = _singleChoiceAnswerFormat.textChoices.toList();
+    _choices.clear();
+
+    if (_singleChoiceAnswerFormat.textChoices.isNotEmpty) {
+      _choices = prevChoices;
+      print('Static text choices loaded: ${_choices.length}');
     }
-    Map<String, dynamic> _resultMap = {
-      widget.questionStep.relatedParameter: selectedValue};
+
+    if (_singleChoiceAnswerFormat.dynamicTextChoices.isNotEmpty) {
+      var manager = GlobalStateManager();
+      var dynamicChoices = manager
+          .getData(_singleChoiceAnswerFormat.dynamicTextChoices.substring(1));
+      print('Using dynamicTextChoices: $dynamicChoices');
+      if (dynamicChoices != null && dynamicChoices is List) {
+        _choices += dynamicChoices
+            .map<TextChoice>((choice) => TextChoice.fromJson(choice))
+            .toList();
+        print('Dynamic choices added: ${dynamicChoices.length}');
+      } else {
+        print('Dynamic choices data is not in expected List format.');
+      }
+    }
+
+    if (_singleChoiceAnswerFormat.buttonChoices.isNotEmpty) {
+      _choices += _singleChoiceAnswerFormat.buttonChoices;
+    }
+
+    print('Total choices available after update: ${_choices.length}');
+  }
+
+  void _onAnswerChanged(TextChoice selectedChoice) {
+    Map<String, dynamic> _resultMap = {};
+    // Update for relatedParameter
+    if (widget.questionStep.relatedParameter.isNotEmpty) {
+      _resultMap[widget.questionStep.relatedParameter] = selectedChoice.value;
+      print(
+          "SingleChoiceAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
+    }
+
+    // Update for relatedTextChoiceParameter
+    if (widget.questionStep.relatedTextChoiceParameter.isNotEmpty) {
+      _resultMap[widget.questionStep.relatedTextChoiceParameter] = [
+        {'text': selectedChoice.text, 'value': selectedChoice.value}
+      ];
+    }
+
     GlobalStateManager().updateData(_resultMap);
-    Map<String, dynamic> _allData = GlobalStateManager().getAllData();
-    print("relatedParameter: ${widget.questionStep.relatedParameter}");
-    print("Global state: $_allData");
+    print('SingleChoiceAnswerView: Updated data: $_resultMap');
+    print("GlobalStateManager data: ${GlobalStateManager().getAllData()}");
   }
 
   @override
@@ -78,46 +124,52 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
         valueIdentifier: _selectedChoice?.value ?? '',
         result: _selectedChoice,
       ),
-      isValid: widget.questionStep.isOptional || _selectedChoice != null,
+      isValid: widget.questionStep.isOptional ||
+          _selectedChoice != null, // Ensure a choice is made if not optional
       title: widget.questionStep.title.isNotEmpty
-          ? Text(
-              widget.questionStep.title,
+          ? Text(widget.questionStep.title,
               style: Theme.of(context).textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            )
+              textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
-              child: Text(
-                widget.questionStep.text,
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Column(
-              children: [
-                Divider(color: Colors.grey),
-                ..._choices.map((TextChoice tc) {
-                  return SelectionListTile(
-                    text: tc.text,
-                    onTap: () {
-                      setState(() {
-                        _selectedChoice = (_selectedChoice == tc) ? null : tc;
-                      });
-                      _onAnswerChanged(_selectedChoice?.value ?? '');
-                    },
-                    isSelected: _selectedChoice == tc,
-                  );
-                }).toList(),
-              ],
-            ),
+            Divider(color: Colors.grey),
+            ..._choices.asMap().entries.map((entry) {
+              int idx = entry.key;
+              TextChoice tc = entry.value;
+              bool hasImage =
+                  idx < _imageChoices.length && _imageChoices[idx].isNotEmpty;
+              return SelectionListTile(
+                text: tc.text,
+                image: hasImage
+                    ? _imageChoices[idx]
+                    : null, // Pass the image URL if available
+                onTap: () {
+                  setState(() {
+                    _selectedChoice = tc;
+                  });
+                  _onAnswerChanged(tc);
+                  // go to next step
+                  final resultFunction = () => SingleChoiceQuestionResult(
+                        id: widget.questionStep.stepIdentifier,
+                        startDate: _startDate,
+                        endDate: DateTime.now(),
+                        valueIdentifier: _selectedChoice?.value ?? '',
+                        result: _selectedChoice,
+                      );
+                  final surveyController =
+                      Provider.of<SurveyController>(context, listen: false);
+                  surveyController.nextStep(context, resultFunction);
+                },
+                isSelected: _selectedChoice == tc,
+              );
+            }).toList(),
           ],
         ),
       ),
     );
   }
 }
+

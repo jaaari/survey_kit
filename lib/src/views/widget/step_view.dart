@@ -43,30 +43,26 @@ class StepView extends StatelessWidget {
                   child: title,
                 ),
                 child,
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32.0),
-                  child: OutlinedButton(
-                    onPressed: isValid || step.isOptional
-                        ? () => [
-                              FocusScope.of(context).hasFocus
-                                  ? FocusScope.of(context).unfocus()
-                                  : null,
-                              surveyController.nextStep(
-                                  context, resultFunction),
-                            ]
-                        : null,
-                    child: Text(
-                      context.read<Map<String, String>?>()?['next'] ??
-                          step.buttonText ??
-                          'Next',
-                      style: TextStyle(
-                        color: isValid
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey,
+                if (isValid || step.isOptional) // Conditionally adding the button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32.0),
+                    child: OutlinedButton(
+                      onPressed: () => [
+                            FocusScope.of(context).hasFocus
+                                ? FocusScope.of(context).unfocus()
+                                : null,
+                            surveyController.nextStep(context, resultFunction),
+                          ],
+                      child: Text(
+                        context.read<Map<String, String>?>()?['next'] ??
+                            step.buttonText ??
+                            'Next',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
