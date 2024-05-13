@@ -72,6 +72,8 @@ class _APICallViewState extends State<APICallView> {
       } else {
         response = await http.get(url, headers: headers);
       }
+      print("API call status: ${response.statusCode}");
+      print("API call response: ${response.body}");
 
       if (response.statusCode == 200) {
         print("API call status 200 with response: ${response.body}");
@@ -126,10 +128,29 @@ class _APICallViewState extends State<APICallView> {
         print(
             'Failed to load data from API with status code: ${response.statusCode} and body: ${response.body}');
         throw Exception(
-            'Failed to load data from API with status code: ${response.statusCode}');
+            'Failed to load data from API with status code: ${response.statusCode}' +
+                ' and body: ${response.body}');
       }
     } catch (e) {
       print('API call error: $e');
+      // display error message
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('API Call Error'),
+            content: Text('Failed to load data from API: $e'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 

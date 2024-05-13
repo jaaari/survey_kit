@@ -39,11 +39,24 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   }
 
   void _initImages() {
-    // Assuming _singleChoiceAnswerFormat.imageChoices is available
-    print("SingleChoiceAnswerView: Initializing image choices");
-    print("Image urls: ${_singleChoiceAnswerFormat.imageChoices}");
-    _imageChoices = _singleChoiceAnswerFormat.imageChoices;
-    print("Image choices loaded: ${_imageChoices.length}");
+    if (_singleChoiceAnswerFormat.imageChoices.isNotEmpty) {
+      print("SingleChoiceAnswerView: Initializing image choices");
+      print("Image urls: ${_singleChoiceAnswerFormat.imageChoices}");
+      _imageChoices = _singleChoiceAnswerFormat.imageChoices;
+      print("Image choices loaded: ${_imageChoices.length}");
+    }
+    else if (_singleChoiceAnswerFormat.dynamicImageChoices != "") {
+      var manager = GlobalStateManager();
+      var dynamicImageChoices = manager
+          .getData(_singleChoiceAnswerFormat.dynamicImageChoices.substring(1));
+      print('Using dynamicImageChoices: $dynamicImageChoices');
+      if (dynamicImageChoices != null && dynamicImageChoices is List) {
+        _imageChoices = dynamicImageChoices.cast<String>();
+        print('Dynamic image choices added: ${_imageChoices.length}');
+      } else {
+        print('Dynamic image choices data is not in expected List format.');
+      }
+    }
   }
 
   @override

@@ -11,6 +11,7 @@ class SingleChoiceAnswerFormat implements AnswerFormat {
   final String dynamicTextChoices;
   final List<TextChoice> buttonChoices;
   final List<String> imageChoices;
+  final String dynamicImageChoices;
 
   const SingleChoiceAnswerFormat({
     required this.textChoices,
@@ -18,6 +19,7 @@ class SingleChoiceAnswerFormat implements AnswerFormat {
     this.dynamicTextChoices = '',
     required this.buttonChoices,
     this.imageChoices = const [],
+    this.dynamicImageChoices = '',
   }) : super();
 
   factory SingleChoiceAnswerFormat.fromJson(Map<String, dynamic> json) =>

@@ -12,7 +12,7 @@
         "user_input_language_complexity": 4,
         "user_input_narrator_voice": "",
         "user_input_language": "english",
-        "user_input_character_ids": [],
+        "user_input_character_ids": "",
         "user_input_main_character_id": ""
     },
     "rules": [
@@ -120,6 +120,15 @@
             },
             "destinationStepIdentifier": {
                 "id": "q14"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": {
+                "id": "q21"
+            },
+            "values": {
+                "create_character": "c2"
             }
         },
         {
@@ -435,7 +444,7 @@
                     "user_input_explicit": "$user_input_explicit",
                     "user_input_character_ids": "$user_input_character_ids",
                     "user_input_main_character_id": "$user_input_main_character_id",
-                    "wanted_number_of_ideas": 5
+                    "wanted_number_of_ideas": 3
                 },
                 "requestType": "POST"
             }
@@ -638,17 +647,13 @@
                         "value": "mystery"
                     },
                     {
-                        "text": "Fairy Talke",
+                        "text": "Fairy Tale",
                         "value": "fairy_tale"
                     }
                 ],
                 "imageChoices": [
                     "https://images.squarespace-cdn.com/content/v1/54822a56e4b0b30bd821480c/45ed8ecf-0bb2-4e34-8fcf-624db47c43c8/Golden+Retrievers+dans+pet+care.jpeg",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffantasy.webp?alt=media&token=d9062a10-6928-4fb1-8ec9-bbbaf53f5179",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Flearning.webp?alt=media&token=e57fa484-fc58-4f73-aeb3-416f86170565",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fscience_fiction.webp?alt=media&token=2f03b151-a2dc-4f7e-be0e-eaa15bc28502",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fmystery.webp?alt=media&token=9bc14b75-6d6e-4b31-bbec-1445df2c9ffb",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffairy_tale.webp?alt=media&token=e3a6a373-db57-4397-8161-399a7ccb21d5"
+                    "https://storage.googleapis.com/audiobookgen.appspot.com/6e1525bb-e817-4bfe-8c42-ca8a2c1684c5/cover_art.jpg"
                 ],
                 "buttonChoices": []
             }
@@ -686,17 +691,6 @@
                         "value": "create_character"
                     }
                 ]
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c2"
-            },
-            "type": "question",
-            "title": "Creating Character (For now just a placeholder for multiple questions or audio input)",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
             }
         },
         {
@@ -836,6 +830,17 @@
                 "defaultValue": 2.5,
                 "minimumValueDescription": "1h",
                 "maximumValueDescription": "4h"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c2"
+            },
+            "type": "question",
+            "title": "Creating Character (For now just a placeholder for multiple questions or audio input)",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
             }
         }
     ]

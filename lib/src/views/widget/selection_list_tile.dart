@@ -21,7 +21,11 @@ class SelectionListTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: ListTile(
-            leading: image != null ? Image.network(image!) : null,  // Display image if available
+            leading: image != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage(image!),
+                  )
+                : null,
             title: Text(
               text,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
