@@ -5,8 +5,11 @@ import 'package:flutter/material.dart' hide Step;
 import 'package:flutter/services.dart';
 import 'package:survey_kit/survey_kit.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:survey_kit/src/kuluko_theme.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await KulukoTheme.initialize();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.white,
   ));
@@ -21,10 +24,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( 
+    return MaterialApp(
+      theme: _buildTheme(LightModeTheme()),
+      darkTheme: _buildTheme(DarkModeTheme()),
+      themeMode: KulukoTheme.themeMode,
       home: Scaffold(
         body: Container(
-          color: Colors.white,
+          color: KulukoTheme.of(context).primaryBackground,
           child: Align(
             alignment: Alignment.center,
             child: FutureBuilder<Task>(
@@ -48,26 +54,26 @@ class _MyAppState extends State<MyApp> {
                       'next': 'Next',
                     },
                     themeData: Theme.of(context).copyWith(
-                      primaryColor: Colors.cyan,
-                      appBarTheme: const AppBarTheme(
-                        color: Colors.white,
+                      primaryColor: KulukoTheme.of(context).primary,
+                      appBarTheme: AppBarTheme(
+                        color: KulukoTheme.of(context).primaryBackground,
                         iconTheme: IconThemeData(
-                          color: Colors.cyan,
+                          color: KulukoTheme.of(context).primary,
                         ),
                         titleTextStyle: TextStyle(
-                          color: Colors.cyan,
+                          color: KulukoTheme.of(context).primary,
                         ),
                       ),
-                      iconTheme: const IconThemeData(
-                        color: Colors.cyan,
+                      iconTheme: IconThemeData(
+                        color: KulukoTheme.of(context).primary,
                       ),
-                      textSelectionTheme: const TextSelectionThemeData(
-                        cursorColor: Colors.cyan,
-                        selectionColor: Colors.cyan,
-                        selectionHandleColor: Colors.cyan,
+                      textSelectionTheme: TextSelectionThemeData(
+                        cursorColor: KulukoTheme.of(context).primary,
+                        selectionColor: KulukoTheme.of(context).primary,
+                        selectionHandleColor: KulukoTheme.of(context).primary,
                       ),
-                      cupertinoOverrideTheme: const CupertinoThemeData(
-                        primaryColor: Colors.cyan,
+                      cupertinoOverrideTheme: CupertinoThemeData(
+                        primaryColor: KulukoTheme.of(context).primary,
                       ),
                       outlinedButtonTheme: OutlinedButtonThemeData(
                         style: ButtonStyle(
@@ -77,12 +83,12 @@ class _MyAppState extends State<MyApp> {
                           side: MaterialStateProperty.resolveWith(
                             (Set<MaterialState> state) {
                               if (state.contains(MaterialState.disabled)) {
-                                return const BorderSide(
-                                  color: Colors.grey,
+                                return BorderSide(
+                                  color: KulukoTheme.of(context).secondary,
                                 );
                               }
-                              return const BorderSide(
-                                color: Colors.cyan,
+                              return BorderSide(
+                                color: KulukoTheme.of(context).primary,
                               );
                             },
                           ),
@@ -98,14 +104,14 @@ class _MyAppState extends State<MyApp> {
                                     .textTheme
                                     .labelLarge
                                     ?.copyWith(
-                                      color: Colors.grey,
+                                      color: KulukoTheme.of(context).secondary,
                                     );
                               }
                               return Theme.of(context)
                                   .textTheme
                                   .labelLarge
                                   ?.copyWith(
-                                    color: Colors.cyan,
+                                    color: KulukoTheme.of(context).primary,
                                   );
                             },
                           ),
@@ -115,48 +121,33 @@ class _MyAppState extends State<MyApp> {
                         style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(
                             Theme.of(context).textTheme.labelLarge?.copyWith(
-                                  color: Colors.cyan,
+                                  color: KulukoTheme.of(context).primary,
                                 ),
                           ),
                         ),
                       ),
-                      textTheme: const TextTheme(
-                        displayMedium: TextStyle(
-                          fontSize: 28.0,
-                          color: Colors.black,
-                        ),
-                        headlineSmall: TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.black,
-                        ),
-                        bodyMedium: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.black,
-                        ),
-                        bodySmall: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
-                        titleMedium: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.black,
-                        ),
+                      textTheme: TextTheme(
+                        displayMedium: KulukoTheme.of(context).typography.displayMedium,
+                        headlineSmall: KulukoTheme.of(context).typography.headlineSmall,
+                        bodyMedium: KulukoTheme.of(context).typography.bodyMedium,
+                        bodySmall: KulukoTheme.of(context).typography.bodySmall,
+                        titleMedium: KulukoTheme.of(context).typography.titleMedium,
                       ),
-                      inputDecorationTheme: const InputDecorationTheme(
+                      inputDecorationTheme: InputDecorationTheme(
                         labelStyle: TextStyle(
-                          color: Colors.black,
+                          color: KulukoTheme.of(context).primaryText,
                         ),
                       ),
                       colorScheme: ColorScheme.fromSwatch(
                         primarySwatch: Colors.cyan,
                       )
                           .copyWith(
-                            onPrimary: Colors.white,
+                            onPrimary: KulukoTheme.of(context).primaryText,
                           )
-                          .copyWith(background: Colors.white),
+                          .copyWith(background: KulukoTheme.of(context).primaryBackground),
                     ),
                     surveyProgressbarConfiguration: SurveyProgressConfiguration(
-                      backgroundColor: Colors.white,
+                      backgroundColor: KulukoTheme.of(context).primaryBackground,
                     ),
                   );
                 }
@@ -169,7 +160,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
- 
   Future<Task> getJsonTask() async {
     try {
       print('Loading task from JSON...');
@@ -186,5 +176,95 @@ class _MyAppState extends State<MyApp> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  ThemeData _buildTheme(KulukoTheme theme) {
+    return ThemeData(
+      primaryColor: theme.primary,
+      appBarTheme: AppBarTheme(
+        color: theme.primaryBackground,
+        iconTheme: IconThemeData(
+          color: theme.primary,
+        ),
+        titleTextStyle: TextStyle(
+          color: theme.primary,
+        ),
+      ),
+      iconTheme: IconThemeData(
+        color: theme.primary,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: theme.primary,
+        selectionColor: theme.primary,
+        selectionHandleColor: theme.primary,
+      ),
+      cupertinoOverrideTheme: CupertinoThemeData(
+        primaryColor: theme.primary,
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(
+            const Size(150.0, 60.0),
+          ),
+          side: MaterialStateProperty.resolveWith(
+            (Set<MaterialState> state) {
+              if (state.contains(MaterialState.disabled)) {
+                return BorderSide(
+                  color: theme.secondary,
+                );
+              }
+              return BorderSide(
+                color: theme.primary,
+              );
+            },
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          textStyle: MaterialStateProperty.resolveWith(
+            (Set<MaterialState> state) {
+              if (state.contains(MaterialState.disabled)) {
+                return TextStyle(
+                  color: theme.secondary,
+                );
+              }
+              return TextStyle(
+                color: theme.primary,
+              );
+            },
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          textStyle: MaterialStateProperty.all(
+            TextStyle(
+              color: theme.primary,
+            ),
+          ),
+        ),
+      ),
+      textTheme: TextTheme(
+        displayMedium: theme.typography.displayMedium,
+        headlineSmall: theme.typography.headlineSmall,
+        bodyMedium: theme.typography.bodyMedium,
+        bodySmall: theme.typography.bodySmall,
+        titleMedium: theme.typography.titleMedium,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(
+          color: theme.primaryText,
+        ),
+      ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.cyan,
+      )
+          .copyWith(
+            onPrimary: theme.primaryText,
+          )
+          .copyWith(background: theme.primaryBackground),
+    );
   }
 }

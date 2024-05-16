@@ -57,100 +57,84 @@ class _APICallViewState extends State<APICallView> {
   Future<void> _fetchData() async {
     var headers = {'Content-Type': 'application/json'};
 
-    try {
-      var url = Uri.parse(_apiCallAnswerFormat.endpointUrl);
-      var resolvedParameters =
-          _resolveParameters(_apiCallAnswerFormat.parameters);
-      var parameters = json.encode(resolvedParameters);
-      http.Response response;
+    var url = Uri.parse(_apiCallAnswerFormat.endpointUrl);
+    var resolvedParameters =
+        _resolveParameters(_apiCallAnswerFormat.parameters);
+    var parameters = json.encode(resolvedParameters);
+    http.Response response;
 
-      print(
-          'API call to ${_apiCallAnswerFormat.endpointUrl} with resolved parameters: $parameters');
-
-      if (_apiCallAnswerFormat.requestType == "POST") {
+    if (_apiCallAnswerFormat.requestType == "POST") {
+      print("Making POST request with parameters: $parameters");
+      try {
         response = await http.post(url, headers: headers, body: parameters);
-      } else {
-        response = await http.get(url, headers: headers);
+      } catch (e, stacktrace) {
+        print('Failed to make HTTP request:');
+        print('Error: $e');
+        print('Stacktrace: $stacktrace');
+        return;
       }
-      print("API call status: ${response.statusCode}");
-      print("API call response: ${response.body}");
+      print("Response headers: ${response.headers}");
+    } else {
+      print("Making GET request with parameters: $parameters");
+      response = await http.get(url, headers: headers);
+      print("Response headers: ${response.headers}");
+    }
 
-      if (response.statusCode == 200) {
-        print("API call status 200 with response: ${response.body}");
+    if (response.statusCode == 200) {
+      print("API call status 200 with response: ${response.body}");
 
-        // Decode the JSON response once and reuse the decoded map
-        Map<String, dynamic> responseData = json.decode(response.body);
+      // Decode the JSON response once and reuse the decoded map
+      Map<String, dynamic> responseData = json.decode(response.body);
 
-        // Update global state
-        GlobalStateManager().updateData(responseData);
+      // Update global state
+      GlobalStateManager().updateData(responseData);
 
-        // Handle response data and update local state
-        List<dynamic> data = [];
-        for (var key in responseData.keys) {
-          if (responseData[key] is List) {
-            var firstItem = responseData[key].first;
-            if (firstItem is Map<String, dynamic> &&
-                firstItem.containsKey('text') &&
-                firstItem.containsKey('value')) {
-              data = responseData[key];
-              break;
-            }
+      // Handle response data and update local state
+      List<dynamic> data = [];
+      for (var key in responseData.keys) {
+        if (responseData[key] is List) {
+          var firstItem = responseData[key].first;
+          if (firstItem is Map<String, dynamic> &&
+              firstItem.containsKey('text') &&
+              firstItem.containsKey('value')) {
+            data = responseData[key];
+            break;
           }
         }
+      }
 
-        if (data.isNotEmpty) {
-          print("Updating local state with data: $data");
-          setState(() {
-            _apiResponse = [
-              TextChoice.fromJson(data.first as Map<String, dynamic>)
-            ];
-          });
-          print("API call response: $_apiResponse");
-        } else {
-          print(
-              "No suitable list found in the API response to update _apiResponse.");
-        }
-
-        // navigate to next step
-        final resultFunction = () => APICallResult(
-              id: widget.questionStep.stepIdentifier,
-              startDate: _startDate,
-              endDate: DateTime.now(),
-              valueIdentifier:
-                  _apiResponse.map((choice) => choice.value).join(','),
-              result: _apiResponse,
-            );
-        Provider.of<SurveyController>(context, listen: false)
-            .nextStep(context, resultFunction);
-
-        print("Global state: ${GlobalStateManager().getAllData()}");
+      if (data.isNotEmpty) {
+        print("Updating local state with data: $data");
+        setState(() {
+          _apiResponse = [
+            TextChoice.fromJson(data.first as Map<String, dynamic>)
+          ];
+        });
+        print("API call response: $_apiResponse");
       } else {
         print(
-            'Failed to load data from API with status code: ${response.statusCode} and body: ${response.body}');
-        throw Exception(
-            'Failed to load data from API with status code: ${response.statusCode}' +
-                ' and body: ${response.body}');
+            "No suitable list found in the API response to update _apiResponse.");
       }
-    } catch (e) {
-      print('API call error: $e');
-      // display error message
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('API Call Error'),
-            content: Text('Failed to load data from API: $e'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
+
+      // navigate to next step
+      final resultFunction = () => APICallResult(
+            id: widget.questionStep.stepIdentifier,
+            startDate: _startDate,
+            endDate: DateTime.now(),
+            valueIdentifier:
+                _apiResponse.map((choice) => choice.value).join(','),
+            result: _apiResponse,
           );
-        },
-      );
+      Provider.of<SurveyController>(context, listen: false)
+          .nextStep(context, resultFunction);
+
+      print("Global state: ${GlobalStateManager().getAllData()}");
+    } else {
+      print(
+          'Failed to load data from API with status code: ${response.statusCode} and body: ${response.body}');
+      throw Exception(
+          'Failed to load data from API with status code: ${response.statusCode}' +
+              ' and body: ${response.body}');
     }
   }
 

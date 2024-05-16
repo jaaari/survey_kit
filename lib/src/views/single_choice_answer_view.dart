@@ -24,6 +24,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   TextChoice? _selectedChoice;
   List<TextChoice> _choices = [];
   List<String> _imageChoices = [];
+  bool isClicked = false;
 
   @override
   void initState() {
@@ -75,6 +76,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   }
 
   void _fetchAndUpdateChoices() {
+    if (isClicked) return;
     final prevChoices = _singleChoiceAnswerFormat.textChoices.toList();
     _choices.clear();
 
@@ -106,8 +108,10 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   }
 
   void _onAnswerChanged(TextChoice selectedChoice) {
+    isClicked = true;
     Map<String, dynamic> _resultMap = {};
     // Update for relatedParameter
+    print("SingleChoiceAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
     if (widget.questionStep.relatedParameter.isNotEmpty) {
       _resultMap[widget.questionStep.relatedParameter] = selectedChoice.value;
       print(

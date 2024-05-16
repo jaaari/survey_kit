@@ -9,6 +9,7 @@ class TextAnswerFormat implements AnswerFormat {
   final String? defaultValue;
   @JsonKey(defaultValue: '')
   final String hint;
+  final String placeholder;
 
   /// Regular expression by which the text gets validated
   /// default: '^(?!\s*$).+' that checks if the entered text is empty
@@ -21,6 +22,7 @@ class TextAnswerFormat implements AnswerFormat {
   const TextAnswerFormat({
     this.maxLines,
     this.hint = '',
+    this.placeholder = '',
     this.defaultValue,
     this.validationRegEx = '^(?!\s*\$).+',
   }) : super();

@@ -5,7 +5,6 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
-import 'dart:convert';
 
 class TextAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -26,6 +25,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final DateTime _startDate;
   late final TextEditingController _controller;
   bool _isValid = false;
+  var actualHint = "";
 
   @override
   void initState() {
@@ -34,8 +34,42 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
     _controller.text =
         widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
-    _checkValidation(_controller.text);
     _startDate = DateTime.now();
+    _initHint();
+    _initPlaceholder();
+  }
+
+  void _initHint() {
+    print("initHint: ${_textAnswerFormat.hint}");
+    if (_textAnswerFormat.hint != "") {
+      actualHint = _textAnswerFormat.hint;
+      print("Hint: $actualHint");
+      if (_textAnswerFormat.hint.contains("\$")) {
+        var dynamicKey = _textAnswerFormat.hint.substring(1); // Remove the '$'
+        var hintValue = GlobalStateManager().getData(dynamicKey);
+        if (hintValue != null) {
+          actualHint = hintValue;
+        }
+        print("Hint after resolving: $actualHint");
+      }
+    }
+  }
+
+  void _initPlaceholder() {
+    print("initPlaceholder: ${_textAnswerFormat.placeholder}");
+    if (_textAnswerFormat.placeholder != "") {
+      if (_textAnswerFormat.placeholder.contains("\$")) {
+        var dynamicKey = _textAnswerFormat.placeholder.substring(1); // Remove the '$'
+        var placeholderValue = GlobalStateManager().getData(dynamicKey);
+        if (placeholderValue != null) {
+          _controller.text = placeholderValue;
+        }
+        print("Placeholder after resolving: ${_controller.text}");
+      }
+      else {
+        _controller.text = _textAnswerFormat.placeholder;
+      }
+    }
   }
 
   void _checkValidation(String text) {
@@ -44,7 +78,8 @@ class _TextAnswerViewState extends State<TextAnswerView> {
         RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
         _isValid = regExp.hasMatch(text);
       } else {
-        _isValid = text.isNotEmpty; // Assume valid if not empty, adjust as needed
+        _isValid =
+            text.isNotEmpty; // Assume valid if not empty, adjust as needed
       }
     });
     _updateGlobalState(text);
@@ -52,7 +87,8 @@ class _TextAnswerViewState extends State<TextAnswerView> {
 
   void _updateGlobalState(String text) {
     // Update the global state with the current text input
-    GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
+    GlobalStateManager()
+        .updateData({widget.questionStep.relatedParameter: text});
     print("Updated global state with text: $text");
   }
 
@@ -94,12 +130,13 @@ class _TextAnswerViewState extends State<TextAnswerView> {
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 50.0,
+            height: MediaQuery.of(context).size.height * 0.4,
             child: TextField(
               textInputAction: TextInputAction.next,
+              maxLines: _textAnswerFormat.maxLines,
               autofocus: true,
               decoration: textFieldInputDecoration(
-                hint: _textAnswerFormat.hint,
+                hint: actualHint,
               ),
               controller: _controller,
               textAlign: TextAlign.center,

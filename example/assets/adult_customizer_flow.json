@@ -88,10 +88,20 @@
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "c1"
+                "id": "c9"
             },
             "destinationStepIdentifier": {
                 "id": "q6"
+            }
+        },
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": {
+                "id": "c3"
+            },
+            "values": {
+                "POSITIVE": "c5",
+                "NEGATIVE": "c4"
             }
         },
         {
@@ -255,7 +265,7 @@
             "title": "Checking User Age",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/check_if_user_is_adult",
+                "endpointUrl": "https://check-if-user-is-adult-cf-6n5kxdz4pa-lz.a.run.app",
                 "parameters": {
                     "creator_user_id": "$user_id"
                 },
@@ -342,11 +352,15 @@
             },
             "type": "question",
             "title": "Generating Character",
+            "relatedParameter": "user_input_character_ids",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/generate_character_adult",
+                "endpointUrl": "https://generate-character-adult-cf-6n5kxdz4pa-lz.a.run.app",
                 "parameters": {
-                    "creator_user_id": "$user_id"
+                    "creator_user_id": "$user_id",
+                    "user_input_genre": "$user_input_genre",
+                    "user_input_explicit": "$user_input_explicit",
+                    "user_input_character_ids": "$user_input_character_ids"
                 },
                 "requestType": "POST"
             }
@@ -356,10 +370,107 @@
                 "id": "c1"
             },
             "type": "question",
-            "title": "Creating Character (For now just a placeholder for multiple questions)",
+            "title": "What is the characters backstory?",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c2"
+            },
+            "type": "question",
+            "title": "Describe your characters personality",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c3"
+            },
+            "type": "question",
+            "title": "Is your character real and you personally know him/her?",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Yes",
+                "negativeAnswer": "No",
+                "result": "POSITIVE"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c4"
+            },
+            "type": "question",
+            "title": "How does your character look?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c5"
+            },
+            "type": "question",
+            "title": "Please upload a picture of your character",
+            "answerFormat": {
+                "type": "file"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c6"
+            },
+            "type": "question",
+            "title": "What are your characters interest?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c7"
+            },
+            "type": "question",
+            "title": "How old is your character?",
+            "answerFormat": {
+                "type": "integer",
+                "minimumValue": 0,
+                "maximumValue": 100
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c8"
+            },
+            "type": "question",
+            "title": "What is your characters name?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c9"
+            },
+            "type": "question",
+            "title": "Saving Character",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://save-character-adult",
+                "parameters": {
+                    "creator_user_id": "$user_id",
+                    "user_input_genre": "$user_input_genre",
+                    "user_input_explicit": "$user_input_explicit",
+                    "user_input_character_ids": "$user_input_character_ids"
+                },
+                "requestType": "POST"
             }
         },
         {
@@ -396,11 +507,10 @@
             "type": "question",
             "relatedParameter": "user_input_story_place",
             "title": "Where should the story take place?",
-            "text": "",
+            "hint": "E.g. a quiet city, a forest, a spaceship, etc.",
             "answerFormat": {
                 "type": "text",
-                "maxLines": 5,
-                "placeholder": "A {genre} story about..."
+                "maxLines": 5
             }
         },
         {
@@ -410,7 +520,7 @@
             "type": "question",
             "relatedParameter": "user_input_story_time",
             "title": "When does your story happen?",
-            "text": "E.g. 2020, 19th century, future, etc.",
+            "hint": "E.g. 2020, 19th century, future, etc.",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -423,10 +533,10 @@
             "type": "question",
             "relatedParameter": "user_input_idea",
             "title": "What is your vision?",
-            "text": "A {genre} story about...",
             "answerFormat": {
                 "type": "text",
-                "maxLines": 5
+                "maxLines": 5,
+                "placeholder": "A story about "
             }
         },
         {
@@ -437,7 +547,7 @@
             "title": "Generating Ideas",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/generate_ideas_adult",
+                "endpointUrl": "https://generate-ideas-adult-cf-6n5kxdz4pa-lz.a.run.app",
                 "parameters": {
                     "creator_user_id": "$user_id",
                     "user_input_genre": "$user_input_genre",
@@ -470,11 +580,11 @@
             "type": "question",
             "relatedParameter": "user_input_idea",
             "title": "If you want you can edit the story here:",
-            "text": "",
+            "text": "Hello",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5,
-                "placeholder": "$generated_idea"
+                "placeholder": "$user_input_idea"
             }
         },
         {
@@ -652,8 +762,12 @@
                     }
                 ],
                 "imageChoices": [
-                    "https://images.squarespace-cdn.com/content/v1/54822a56e4b0b30bd821480c/45ed8ecf-0bb2-4e34-8fcf-624db47c43c8/Golden+Retrievers+dans+pet+care.jpeg",
-                    "https://storage.googleapis.com/audiobookgen.appspot.com/6e1525bb-e817-4bfe-8c42-ca8a2c1684c5/cover_art.jpg"
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fadventure.webp?alt=media&token=8fae7b9c-19e4-47c7-b33c-e15ab5f45fc9",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffantasy.webp?alt=media&token=d9062a10-6928-4fb1-8ec9-bbbaf53f5179",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Flearning.webp?alt=media&token=e57fa484-fc58-4f73-aeb3-416f86170565",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fscience_fiction.webp?alt=media&token=2f03b151-a2dc-4f7e-be0e-eaa15bc28502",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fmystery.webp?alt=media&token=9bc14b75-6d6e-4b31-bbec-1445df2c9ffb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffairy_tale.webp?alt=media&token=e3a6a373-db57-4397-8161-399a7ccb21d5"
                 ],
                 "buttonChoices": []
             }

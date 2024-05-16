@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:survey_kit/src/kuluko_theme.dart';
 
 class SelectionListTile extends StatelessWidget {
   final String text;
@@ -21,10 +22,10 @@ class SelectionListTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: ListTile(
+            tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
             leading: image != null
-                ? CircleAvatar(
-                    backgroundImage: NetworkImage(image!),
-                  )
+                ? Image(
+                    image: NetworkImage(image!))
                 : null,
             title: Text(
               text,
