@@ -70,7 +70,7 @@
                 "id": "q6"
             },
             "values": {
-                "choose_existing_characters": "q61",
+                "choose_existing_characters": "a2",
                 "generate_character": "a3",
                 "create_character_manually": "c1",
                 "done": "q7"
@@ -288,21 +288,6 @@
         },
         {
             "stepIdentifier": {
-                "id": "a2"
-            },
-            "type": "question",
-            "title": "Getting existing characters",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/get_existing_characters",
-                "parameters": {
-                    "creator_user_id": "$user_id"
-                },
-                "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
                 "id": "q6"
             },
             "type": "question",
@@ -333,6 +318,21 @@
         },
         {
             "stepIdentifier": {
+                "id": "a2"
+            },
+            "type": "question",
+            "title": "Getting existing characters",
+            "answerFormat": {
+                "type": "api_call",
+                "endpointUrl": "https://get-existing-characters-cf-6n5kxdz4pa-lz.a.run.app",
+                "parameters": {
+                    "creator_user_id": "$user_id"
+                },
+                "requestType": "POST"
+            }
+        },
+        {
+            "stepIdentifier": {
                 "id": "q61"
             },
             "type": "question",
@@ -343,7 +343,8 @@
                 "type": "multiple",
                 "textChoices": [],
                 "dynamicTextChoices": "$existing_characters",
-                "buttonChoices": []
+                "buttonChoices": [],
+                "dynamicImageChoices": "$existing_characters_image_urls"
             }
         },
         {

@@ -17,13 +17,12 @@ class SelectionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('SelectionListTile is being built');
+    print('SelectionListTile is being built with ImageURL: $imageURL');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0), // Margin
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8), // Padding
         decoration: BoxDecoration(
-          // if selected, change the background color to the primary color, else use the default color
           color: isSelected
               ? Theme.of(context).primaryColor.withOpacity(0.1)
               : Theme.of(context).colorScheme.outlineVariant,

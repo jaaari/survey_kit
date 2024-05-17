@@ -16,6 +16,8 @@ class MultipleChoiceAnswerFormat implements AnswerFormat {
   @JsonKey(defaultValue: '')
   final String dynamicTextChoices;
   final List<TextChoice> buttonChoices;
+  final List<String> imageChoices;
+  final String dynamicImageChoices;
 
   const MultipleChoiceAnswerFormat({
     required this.textChoices,
@@ -23,6 +25,8 @@ class MultipleChoiceAnswerFormat implements AnswerFormat {
     this.otherField = false,
     this.maxAnswers = 100,
     this.dynamicTextChoices = '',
+    this.imageChoices = const [],
+    this.dynamicImageChoices = '',
     required this.buttonChoices,
   }) : super();
 

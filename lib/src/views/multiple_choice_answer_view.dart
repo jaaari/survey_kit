@@ -7,7 +7,6 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/selection_list_tile.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
-import 'dart:convert';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +30,7 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
 
   List<TextChoice> _selectedChoices = [];
   List<TextChoice> _choices = [];
+  List<String> _imageChoices = [];
 
   @override
   void initState() {
@@ -41,6 +41,7 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
         widget.result?.result ?? _multipleChoiceAnswer.defaultSelection;
     _startDateTime = DateTime.now();
     _initChoices();
+    _initImages();
   }
 
   void _initChoices() {
@@ -68,6 +69,26 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
     }
 
     _onAnswerChanged();
+  }
+
+  void _initImages() {
+    if (_multipleChoiceAnswer.imageChoices.isNotEmpty) {
+      print("SingleChoiceAnswerView: Initializing image choices");
+      print("Image urls: ${_multipleChoiceAnswer.imageChoices}");
+      _imageChoices = _multipleChoiceAnswer.imageChoices;
+      print("Image choices loaded: ${_imageChoices.length}");
+    } else if (_multipleChoiceAnswer.dynamicImageChoices != "") {
+      var manager = GlobalStateManager();
+      var dynamicImageChoices = manager
+          .getData(_multipleChoiceAnswer.dynamicImageChoices.substring(1));
+      print('Using dynamicImageChoices: $dynamicImageChoices');
+      if (dynamicImageChoices != null && dynamicImageChoices is List) {
+        _imageChoices = dynamicImageChoices.cast<String>();
+        print('Dynamic image choices added: ${_imageChoices.length}');
+      } else {
+        print('Dynamic image choices data is not in expected List format.');
+      }
+    }
   }
 
   void _onAnswerChanged() {
@@ -134,6 +155,9 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
                 ..._choices
                     .map(
                       (TextChoice tc) => SelectionListTile(
+                        imageURL: _imageChoices.isNotEmpty
+                            ? _imageChoices[_choices.indexOf(tc)]
+                            : "",
                         text: tc.text,
                         onTap: () {
                           setState(
