@@ -29,7 +29,7 @@ dependencies:
   url_launcher: ^6.1.5
   uuid: ^4.2.1
   video_player: ^2.1.6
-  shared_preferences: ^2.0.8
+  shared_preferences: any
   google_fonts: 6.1.0
 
 dev_dependencies:

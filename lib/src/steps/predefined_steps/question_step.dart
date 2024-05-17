@@ -66,7 +66,7 @@ class QuestionStep extends Step {
     bool isOptional = false,
     String buttonText = 'Next',
     StepIdentifier? stepIdentifier,
-    bool showAppBar = true,
+    bool showAppBar = false,
     this.title = '',
     this.text = '',
     this.relatedParameter = '',

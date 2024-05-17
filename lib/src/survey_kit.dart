@@ -159,20 +159,8 @@ class _SurveyPageState extends State<SurveyPage>
       builder: (BuildContext context, SurveyState state) {
         if (state is PresentingSurveyState) {
           return Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: state.currentStep.showAppBar
-                ? PreferredSize(
-                    preferredSize: Size(
-                      double.infinity,
-                      70.0,
-                    ),
-                    child: widget.appBar != null
-                        ? widget.appBar!.call(state.appBarConfiguration)
-                        : SurveyAppBar(
-                            appBarConfiguration: state.appBarConfiguration,
-                          ),
-                  )
-                : null,
+            backgroundColor: Colors.red,
+            appBar: null,
             body: TabBarView(
               physics: NeverScrollableScrollPhysics(),
               controller: tabController,

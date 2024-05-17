@@ -31,7 +31,7 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
   void initState() {
     super.initState();
     _answerFormat = widget.questionStep.answerFormat as BooleanAnswerFormat;
-    _result = null;  // Start with no selection
+    _result = null; // Start with no selection
     _startDate = DateTime.now();
   }
 
@@ -51,17 +51,20 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
 
     // Proceed to next step
     final resultFunction = () => BooleanQuestionResult(
-      id: widget.questionStep.stepIdentifier,
-      startDate: _startDate,
-      endDate: DateTime.now(),
-      valueIdentifier: _result == BooleanResult.POSITIVE ? "POSITIVE" : "NEGATIVE",
-      result: _result,
-    );
-    Provider.of<SurveyController>(context, listen: false).nextStep(context, resultFunction);
+          id: widget.questionStep.stepIdentifier,
+          startDate: _startDate,
+          endDate: DateTime.now(),
+          valueIdentifier:
+              _result == BooleanResult.POSITIVE ? "POSITIVE" : "NEGATIVE",
+          result: _result,
+        );
+    Provider.of<SurveyController>(context, listen: false)
+        .nextStep(context, resultFunction);
   }
 
   @override
   Widget build(BuildContext context) {
+    print("BooleanAnswerView: Building");
     return StepView(
       step: widget.questionStep,
       resultFunction: () => BooleanQuestionResult(
@@ -76,26 +79,30 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
         result: _result,
       ),
       title: widget.questionStep.title.isNotEmpty
-          ? Text(
-              widget.questionStep.title,
-              style: Theme.of(context).textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            )
+          ? Text(widget.questionStep.title,
+              style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                  fontWeight:
+                      Theme.of(context).textTheme.titleMedium?.fontWeight,
+                  color: Theme.of(context).primaryColor),
+              textAlign: TextAlign.center)
           : widget.questionStep.content,
-      isValid: widget.questionStep.isOptional || _result != null,  // Validation requires a choice
+      isValid: widget.questionStep.isOptional ||
+          _result != null, // Validation requires a choice
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 32.0),
-            child: Text(
-              widget.questionStep.text,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
+          // if (widget.questionStep.title.isNotEmpty) display text
+          if (widget.questionStep.text.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                widget.questionStep.text,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
           Column(
             children: [
-              Divider(color: Colors.grey),
               SelectionListTile(
                 text: _answerFormat.positiveAnswer,
                 onTap: () => _onAnswerChanged(BooleanResult.POSITIVE),

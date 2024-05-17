@@ -5,55 +5,55 @@ class SelectionListTile extends StatelessWidget {
   final String text;
   final Function onTap;
   final bool isSelected;
-  final String? image;  // Optional parameter for image URL
+  final String imageURL;
 
   const SelectionListTile({
     Key? key,
     required this.text,
     required this.onTap,
     this.isSelected = false,
-    this.image,  // Accepting an image URL
+    this.imageURL = "",
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14.0),
-          child: ListTile(
-            tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-            leading: image != null
-                ? Image(
-                    image: NetworkImage(image!))
-                : null,
-            title: Text(
-              text,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: isSelected
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).textTheme.headlineSmall?.color,
-                  ),
-            ),
-            trailing: isSelected
-                ? Icon(
-                    Icons.check,
-                    size: 32,
-                    color: isSelected
-                        ? Theme.of(context).primaryColor
-                        : Colors.black,
-                  )
-                : Container(
-                    width: 32,
-                    height: 32,
-                  ),
-            onTap: () => onTap.call(),
+    print('SelectionListTile is being built');
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0), // Margin
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8), // Padding
+        decoration: BoxDecoration(
+          // if selected, change the background color to the primary color, else use the default color
+          color: isSelected
+              ? Theme.of(context).primaryColor.withOpacity(0.1)
+              : Theme.of(context).colorScheme.outlineVariant,
+          borderRadius: BorderRadius.circular(14.0), 
+          image: imageURL != "" ? DecorationImage(
+            image: NetworkImage(imageURL),
+            fit: BoxFit.fitHeight,
+            alignment: Alignment.centerRight,
+          ) : null,
+        ),
+        child: ListTile(
+          title: Text(
+            text,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: isSelected
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).textTheme.bodyMedium?.color,
+                ),
           ),
+          // if image is not null, display a square transparent container at the end so the background image is visible (100% height and square width)
+          trailing: imageURL != ""
+              ? Container(
+                  width: 50,
+                  height: 50,
+                  color: Colors.transparent,
+                )
+              : null,
+          onTap: () => onTap.call(),
         ),
-        Divider(
-          color: Colors.grey,
-        ),
-      ],
+      ),
     );
   }
 }

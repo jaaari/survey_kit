@@ -66,7 +66,7 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
       title: widget.questionStep.title.isNotEmpty
           ? Text(
               widget.questionStep.title,
-              style: Theme.of(context).textTheme.displayMedium,
+              style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             )
           : widget.questionStep.content,

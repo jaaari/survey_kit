@@ -40,6 +40,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   }
 
   void _initImages() {
+    print("SingleChoiceAnswerView: Initializing image choices");
     if (_singleChoiceAnswerFormat.imageChoices.isNotEmpty) {
       print("SingleChoiceAnswerView: Initializing image choices");
       print("Image urls: ${_singleChoiceAnswerFormat.imageChoices}");
@@ -132,6 +133,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
 
   @override
   Widget build(BuildContext context) {
+    print("SingleChoiceAnswerView: Building");
     return StepView(
       step: widget.questionStep,
       resultFunction: () => SingleChoiceQuestionResult(
@@ -145,24 +147,24 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
           _selectedChoice != null, // Ensure a choice is made if not optional
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: Theme.of(context).textTheme.displayMedium,
+              style: TextStyle(fontSize: Theme.of(context).textTheme.titleMedium?.fontSize, fontWeight: Theme.of(context).textTheme.titleMedium?.fontWeight, color: Theme.of(context).primaryColor),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Divider(color: Colors.grey),
             ..._choices.asMap().entries.map((entry) {
               int idx = entry.key;
               TextChoice tc = entry.value;
               bool hasImage =
-                  idx < _imageChoices.length && _imageChoices[idx].isNotEmpty;
+                  idx < _imageChoices.length && _imageChoices[idx].isNotEmpty && _imageChoices[idx] != "";
               return SelectionListTile(
                 text: tc.text,
-                image: hasImage
+                imageURL: hasImage
                     ? _imageChoices[idx]
-                    : null, // Pass the image URL if available
+                    : "",
                 onTap: () {
                   setState(() {
                     _selectedChoice = tc;

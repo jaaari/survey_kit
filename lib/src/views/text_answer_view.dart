@@ -59,14 +59,14 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     print("initPlaceholder: ${_textAnswerFormat.placeholder}");
     if (_textAnswerFormat.placeholder != "") {
       if (_textAnswerFormat.placeholder.contains("\$")) {
-        var dynamicKey = _textAnswerFormat.placeholder.substring(1); // Remove the '$'
+        var dynamicKey =
+            _textAnswerFormat.placeholder.substring(1); // Remove the '$'
         var placeholderValue = GlobalStateManager().getData(dynamicKey);
         if (placeholderValue != null) {
           _controller.text = placeholderValue;
         }
         print("Placeholder after resolving: ${_controller.text}");
-      }
-      else {
+      } else {
         _controller.text = _textAnswerFormat.placeholder;
       }
     }
@@ -110,11 +110,13 @@ class _TextAnswerViewState extends State<TextAnswerView> {
         result: _controller.text,
       ),
       title: widget.questionStep.title.isNotEmpty
-          ? Text(
-              widget.questionStep.title,
-              style: Theme.of(context).textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            )
+          ? Text(widget.questionStep.title,
+              style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                  fontWeight:
+                      Theme.of(context).textTheme.titleMedium?.fontWeight,
+                  color: Theme.of(context).primaryColor),
+              textAlign: TextAlign.center)
           : widget.questionStep.content,
       isValid: _isValid || widget.questionStep.isOptional,
       child: Column(

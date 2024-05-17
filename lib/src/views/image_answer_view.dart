@@ -51,11 +51,13 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       ),
       isValid: _isValid || widget.questionStep.isOptional,
       title: widget.questionStep.title.isNotEmpty
-          ? Text(
-              widget.questionStep.title,
-              style: Theme.of(context).textTheme.displayMedium,
-              textAlign: TextAlign.center,
-            )
+          ? Text(widget.questionStep.title,
+              style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                  fontWeight:
+                      Theme.of(context).textTheme.titleMedium?.fontWeight,
+                  color: Theme.of(context).primaryColor),
+              textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 32.0),

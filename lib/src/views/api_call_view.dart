@@ -153,7 +153,7 @@ class _APICallViewState extends State<APICallView> {
         isValid: false,
         title: Text(
           widget.questionStep.title,
-          style: Theme.of(context).textTheme.displayMedium,
+          style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.center,
         ),
         child: _apiResponse.isEmpty

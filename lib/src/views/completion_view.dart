@@ -21,7 +21,7 @@ class CompletionView extends StatelessWidget {
         DateTime.now(),
       ),
       title: Text(completionStep.title,
-          style: Theme.of(context).textTheme.displayMedium,
+          style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.center),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 64.0),

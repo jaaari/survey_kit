@@ -23,7 +23,7 @@ abstract class Step {
     this.buttonText = 'Next',
     this.canGoBack = true,
     this.showProgress = true,
-    this.showAppBar = true,
+    this.showAppBar = false,
   }) : stepIdentifier = stepIdentifier ?? StepIdentifier();
 
   Widget createView({required QuestionResult? questionResult});

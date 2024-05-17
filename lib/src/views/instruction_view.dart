@@ -15,7 +15,7 @@ class InstructionView extends StatelessWidget {
       step: instructionStep,
       title: Text(
         instructionStep.title,
-        style: Theme.of(context).textTheme.displayMedium,
+        style: Theme.of(context).textTheme.titleMedium,
         textAlign: TextAlign.center,
       ),
       resultFunction: () => InstructionStepResult(
