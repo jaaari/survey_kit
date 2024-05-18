@@ -126,11 +126,22 @@ class _TextAnswerViewState extends State<TextAnswerView> {
                 const EdgeInsets.only(bottom: 32.0, left: 14.0, right: 14.0),
             child: Text(
               widget.questionStep.text,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
           Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(14.0),
+            ),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.4,
             child: TextField(
@@ -145,6 +156,11 @@ class _TextAnswerViewState extends State<TextAnswerView> {
               onChanged: (String text) {
                 _checkValidation(text);
               },
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              )
             ),
           ),
         ],

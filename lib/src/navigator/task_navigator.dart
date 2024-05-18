@@ -35,7 +35,10 @@ abstract class TaskNavigator {
   }
 
   void record(Step step) {
-    history.add(step);
+    // dont add api calls to history
+    if (!step.stepIdentifier.id.contains("a")) {
+      history.add(step);
+    }
   }
 
   int get countSteps => task.steps.length;

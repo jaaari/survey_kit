@@ -144,7 +144,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
         result: _selectedChoice,
       ),
       isValid: widget.questionStep.isOptional ||
-          _selectedChoice != null, // Ensure a choice is made if not optional
+          _selectedChoice != null,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
               style: TextStyle(fontSize: Theme.of(context).textTheme.titleMedium?.fontSize, fontWeight: Theme.of(context).textTheme.titleMedium?.fontWeight, color: Theme.of(context).primaryColor),

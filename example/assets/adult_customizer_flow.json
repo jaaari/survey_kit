@@ -60,7 +60,7 @@
                 "id": "q5"
             },
             "values": {
-                "POSITIVE": "a2",
+                "POSITIVE": "q6",
                 "NEGATIVE": "q8"
             }
         },
@@ -72,8 +72,7 @@
             "values": {
                 "choose_existing_characters": "a2",
                 "generate_character": "a3",
-                "create_character_manually": "c1",
-                "done": "q7"
+                "create_character_manually": "c1"
             }
         },
         {
@@ -111,6 +110,15 @@
             },
             "destinationStepIdentifier": {
                 "id": "q6"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q7"
+            },
+            "destinationStepIdentifier": {
+                "id": "q8"
             }
         },
         {
@@ -248,7 +256,7 @@
                 "id": "q5"
             },
             "type": "question",
-            "title": "Do you want to pick the story characters manually? (CURRENTLY BOTH YES AND NO LEAD TO THE SAME RESULT)",
+            "title": "Do you want to pick the story characters manually?",
             "answerFormat": {
                 "type": "bool",
                 "positiveAnswer": "Yes",
@@ -263,6 +271,7 @@
             "type": "question",
             "relatedParameter": "is_adult",
             "title": "Checking User Age",
+            "canGoBack": false,
             "answerFormat": {
                 "type": "api_call",
                 "endpointUrl": "https://check-if-user-is-adult-cf-6n5kxdz4pa-lz.a.run.app",
@@ -292,6 +301,7 @@
             },
             "type": "question",
             "title": "Here you see which characters you have already selected. Press the button to select or create more!",
+            "isOptional": true,
             "answerFormat": {
                 "type": "single",
                 "textChoices": [],
@@ -308,12 +318,22 @@
                     {
                         "text": "Create new character manually",
                         "value": "create_character_manually"
-                    },
-                    {
-                        "text": "Done",
-                        "value": "done"
                     }
                 ]
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q7"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_main_character_id",
+            "title": "Choose your main character:",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [],
+                "dynamicTextChoices": "$selected_characters",
+                "buttonChoices": []
             }
         },
         {
@@ -472,20 +492,6 @@
                     "user_input_character_ids": "$user_input_character_ids"
                 },
                 "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q7"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_main_character_id",
-            "title": "Choose your main character:",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [],
-                "dynamicTextChoices": "$selected_characters",
-                "buttonChoices": []
             }
         },
         {

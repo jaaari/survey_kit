@@ -20,37 +20,41 @@ class SelectionListTile extends StatelessWidget {
     print('SelectionListTile is being built with ImageURL: $imageURL');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0), // Margin
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8), // Padding
-        decoration: BoxDecoration(
-          color: isSelected
-              ? Theme.of(context).primaryColor.withOpacity(0.1)
-              : Theme.of(context).colorScheme.outlineVariant,
-          borderRadius: BorderRadius.circular(14.0), 
-          image: imageURL != "" ? DecorationImage(
-            image: NetworkImage(imageURL),
-            fit: BoxFit.fitHeight,
-            alignment: Alignment.centerRight,
-          ) : null,
-        ),
-        child: ListTile(
-          title: Text(
-            text,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isSelected
-                      ? Theme.of(context).primaryColor
-                      : Theme.of(context).textTheme.bodyMedium?.color,
-                ),
+      child: InkWell(
+        onTap: () => onTap.call(),
+        borderRadius: BorderRadius.circular(14.0), // Border radius for InkWell effect
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 20), // Padding
+          constraints: BoxConstraints(
+            minHeight: 100.0, // Set your desired minimum height here
           ),
-          // if image is not null, display a square transparent container at the end so the background image is visible (100% height and square width)
-          trailing: imageURL != ""
-              ? Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.transparent,
-                )
-              : null,
-          onTap: () => onTap.call(),
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? Theme.of(context).primaryColor.withOpacity(0.1)
+                : Theme.of(context).colorScheme.outlineVariant,
+            borderRadius: BorderRadius.circular(14.0),
+            image: imageURL != "" ? DecorationImage(
+              image: NetworkImage(imageURL),
+              fit: BoxFit.fitHeight,
+              alignment: Alignment.centerRight,
+            ) : null,
+          ),
+          child: ListTile(
+            contentPadding: EdgeInsets.zero, // Remove ListTile's padding
+            title: Text(
+              text,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: isSelected
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+            ),
+            trailing: imageURL != "" ? Container(width: 100, color: Colors.transparent) : null,
+            onTap: () => onTap.call(),
+          ),
         ),
       ),
     );
