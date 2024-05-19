@@ -17,7 +17,11 @@ class SelectionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Debugging print statements
     print('SelectionListTile is being built with ImageURL: $imageURL');
+    print('Current theme brightness: ${Theme.of(context).brightness}');
+    print('surfaceContainerLowest color: ${Theme.of(context).colorScheme.surfaceContainerLowest}');
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0), // Margin
       child: InkWell(
@@ -32,7 +36,7 @@ class SelectionListTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? Theme.of(context).primaryColor.withOpacity(0.1)
-                : Theme.of(context).colorScheme.outlineVariant,
+                : Theme.of(context).colorScheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(14.0),
             image: imageURL != "" ? DecorationImage(
               image: NetworkImage(imageURL),

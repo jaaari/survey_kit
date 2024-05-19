@@ -172,15 +172,6 @@
     "steps": [
         {
             "stepIdentifier": {
-                "id": "0"
-            },
-            "type": "intro",
-            "title": "Welcome to the\nAudiobook\nTest Configurator",
-            "text": "Get ready for a bunch of super random questions!",
-            "buttonText": "Let's go!"
-        },
-        {
-            "stepIdentifier": {
                 "id": "q1"
             },
             "type": "question",
@@ -634,25 +625,35 @@
             },
             "type": "question",
             "relatedParameter": "user_input_narrator_voice",
-            "title": "Who do you want to narrate your audiobook (should be a custom type that plays sample on click)?",
+            "title": "Who do you want to narrate your audiobook?",
             "text": "",
             "answerFormat": {
-                "type": "single",
+                "type": "single_audio",
                 "textChoices": [
                     {
                         "text": "Onyx",
                         "value": "onyx"
                     },
                     {
-                        "text": "Fable",
-                        "value": "fable"
+                        "text": "Nova",
+                        "value": "nova"
                     },
                     {
                         "text": "Echo",
                         "value": "echo"
                     }
                 ],
-                "buttonChoices": []
+                "buttonChoices": [],
+                "imageChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_32-year-old_strict-looking_woman_recording_a_podcast_vie_e10097ee-289e-4638-a538-2021b5fd0714.png?alt=media&token=595b6713-9e3f-4afd-8f83-5564d705d4fb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9"
+                ],
+                "audioChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fonyx_sample.mp3?alt=media&token=57876e7e-c973-4c73-b8b0-26b46c84b436",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ffable_sample.mp3?alt=media&token=c8be5b84-4241-450c-ab28-d38db3610a01",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fecho_sample.mp3?alt=media&token=a8eede16-6510-4c13-82c2-ec44b4d40a0b"
+                ]
             }
         },
         {
@@ -918,22 +919,32 @@
             "title": "Who do you want to narrate your audiobook?",
             "text": "",
             "answerFormat": {
-                "type": "single",
+                "type": "single_audio",
                 "textChoices": [
                     {
                         "text": "Onyx",
                         "value": "onyx"
                     },
                     {
-                        "text": "Fable",
-                        "value": "fable"
+                        "text": "Nova",
+                        "value": "nova"
                     },
                     {
                         "text": "Echo",
                         "value": "echo"
                     }
                 ],
-                "buttonChoices": []
+                "buttonChoices": [],
+                "imageChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_32-year-old_strict-looking_woman_recording_a_podcast_vie_e10097ee-289e-4638-a538-2021b5fd0714.png?alt=media&token=595b6713-9e3f-4afd-8f83-5564d705d4fb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9"
+                ],
+                "audioChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fonyx_sample.mp3?alt=media&token=57876e7e-c973-4c73-b8b0-26b46c84b436",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ffable_sample.mp3?alt=media&token=c8be5b84-4241-450c-ab28-d38db3610a01",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fecho_sample.mp3?alt=media&token=a8eede16-6510-4c13-82c2-ec44b4d40a0b"
+                ]
             }
         },
         {

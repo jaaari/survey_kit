@@ -14,6 +14,7 @@ import 'package:survey_kit/src/answer_format/single_choice_answer_format.dart';
 import 'package:survey_kit/src/answer_format/text_answer_format.dart';
 import 'package:survey_kit/src/answer_format/time_answer_formart.dart';
 import 'package:survey_kit/src/answer_format/api_call_answer_format.dart';
+import 'package:survey_kit/src/answer_format/single_choice_audio_answer_format.dart';
 import 'package:survey_kit/src/steps/predefined_steps/answer_format_not_defined_exception.dart';
 
 
@@ -37,6 +38,8 @@ abstract class AnswerFormat {
         return DateAnswerFormat.fromJson(json);
       case 'single':
         return SingleChoiceAnswerFormat.fromJson(json);
+      case 'single_audio':
+        return SingleChoiceAudioAnswerFormat.fromJson(json);
       case 'multiple':
         return MultipleChoiceAnswerFormat.fromJson(json);
       case 'multiple_double':

@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: _buildTheme(LightModeTheme()),
       darkTheme: _buildTheme(DarkModeTheme()),
-      themeMode: KulukoTheme.themeMode,
+      themeMode: ThemeMode.dark,
       home: Scaffold(
         body: Container(
           color: KulukoTheme.of(context).primaryBackground,
@@ -180,6 +180,11 @@ class _MyAppState extends State<MyApp> {
 
   ThemeData _buildTheme(KulukoTheme theme) {
     return ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.cyan,
+        brightness: Brightness.dark,
+      ),
       primaryColor: theme.primary,
       appBarTheme: AppBarTheme(
         color: theme.primaryBackground,
