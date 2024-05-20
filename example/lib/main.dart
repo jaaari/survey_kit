@@ -180,11 +180,6 @@ class _MyAppState extends State<MyApp> {
 
   ThemeData _buildTheme(KulukoTheme theme) {
     return ThemeData(
-      brightness: Brightness.dark,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.cyan,
-        brightness: Brightness.dark,
-      ),
       primaryColor: theme.primary,
       appBarTheme: AppBarTheme(
         color: theme.primaryBackground,

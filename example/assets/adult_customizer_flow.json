@@ -165,6 +165,15 @@
                 "id": "q27"
             },
             "destinationStepIdentifier": {
+                "id": "a10"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "a10"
+            },
+            "destinationStepIdentifier": {
                 "id": "q18"
             }
         }
@@ -383,6 +392,7 @@
             },
             "type": "question",
             "title": "What is the characters backstory?",
+            "relatedParameter": "character_backstory",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -394,6 +404,7 @@
             },
             "type": "question",
             "title": "Describe your characters personality",
+            "relatedParameter": "character_personality",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -405,6 +416,7 @@
             },
             "type": "question",
             "title": "Is your character real and you personally know him/her?",
+            "relatedParameter": "character_real",
             "answerFormat": {
                 "type": "bool",
                 "positiveAnswer": "Yes",
@@ -418,6 +430,7 @@
             },
             "type": "question",
             "title": "How does your character look?",
+            "relatedParameter": "character_looks",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -429,6 +442,7 @@
             },
             "type": "question",
             "title": "Please upload a picture of your character",
+            "relatedParameter": "character_image_url",
             "answerFormat": {
                 "type": "file"
             }
@@ -439,6 +453,7 @@
             },
             "type": "question",
             "title": "What are your characters interest?",
+            "relatedParameter": "character_interests",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -450,6 +465,7 @@
             },
             "type": "question",
             "title": "How old is your character?",
+            "relatedParameter": "character_age",
             "answerFormat": {
                 "type": "integer",
                 "minimumValue": 0,
@@ -462,6 +478,7 @@
             },
             "type": "question",
             "title": "What is your characters name?",
+            "relatedParameter": "character_name",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -475,12 +492,17 @@
             "title": "Saving Character",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://save-character-adult",
+                "endpointUrl": "https://save-character-to-database-cf-6n5kxdz4pa-lz.a.run.app",
                 "parameters": {
                     "creator_user_id": "$user_id",
-                    "user_input_genre": "$user_input_genre",
-                    "user_input_explicit": "$user_input_explicit",
-                    "user_input_character_ids": "$user_input_character_ids"
+                    "character_personality": "$character_personality",
+                    "character_looks": "$character_looks",
+                    "character_name": "$character_name",
+                    "character_age": "$character_age",
+                    "character_interests": "$character_interests",
+                    "character_backstory": "$character_backstory",
+                    "character_image_url": "$character_image_url",
+                    "character_real": "$character_real"
                 },
                 "requestType": "POST"
             }
@@ -973,6 +995,34 @@
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "a10"
+            },
+            "type": "question",
+            "title": "Generating Audiobook",
+            "answerFormat":{
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/generate_audiobook",
+                "parameters": {
+                    "creator_user_id": "$user_id",
+                    "user_input_genre": "$user_input_genre",
+                    "user_input_explicit": "$user_input_explicit",
+                    "user_input_story_place": "$user_input_story_place",
+                    "user_input_story_time": "$user_input_story_time",
+                    "user_input_idea": "$user_input_idea",
+                    "user_input_target_duration": "$user_input_target_duration",
+                    "user_input_language_complexity": "$user_input_language_complexity",
+                    "user_input_narrator_voice": "$user_input_narrator_voice",
+                    "user_input_audiobook_language_code": "$user_input_language",
+                    "user_input_character_ids": "$user_input_character_ids",
+                    "user_input_main_character_id": "$user_input_main_character_id",
+                    "user_input_requested_duration": "$user_input_target_duration",
+                    "user_input_listener_age": "$user_input_target_listener_age"
+                },
+                "requestType": "POST"
             }
         }
     ]
