@@ -22,7 +22,7 @@
                 "id": "q1"
             },
             "values": {
-                "POSITIVE": "q19",
+                "POSITIVE": "cq1",
                 "NEGATIVE": "q2"
             }
         },
@@ -143,7 +143,7 @@
         {
             "type": "conditional",
             "triggerStepIdentifier": {
-                "id": "q21"
+                "id": "cq3"
             },
             "values": {
                 "create_character": "c2"
@@ -152,17 +152,17 @@
         {
             "type": "conditional",
             "triggerStepIdentifier": {
-                "id": "q22"
+                "id": "cq4"
             },
             "values": {
-                "POSITIVE": "q23",
+                "POSITIVE": "cq5",
                 "NEGATIVE": "a8"
             }
         },
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "q27"
+                "id": "cq9"
             },
             "destinationStepIdentifier": {
                 "id": "a10"
@@ -728,7 +728,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q19"
+                "id": "cq1"
             },
             "type": "question",
             "relatedParameter": "user_input_target_listener_age",
@@ -758,7 +758,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q20"
+                "id": "cq2"
             },
             "type": "question",
             "relatedParameter": "user_input_genre",
@@ -820,7 +820,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q21"
+                "id": "cq3"
             },
             "type": "question",
             "relatedParameter": "user_input_main_character_id",
@@ -839,7 +839,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q22"
+                "id": "cq4"
             },
             "type": "question",
             "relatedParameter": "user_input_lesson",
@@ -853,7 +853,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q23"
+                "id": "cq5"
             },
             "type": "question",
             "relatedParameter": "user_input_lesson",
@@ -884,7 +884,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q24"
+                "id": "cq6"
             },
             "type": "question",
             "relatedParameter": "user_input_story_place",
@@ -920,7 +920,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q25"
+                "id": "cq7"
             },
             "type": "question",
             "relatedParameter": "user_input_idea",
@@ -934,7 +934,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q26"
+                "id": "cq8"
             },
             "type": "question",
             "relatedParameter": "user_input_narrator_voice",
@@ -971,7 +971,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q27"
+                "id": "cq9"
             },
             "type": "question",
             "relatedParameter": "user_input_target_duration",
