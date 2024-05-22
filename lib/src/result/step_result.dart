@@ -10,6 +10,7 @@ import 'package:survey_kit/src/result/question/scale_question_result.dart';
 import 'package:survey_kit/src/result/question/single_choice_question_result.dart';
 import 'package:survey_kit/src/result/question/text_question_result.dart';
 import 'package:survey_kit/src/result/question/time_question_result.dart';
+import 'package:survey_kit/src/result/question/single_choice_audio_question_result.dart';
 import 'package:survey_kit/src/result/result.dart';
 import 'package:survey_kit/src/result/step/completion_step_result.dart';
 import 'package:survey_kit/src/result/step/instruction_step_result.dart';
@@ -66,6 +67,10 @@ class _Converter implements JsonConverter<List<QuestionResult>, Object> {
       } else if (qr is DateQuestionResult) {
         final qrJson = qr.toJson();
         qrJson['type'] = (DateQuestionResult).toString();
+        allQuestionResultsEncoded.add(qrJson);
+      } else if (qr is singleChoiceAudioQuestionResult) {
+        final qrJson = qr.toJson();
+        qrJson['type'] = (singleChoiceAudioQuestionResult).toString();
         allQuestionResultsEncoded.add(qrJson);
       } else if (qr is APICallResult) {
         final qrJson = qr.toJson();

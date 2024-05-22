@@ -2,55 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:survey_kit/survey_kit.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
+import 'package:survey_kit/src/answer_format/single_choice_audio_answer_format.dart';
+import 'package:survey_kit/src/result/question/single_choice_audio_question_result.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class SingleChoiceAnswerView extends StatefulWidget {
+class singleChoiceAudioAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
-  final SingleChoiceQuestionResult? result;
+  final singleChoiceAudioQuestionResult? result;
 
-  const SingleChoiceAnswerView({
+  const singleChoiceAudioAnswerView({
     Key? key,
     required this.questionStep,
     required this.result,
   }) : super(key: key);
 
   @override
-  _SingleChoiceAnswerViewState createState() => _SingleChoiceAnswerViewState();
+  _singleChoiceAudioAnswerViewState createState() => _singleChoiceAudioAnswerViewState();
 }
 
-class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
+class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerView> {
   late final DateTime _startDate;
-  late final SingleChoiceAnswerFormat _singleChoiceAnswerFormat;
+  late final SingleChoiceAudioAnswerFormat _SingleChoiceAudioAnswerFormat;
   TextChoice? _selectedChoice;
   List<TextChoice> _choices = [];
   List<String> _imageChoices = [];
+  List<String> _audioChoices = [];
   bool isClicked = false;
+  AudioPlayer? _audioPlayer;
 
   @override
   void initState() {
     super.initState();
     _startDate = DateTime.now();
-    _singleChoiceAnswerFormat =
-        widget.questionStep.answerFormat as SingleChoiceAnswerFormat;
+    _SingleChoiceAudioAnswerFormat =
+        widget.questionStep.answerFormat as SingleChoiceAudioAnswerFormat;
     _selectedChoice = null; // No choice is preselected
     _initChoices();
-    print("SingleChoiceAnswerView: Initialized");
+    print("singleChoiceAudioAnswerView: Initialized");
     _initImages(); // Initialize image choices
+    _initAudioChoices(); // Initialize audio choices
     GlobalStateManager().addListener(_refreshChoices);
   }
 
   void _initImages() {
-    print("SingleChoiceAnswerView: Initializing image choices");
-    if (_singleChoiceAnswerFormat.imageChoices.isNotEmpty) {
-      print("SingleChoiceAnswerView: Initializing image choices");
-      print("Image urls: ${_singleChoiceAnswerFormat.imageChoices}");
-      _imageChoices = _singleChoiceAnswerFormat.imageChoices;
+    print("singleChoiceAudioAnswerView: Initializing image choices");
+    if (_SingleChoiceAudioAnswerFormat.imageChoices.isNotEmpty) {
+      print("singleChoiceAudioAnswerView: Initializing image choices");
+      print("Image urls: ${_SingleChoiceAudioAnswerFormat.imageChoices}");
+      _imageChoices = _SingleChoiceAudioAnswerFormat.imageChoices;
       print("Image choices loaded: ${_imageChoices.length}");
-    }
-    else if (_singleChoiceAnswerFormat.dynamicImageChoices != "") {
+    } else if (_SingleChoiceAudioAnswerFormat.dynamicImageChoices != "") {
       var manager = GlobalStateManager();
       var dynamicImageChoices = manager
-          .getData(_singleChoiceAnswerFormat.dynamicImageChoices.substring(1));
+          .getData(_SingleChoiceAudioAnswerFormat.dynamicImageChoices.substring(1));
       print('Using dynamicImageChoices: $dynamicImageChoices');
       if (dynamicImageChoices != null && dynamicImageChoices is List) {
         _imageChoices = dynamicImageChoices.cast<String>();
@@ -61,9 +66,19 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
     }
   }
 
+  void _initAudioChoices() {
+    print("singleChoiceAudioAnswerView: Initializing audio choices");
+    if (_SingleChoiceAudioAnswerFormat.audioChoices.isNotEmpty) {
+      print("singleChoiceAudioAnswerView: Audio choices urls: ${_SingleChoiceAudioAnswerFormat.audioChoices}");
+      _audioChoices = _SingleChoiceAudioAnswerFormat.audioChoices;
+      print("Audio choices loaded: ${_audioChoices.length}");
+    }
+  }
+
   @override
   void dispose() {
     GlobalStateManager().removeListener(_refreshChoices);
+    _audioPlayer?.dispose();
     super.dispose();
   }
 
@@ -72,24 +87,24 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   }
 
   void _initChoices() {
-    print("SingleChoiceAnswerView: Initializing choices");
+    print("singleChoiceAudioAnswerView: Initializing choices");
     _fetchAndUpdateChoices();
   }
 
   void _fetchAndUpdateChoices() {
     if (isClicked) return;
-    final prevChoices = _singleChoiceAnswerFormat.textChoices.toList();
+    final prevChoices = _SingleChoiceAudioAnswerFormat.textChoices.toList();
     _choices.clear();
 
-    if (_singleChoiceAnswerFormat.textChoices.isNotEmpty) {
+    if (_SingleChoiceAudioAnswerFormat.textChoices.isNotEmpty) {
       _choices = prevChoices;
       print('Static text choices loaded: ${_choices.length}');
     }
 
-    if (_singleChoiceAnswerFormat.dynamicTextChoices.isNotEmpty) {
+    if (_SingleChoiceAudioAnswerFormat.dynamicTextChoices.isNotEmpty) {
       var manager = GlobalStateManager();
       var dynamicChoices = manager
-          .getData(_singleChoiceAnswerFormat.dynamicTextChoices.substring(1));
+          .getData(_SingleChoiceAudioAnswerFormat.dynamicTextChoices.substring(1));
       print('Using dynamicTextChoices: $dynamicChoices');
       if (dynamicChoices != null && dynamicChoices is List) {
         _choices += dynamicChoices
@@ -101,8 +116,8 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
       }
     }
 
-    if (_singleChoiceAnswerFormat.buttonChoices.isNotEmpty) {
-      _choices += _singleChoiceAnswerFormat.buttonChoices;
+    if (_SingleChoiceAudioAnswerFormat.buttonChoices.isNotEmpty) {
+      _choices += _SingleChoiceAudioAnswerFormat.buttonChoices;
     }
 
     print('Total choices available after update: ${_choices.length}');
@@ -112,11 +127,11 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
     isClicked = true;
     Map<String, dynamic> _resultMap = {};
     // Update for relatedParameter
-    print("SingleChoiceAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
+    print("singleChoiceAudioAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
     if (widget.questionStep.relatedParameter.isNotEmpty) {
       _resultMap[widget.questionStep.relatedParameter] = selectedChoice.value;
       print(
-          "SingleChoiceAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
+          "singleChoiceAudioAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
     }
 
     // Update for relatedTextChoiceParameter
@@ -127,13 +142,21 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
     }
 
     GlobalStateManager().updateData(_resultMap);
-    print('SingleChoiceAnswerView: Updated data: $_resultMap');
+    print('singleChoiceAudioAnswerView: Updated data: $_resultMap');
     print("GlobalStateManager data: ${GlobalStateManager().getAllData()}");
+  }
+
+  void _playAudio(int index) async {
+    if (_audioPlayer != null) {
+      await _audioPlayer!.stop();
+    }
+    _audioPlayer = AudioPlayer();
+    await _audioPlayer!.play(UrlSource(_audioChoices[index]));
   }
 
   @override
   Widget build(BuildContext context) {
-    print("SingleChoiceAnswerView: Building");
+    print("singleChoiceAudioAnswerView: Building");
     return StepView(
       step: widget.questionStep,
       resultFunction: () => SingleChoiceQuestionResult(
@@ -143,11 +166,15 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
         valueIdentifier: _selectedChoice?.value ?? '',
         result: _selectedChoice,
       ),
-      isValid: widget.questionStep.isOptional ||
-          _selectedChoice != null, // Ensure a choice is made if not optional
+      isValid: widget.questionStep.isOptional || _selectedChoice != null,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(fontSize: Theme.of(context).textTheme.titleMedium?.fontSize, fontWeight: Theme.of(context).textTheme.titleMedium?.fontWeight, color: Theme.of(context).primaryColor),
+              style: TextStyle(
+                  fontSize:
+                      Theme.of(context).textTheme.titleMedium?.fontSize,
+                  fontWeight:
+                      Theme.of(context).textTheme.titleMedium?.fontWeight,
+                  color: Theme.of(context).primaryColor),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
@@ -158,29 +185,20 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
             ..._choices.asMap().entries.map((entry) {
               int idx = entry.key;
               TextChoice tc = entry.value;
-              bool hasImage =
-                  idx < _imageChoices.length && _imageChoices[idx].isNotEmpty && _imageChoices[idx] != "";
+              bool hasImage = idx < _imageChoices.length &&
+                  _imageChoices[idx].isNotEmpty &&
+                  _imageChoices[idx] != "";
               return SelectionListTile(
                 text: tc.text,
-                imageURL: hasImage
-                    ? _imageChoices[idx]
-                    : "",
+                imageURL: hasImage ? _imageChoices[idx] : "",
                 onTap: () {
                   setState(() {
                     _selectedChoice = tc;
                   });
                   _onAnswerChanged(tc);
-                  // go to next step
-                  final resultFunction = () => SingleChoiceQuestionResult(
-                        id: widget.questionStep.stepIdentifier,
-                        startDate: _startDate,
-                        endDate: DateTime.now(),
-                        valueIdentifier: _selectedChoice?.value ?? '',
-                        result: _selectedChoice,
-                      );
-                  final surveyController =
-                      Provider.of<SurveyController>(context, listen: false);
-                  surveyController.nextStep(context, resultFunction);
+                  if (_audioChoices.isNotEmpty && idx < _audioChoices.length) {
+                    _playAudio(idx);
+                  }
                 },
                 isSelected: _selectedChoice == tc,
               );
@@ -191,4 +209,3 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
     );
   }
 }
-
