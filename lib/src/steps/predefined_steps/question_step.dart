@@ -174,10 +174,10 @@ class QuestionStep extends Step {
           result: questionResult as ImageQuestionResult?,
         );
       case SingleChoiceAudioAnswerFormat:
-        return singleChoiceAudioAnswerView(
+        return SingleChoiceAudioAnswerView(
           key: key,
           questionStep: this,
-          result: questionResult as singleChoiceAudioQuestionResult?,
+          result: questionResult as SingleChoiceAudioQuestionResult?,
         );
       default:
         throw AnswerFormatNotDefinedException();

@@ -24,7 +24,6 @@ class StepView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('StepView is being built');
     final _surveyController = controller ?? context.read<SurveyController>();
 
     return Scaffold(

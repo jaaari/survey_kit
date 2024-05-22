@@ -68,9 +68,9 @@ class _Converter implements JsonConverter<List<QuestionResult>, Object> {
         final qrJson = qr.toJson();
         qrJson['type'] = (DateQuestionResult).toString();
         allQuestionResultsEncoded.add(qrJson);
-      } else if (qr is singleChoiceAudioQuestionResult) {
+      } else if (qr is SingleChoiceAudioQuestionResult) {
         final qrJson = qr.toJson();
-        qrJson['type'] = (singleChoiceAudioQuestionResult).toString();
+        qrJson['type'] = (SingleChoiceAudioQuestionResult).toString();
         allQuestionResultsEncoded.add(qrJson);
       } else if (qr is APICallResult) {
         final qrJson = qr.toJson();
