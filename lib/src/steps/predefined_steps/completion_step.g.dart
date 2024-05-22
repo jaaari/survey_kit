@@ -16,6 +16,9 @@ CompletionStep _$CompletionStepFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       text: json['text'] as String,
       assetPath: json['assetPath'] as String? ?? "",
+      endpointUrl: json['endpointUrl'] as String,
+      parameters: json['parameters'] as Map<String, dynamic>,
+      requestType: json['requestType'] as String? ?? "POST",
     );
 
 Map<String, dynamic> _$CompletionStepToJson(CompletionStep instance) =>
@@ -27,4 +30,7 @@ Map<String, dynamic> _$CompletionStepToJson(CompletionStep instance) =>
       'title': instance.title,
       'text': instance.text,
       'assetPath': instance.assetPath,
+      'endpointUrl': instance.endpointUrl,
+      'parameters': instance.parameters,
+      'requestType': instance.requestType,
     };

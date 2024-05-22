@@ -1,27 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'integer_question_result.dart';
+part of 'single_choice_audio_question_result.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-IntegerQuestionResult _$IntegerQuestionResultFromJson(
+SingleChoiceAudioQuestionResult _$SingleChoiceAudioQuestionResultFromJson(
         Map<String, dynamic> json) =>
-    IntegerQuestionResult(
+    SingleChoiceAudioQuestionResult(
       id: Identifier.fromJson(json['id'] as Map<String, dynamic>),
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: DateTime.parse(json['endDate'] as String),
       valueIdentifier: json['valueIdentifier'] as String,
-      result: (json['result'] as num?)?.toInt(),
+      result: json['result'] == null
+          ? null
+          : TextChoice.fromJson(json['result'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$IntegerQuestionResultToJson(
-        IntegerQuestionResult instance) =>
+Map<String, dynamic> _$SingleChoiceAudioQuestionResultToJson(
+        SingleChoiceAudioQuestionResult instance) =>
     <String, dynamic>{
       'id': instance.id?.toJson(),
       'startDate': instance.startDate.toIso8601String(),
       'endDate': instance.endDate.toIso8601String(),
-      'result': instance.result,
+      'result': instance.result?.toJson(),
       'valueIdentifier': instance.valueIdentifier,
     };
