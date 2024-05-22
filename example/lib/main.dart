@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: _buildTheme(LightModeTheme()),
       darkTheme: _buildTheme(DarkModeTheme()),
-      themeMode: KulukoTheme.themeMode,
+      themeMode: ThemeMode.dark,
       home: Scaffold(
         body: Container(
           color: KulukoTheme.of(context).primaryBackground,

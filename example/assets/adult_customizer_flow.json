@@ -22,7 +22,7 @@
                 "id": "q1"
             },
             "values": {
-                "POSITIVE": "q19",
+                "POSITIVE": "cq1",
                 "NEGATIVE": "q2"
             }
         },
@@ -143,7 +143,7 @@
         {
             "type": "conditional",
             "triggerStepIdentifier": {
-                "id": "q21"
+                "id": "cq3"
             },
             "values": {
                 "create_character": "c2"
@@ -152,17 +152,26 @@
         {
             "type": "conditional",
             "triggerStepIdentifier": {
-                "id": "q22"
+                "id": "cq4"
             },
             "values": {
-                "POSITIVE": "q23",
+                "POSITIVE": "cq5",
                 "NEGATIVE": "a8"
             }
         },
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "q27"
+                "id": "cq9"
+            },
+            "destinationStepIdentifier": {
+                "id": "a10"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "a10"
             },
             "destinationStepIdentifier": {
                 "id": "q18"
@@ -170,15 +179,6 @@
         }
     ],
     "steps": [
-        {
-            "stepIdentifier": {
-                "id": "0"
-            },
-            "type": "intro",
-            "title": "Welcome to the\nAudiobook\nTest Configurator",
-            "text": "Get ready for a bunch of super random questions!",
-            "buttonText": "Let's go!"
-        },
         {
             "stepIdentifier": {
                 "id": "q1"
@@ -392,6 +392,7 @@
             },
             "type": "question",
             "title": "What is the characters backstory?",
+            "relatedParameter": "character_backstory",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -403,6 +404,7 @@
             },
             "type": "question",
             "title": "Describe your characters personality",
+            "relatedParameter": "character_personality",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -414,6 +416,7 @@
             },
             "type": "question",
             "title": "Is your character real and you personally know him/her?",
+            "relatedParameter": "character_real",
             "answerFormat": {
                 "type": "bool",
                 "positiveAnswer": "Yes",
@@ -427,6 +430,7 @@
             },
             "type": "question",
             "title": "How does your character look?",
+            "relatedParameter": "character_looks",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -438,6 +442,7 @@
             },
             "type": "question",
             "title": "Please upload a picture of your character",
+            "relatedParameter": "character_image_url",
             "answerFormat": {
                 "type": "file"
             }
@@ -448,6 +453,7 @@
             },
             "type": "question",
             "title": "What are your characters interest?",
+            "relatedParameter": "character_interests",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -459,6 +465,7 @@
             },
             "type": "question",
             "title": "How old is your character?",
+            "relatedParameter": "character_age",
             "answerFormat": {
                 "type": "integer",
                 "minimumValue": 0,
@@ -471,6 +478,7 @@
             },
             "type": "question",
             "title": "What is your characters name?",
+            "relatedParameter": "character_name",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
@@ -484,12 +492,17 @@
             "title": "Saving Character",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://save-character-adult",
+                "endpointUrl": "https://save-character-to-database-cf-6n5kxdz4pa-lz.a.run.app",
                 "parameters": {
                     "creator_user_id": "$user_id",
-                    "user_input_genre": "$user_input_genre",
-                    "user_input_explicit": "$user_input_explicit",
-                    "user_input_character_ids": "$user_input_character_ids"
+                    "character_personality": "$character_personality",
+                    "character_looks": "$character_looks",
+                    "character_name": "$character_name",
+                    "character_age": "$character_age",
+                    "character_interests": "$character_interests",
+                    "character_backstory": "$character_backstory",
+                    "character_image_url": "$character_image_url",
+                    "character_real": "$character_real"
                 },
                 "requestType": "POST"
             }
@@ -634,25 +647,35 @@
             },
             "type": "question",
             "relatedParameter": "user_input_narrator_voice",
-            "title": "Who do you want to narrate your audiobook (should be a custom type that plays sample on click)?",
+            "title": "Who do you want to narrate your audiobook?",
             "text": "",
             "answerFormat": {
-                "type": "single",
+                "type": "single_audio",
                 "textChoices": [
                     {
                         "text": "Onyx",
                         "value": "onyx"
                     },
                     {
-                        "text": "Fable",
-                        "value": "fable"
+                        "text": "Nova",
+                        "value": "nova"
                     },
                     {
                         "text": "Echo",
                         "value": "echo"
                     }
                 ],
-                "buttonChoices": []
+                "buttonChoices": [],
+                "imageChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_32-year-old_strict-looking_woman_recording_a_podcast_vie_e10097ee-289e-4638-a538-2021b5fd0714.png?alt=media&token=595b6713-9e3f-4afd-8f83-5564d705d4fb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9"
+                ],
+                "audioChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fonyx_sample.mp3?alt=media&token=57876e7e-c973-4c73-b8b0-26b46c84b436",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ffable_sample.mp3?alt=media&token=c8be5b84-4241-450c-ab28-d38db3610a01",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fecho_sample.mp3?alt=media&token=a8eede16-6510-4c13-82c2-ec44b4d40a0b"
+                ]
             }
         },
         {
@@ -705,7 +728,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q19"
+                "id": "cq1"
             },
             "type": "question",
             "relatedParameter": "user_input_target_listener_age",
@@ -735,7 +758,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q20"
+                "id": "cq2"
             },
             "type": "question",
             "relatedParameter": "user_input_genre",
@@ -797,7 +820,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q21"
+                "id": "cq3"
             },
             "type": "question",
             "relatedParameter": "user_input_main_character_id",
@@ -816,7 +839,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q22"
+                "id": "cq4"
             },
             "type": "question",
             "relatedParameter": "user_input_lesson",
@@ -830,7 +853,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q23"
+                "id": "cq5"
             },
             "type": "question",
             "relatedParameter": "user_input_lesson",
@@ -861,7 +884,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q24"
+                "id": "cq6"
             },
             "type": "question",
             "relatedParameter": "user_input_story_place",
@@ -897,7 +920,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q25"
+                "id": "cq7"
             },
             "type": "question",
             "relatedParameter": "user_input_idea",
@@ -911,34 +934,44 @@
         },
         {
             "stepIdentifier": {
-                "id": "q26"
+                "id": "cq8"
             },
             "type": "question",
             "relatedParameter": "user_input_narrator_voice",
             "title": "Who do you want to narrate your audiobook?",
             "text": "",
             "answerFormat": {
-                "type": "single",
+                "type": "single_audio",
                 "textChoices": [
                     {
                         "text": "Onyx",
                         "value": "onyx"
                     },
                     {
-                        "text": "Fable",
-                        "value": "fable"
+                        "text": "Nova",
+                        "value": "nova"
                     },
                     {
                         "text": "Echo",
                         "value": "echo"
                     }
                 ],
-                "buttonChoices": []
+                "buttonChoices": [],
+                "imageChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_32-year-old_strict-looking_woman_recording_a_podcast_vie_e10097ee-289e-4638-a538-2021b5fd0714.png?alt=media&token=595b6713-9e3f-4afd-8f83-5564d705d4fb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9"
+                ],
+                "audioChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fonyx_sample.mp3?alt=media&token=57876e7e-c973-4c73-b8b0-26b46c84b436",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ffable_sample.mp3?alt=media&token=c8be5b84-4241-450c-ab28-d38db3610a01",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fecho_sample.mp3?alt=media&token=a8eede16-6510-4c13-82c2-ec44b4d40a0b"
+                ]
             }
         },
         {
             "stepIdentifier": {
-                "id": "q27"
+                "id": "cq9"
             },
             "type": "question",
             "relatedParameter": "user_input_target_duration",
@@ -962,6 +995,34 @@
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "a10"
+            },
+            "type": "question",
+            "title": "Generating Audiobook",
+            "answerFormat":{
+                "type": "api_call",
+                "endpointUrl": "https://kuluko.com/api/generate_audiobook",
+                "parameters": {
+                    "creator_user_id": "$user_id",
+                    "user_input_genre": "$user_input_genre",
+                    "user_input_explicit": "$user_input_explicit",
+                    "user_input_story_place": "$user_input_story_place",
+                    "user_input_story_time": "$user_input_story_time",
+                    "user_input_idea": "$user_input_idea",
+                    "user_input_target_duration": "$user_input_target_duration",
+                    "user_input_language_complexity": "$user_input_language_complexity",
+                    "user_input_narrator_voice": "$user_input_narrator_voice",
+                    "user_input_audiobook_language_code": "$user_input_language",
+                    "user_input_character_ids": "$user_input_character_ids",
+                    "user_input_main_character_id": "$user_input_main_character_id",
+                    "user_input_requested_duration": "$user_input_target_duration",
+                    "user_input_listener_age": "$user_input_target_listener_age"
+                },
+                "requestType": "POST"
             }
         }
     ]
