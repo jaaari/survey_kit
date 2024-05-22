@@ -7,7 +7,7 @@
         "user_input_explicit": false,
         "user_input_story_place": "",
         "user_input_story_time": "",
-        "user_input_idea": "",
+        "user_input_story_idea": "",
         "user_input_target_duration": 2.5,
         "user_input_language_complexity": 4,
         "user_input_narrator_voice": "",
@@ -165,7 +165,7 @@
                 "id": "cq9"
             },
             "destinationStepIdentifier": {
-                "id": "a10"
+                "id": "q18"
             }
         },
         {
@@ -551,7 +551,7 @@
                 "id": "q11"
             },
             "type": "question",
-            "relatedParameter": "user_input_idea",
+            "relatedParameter": "user_input_story_idea",
             "title": "What is your vision?",
             "answerFormat": {
                 "type": "text",
@@ -584,7 +584,7 @@
                 "id": "q12"
             },
             "type": "question",
-            "relatedParameter": "user_input_idea",
+            "relatedParameter": "user_input_story_idea",
             "title": "Choose an idea for your story:",
             "answerFormat": {
                 "type": "single",
@@ -598,13 +598,13 @@
                 "id": "q13"
             },
             "type": "question",
-            "relatedParameter": "user_input_idea",
+            "relatedParameter": "user_input_story_idea",
             "title": "If you want you can edit the story here:",
             "text": "Hello",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5,
-                "placeholder": "$user_input_idea"
+                "placeholder": "$user_input_story_idea"
             }
         },
         {
@@ -683,7 +683,7 @@
                 "id": "q17"
             },
             "type": "question",
-            "relatedParameter": "user_input_language",
+            "relatedParameter": "user_input_audiobook_language_code",
             "title": "What language should the audiobook be in?",
             "text": "",
             "answerFormat": {
@@ -691,27 +691,27 @@
                 "textChoices": [
                     {
                         "text": "English",
-                        "value": "english"
+                        "value": "en"
                     },
                     {
                         "text": "German",
-                        "value": "german"
+                        "value": "de"
                     },
                     {
                         "text": "French",
-                        "value": "french"
+                        "value": "fr"
                     },
                     {
                         "text": "Spanish",
-                        "value": "spanish"
+                        "value": "es"
                     },
                     {
                         "text": "Italian",
-                        "value": "italian"
+                        "value": "it"
                     },
                     {
                         "text": "Finnish",
-                        "value": "finnish"
+                        "value": "fi"
                     }
                 ],
                 "buttonChoices": []
@@ -722,9 +722,27 @@
                 "id": "q18"
             },
             "type": "completion",
-            "text": "Here could be a overview with links back to the questions.",
-            "title": "Done!",
-            "buttonText": "Generate Audiobook!"
+            "text": "$user_input_story_idea",
+            "title": "All done! Do you want to generate your story now?",
+            "buttonText": "Generate Audiobook!",
+            "parameters": {
+                "creator_user_id": "$user_id",
+                "user_input_genre": "$user_input_genre",
+                "user_input_explicit": "$user_input_explicit",
+                "user_input_story_place": "$user_input_story_place",
+                "user_input_story_time": "$user_input_story_time",
+                "user_input_story_idea": "$user_input_story_idea",
+                "user_input_target_duration": "$user_input_target_duration",
+                "user_input_language_complexity": "$user_input_language_complexity",
+                "user_input_narrator_voice": "$user_input_narrator_voice",
+                "user_input_audiobook_language_code": "$user_input_language",
+                "user_input_character_ids": "$user_input_character_ids",
+                "user_input_main_character_id": "$user_input_main_character_id",
+                "user_input_requested_duration": "$user_input_target_duration",
+                "user_input_target_listener_age": "$user_input_target_listener_age"
+            },
+            "requestType": "POST",
+            "endpointUrl": "https://initiate-audiobook-cf-6n5kxdz4pa-lz.a.run.app"
         },
         {
             "stepIdentifier": {
@@ -834,7 +852,8 @@
                         "text": "Create new character",
                         "value": "create_character"
                     }
-                ]
+                ],
+                "dynamicImageChoices": "$existing_characters_image_urls"
             }
         },
         {
@@ -923,7 +942,7 @@
                 "id": "cq7"
             },
             "type": "question",
-            "relatedParameter": "user_input_idea",
+            "relatedParameter": "user_input_story_idea",
             "title": "Choose an idea for your story:",
             "answerFormat": {
                 "type": "single",
@@ -995,34 +1014,6 @@
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "a10"
-            },
-            "type": "question",
-            "title": "Generating Audiobook",
-            "answerFormat":{
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/generate_audiobook",
-                "parameters": {
-                    "creator_user_id": "$user_id",
-                    "user_input_genre": "$user_input_genre",
-                    "user_input_explicit": "$user_input_explicit",
-                    "user_input_story_place": "$user_input_story_place",
-                    "user_input_story_time": "$user_input_story_time",
-                    "user_input_idea": "$user_input_idea",
-                    "user_input_target_duration": "$user_input_target_duration",
-                    "user_input_language_complexity": "$user_input_language_complexity",
-                    "user_input_narrator_voice": "$user_input_narrator_voice",
-                    "user_input_audiobook_language_code": "$user_input_language",
-                    "user_input_character_ids": "$user_input_character_ids",
-                    "user_input_main_character_id": "$user_input_main_character_id",
-                    "user_input_requested_duration": "$user_input_target_duration",
-                    "user_input_listener_age": "$user_input_target_listener_age"
-                },
-                "requestType": "POST"
             }
         }
     ]

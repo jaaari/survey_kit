@@ -7,8 +7,8 @@ import 'package:json_annotation/json_annotation.dart';
 part 'single_choice_audio_question_result.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class singleChoiceAudioQuestionResult extends QuestionResult<TextChoice?> {
-  singleChoiceAudioQuestionResult({
+class SingleChoiceAudioQuestionResult extends QuestionResult<TextChoice?> {
+  SingleChoiceAudioQuestionResult({
     required Identifier id,
     required DateTime startDate,
     required DateTime endDate,
@@ -22,9 +22,9 @@ class singleChoiceAudioQuestionResult extends QuestionResult<TextChoice?> {
           result: result,
         );
 
-  factory singleChoiceAudioQuestionResult.fromJson(Map<String, dynamic> json) => _$singleChoiceAudioQuestionResultFromJson(json);
+  factory SingleChoiceAudioQuestionResult.fromJson(Map<String, dynamic> json) => _$SingleChoiceAudioQuestionResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$singleChoiceAudioQuestionResultToJson(this);
+  Map<String, dynamic> toJson() => _$SingleChoiceAudioQuestionResultToJson(this);
 
   @override
   List<Object?> get props => [id, startDate, endDate, valueIdentifier, result];

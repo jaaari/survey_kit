@@ -37,6 +37,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     _startDate = DateTime.now();
     _initHint();
     _initPlaceholder();
+    _checkValidation(_controller.text);
   }
 
   void _initHint() {

@@ -7,21 +7,21 @@ import 'package:survey_kit/src/result/question/single_choice_audio_question_resu
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class singleChoiceAudioAnswerView extends StatefulWidget {
+class SingleChoiceAudioAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
-  final singleChoiceAudioQuestionResult? result;
+  final SingleChoiceAudioQuestionResult? result;
 
-  const singleChoiceAudioAnswerView({
+  const SingleChoiceAudioAnswerView({
     Key? key,
     required this.questionStep,
     required this.result,
   }) : super(key: key);
 
   @override
-  _singleChoiceAudioAnswerViewState createState() => _singleChoiceAudioAnswerViewState();
+  _SingleChoiceAudioAnswerViewState createState() => _SingleChoiceAudioAnswerViewState();
 }
 
-class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerView> {
+class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerView> {
   late final DateTime _startDate;
   late final SingleChoiceAudioAnswerFormat _SingleChoiceAudioAnswerFormat;
   TextChoice? _selectedChoice;
@@ -39,16 +39,16 @@ class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerVie
         widget.questionStep.answerFormat as SingleChoiceAudioAnswerFormat;
     _selectedChoice = null; // No choice is preselected
     _initChoices();
-    print("singleChoiceAudioAnswerView: Initialized");
+    print("SingleChoiceAudioAnswerView: Initialized");
     _initImages(); // Initialize image choices
     _initAudioChoices(); // Initialize audio choices
     GlobalStateManager().addListener(_refreshChoices);
   }
 
   void _initImages() {
-    print("singleChoiceAudioAnswerView: Initializing image choices");
+    print("SingleChoiceAudioAnswerView: Initializing image choices");
     if (_SingleChoiceAudioAnswerFormat.imageChoices.isNotEmpty) {
-      print("singleChoiceAudioAnswerView: Initializing image choices");
+      print("SingleChoiceAudioAnswerView: Initializing image choices");
       print("Image urls: ${_SingleChoiceAudioAnswerFormat.imageChoices}");
       _imageChoices = _SingleChoiceAudioAnswerFormat.imageChoices;
       print("Image choices loaded: ${_imageChoices.length}");
@@ -67,9 +67,9 @@ class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerVie
   }
 
   void _initAudioChoices() {
-    print("singleChoiceAudioAnswerView: Initializing audio choices");
+    print("SingleChoiceAudioAnswerView: Initializing audio choices");
     if (_SingleChoiceAudioAnswerFormat.audioChoices.isNotEmpty) {
-      print("singleChoiceAudioAnswerView: Audio choices urls: ${_SingleChoiceAudioAnswerFormat.audioChoices}");
+      print("SingleChoiceAudioAnswerView: Audio choices urls: ${_SingleChoiceAudioAnswerFormat.audioChoices}");
       _audioChoices = _SingleChoiceAudioAnswerFormat.audioChoices;
       print("Audio choices loaded: ${_audioChoices.length}");
     }
@@ -87,7 +87,7 @@ class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerVie
   }
 
   void _initChoices() {
-    print("singleChoiceAudioAnswerView: Initializing choices");
+    print("SingleChoiceAudioAnswerView: Initializing choices");
     _fetchAndUpdateChoices();
   }
 
@@ -127,11 +127,11 @@ class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerVie
     isClicked = true;
     Map<String, dynamic> _resultMap = {};
     // Update for relatedParameter
-    print("singleChoiceAudioAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
+    print("SingleChoiceAudioAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
     if (widget.questionStep.relatedParameter.isNotEmpty) {
       _resultMap[widget.questionStep.relatedParameter] = selectedChoice.value;
       print(
-          "singleChoiceAudioAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
+          "SingleChoiceAudioAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
     }
 
     // Update for relatedTextChoiceParameter
@@ -142,7 +142,7 @@ class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerVie
     }
 
     GlobalStateManager().updateData(_resultMap);
-    print('singleChoiceAudioAnswerView: Updated data: $_resultMap');
+    print('SingleChoiceAudioAnswerView: Updated data: $_resultMap');
     print("GlobalStateManager data: ${GlobalStateManager().getAllData()}");
   }
 
@@ -156,10 +156,10 @@ class _singleChoiceAudioAnswerViewState extends State<singleChoiceAudioAnswerVie
 
   @override
   Widget build(BuildContext context) {
-    print("singleChoiceAudioAnswerView: Building");
+    print("SingleChoiceAudioAnswerView: Building");
     return StepView(
       step: widget.questionStep,
-      resultFunction: () => SingleChoiceQuestionResult(
+      resultFunction: () => SingleChoiceAudioQuestionResult(
         id: widget.questionStep.stepIdentifier,
         startDate: _startDate,
         endDate: DateTime.now(),

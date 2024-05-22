@@ -12,6 +12,9 @@ class CompletionStep extends Step {
   final String title;
   final String text;
   final String assetPath;
+  final String endpointUrl;
+  final Map<String, dynamic> parameters;
+  final String requestType;
 
   CompletionStep({
     bool isOptional = false,
@@ -20,7 +23,10 @@ class CompletionStep extends Step {
     bool showAppBar = false,
     required this.title,
     required this.text,
-    this.assetPath = ""
+    this.assetPath = "",
+    required this.endpointUrl,
+    required this.parameters,
+    this.requestType = "POST",
   }) : super(
           stepIdentifier: stepIdentifier,
           isOptional: isOptional,
@@ -38,6 +44,18 @@ class CompletionStep extends Step {
   Map<String, dynamic> toJson() => _$CompletionStepToJson(this);
 
   bool operator ==(o) =>
-      super == (o) && o is CompletionStep && o.title == title && o.text == text;
-  int get hashCode => super.hashCode ^ title.hashCode ^ text.hashCode;
+      super == (o) &&
+      o is CompletionStep &&
+      o.title == title &&
+      o.text == text &&
+      o.endpointUrl == endpointUrl &&
+      o.parameters == parameters &&
+      o.requestType == requestType;
+  int get hashCode =>
+      super.hashCode ^
+      title.hashCode ^
+      text.hashCode ^
+      endpointUrl.hashCode ^
+      parameters.hashCode ^
+      requestType.hashCode;
 }
