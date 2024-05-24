@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/result/step/completion_step_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/completion_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
@@ -60,7 +61,11 @@ class _CompletionViewState extends State<CompletionView> {
       }
 
       if (response.statusCode == 200) {
-        Provider.of<SurveyController>(context, listen: false).closeSurvey(context);
+        Provider.of<SurveyController>(context, listen: false).nextStep(context, () => CompletionStepResult(
+        widget.completionStep.stepIdentifier,
+        _startDate,
+        DateTime.now()
+      ));
       } else {
         setState(() {
           _errorMessage = 'Error: ${response.body}';
@@ -92,10 +97,11 @@ class _CompletionViewState extends State<CompletionView> {
   Widget build(BuildContext context) {
     return StepView(
       step: widget.completionStep,
+      isValid: false,
       resultFunction: () => CompletionStepResult(
         widget.completionStep.stepIdentifier,
         _startDate,
-        DateTime.now(),
+        DateTime.now()
       ),
       title: Text(
         widget.completionStep.title,

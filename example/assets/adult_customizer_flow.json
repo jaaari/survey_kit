@@ -13,7 +13,8 @@
         "user_input_narrator_voice": "",
         "user_input_language": "english",
         "user_input_character_ids": "",
-        "user_input_main_character_id": ""
+        "user_input_main_character_id": "",
+        "user_input_target_listener_age": ""
     },
     "rules": [
         {
@@ -171,7 +172,7 @@
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "a10"
+                "id": "q17"
             },
             "destinationStepIdentifier": {
                 "id": "q18"
@@ -600,7 +601,6 @@
             "type": "question",
             "relatedParameter": "user_input_story_idea",
             "title": "If you want you can edit the story here:",
-            "text": "Hello",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5,
@@ -716,33 +716,6 @@
                 ],
                 "buttonChoices": []
             }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q18"
-            },
-            "type": "completion",
-            "text": "$user_input_story_idea",
-            "title": "All done! Do you want to generate your story now?",
-            "buttonText": "Generate Audiobook!",
-            "parameters": {
-                "creator_user_id": "$user_id",
-                "user_input_genre": "$user_input_genre",
-                "user_input_explicit": "$user_input_explicit",
-                "user_input_story_place": "$user_input_story_place",
-                "user_input_story_time": "$user_input_story_time",
-                "user_input_story_idea": "$user_input_story_idea",
-                "user_input_target_duration": "$user_input_target_duration",
-                "user_input_language_complexity": "$user_input_language_complexity",
-                "user_input_narrator_voice": "$user_input_narrator_voice",
-                "user_input_audiobook_language_code": "$user_input_language",
-                "user_input_character_ids": "$user_input_character_ids",
-                "user_input_main_character_id": "$user_input_main_character_id",
-                "user_input_requested_duration": "$user_input_target_duration",
-                "user_input_target_listener_age": "$user_input_target_listener_age"
-            },
-            "requestType": "POST",
-            "endpointUrl": "https://initiate-audiobook-cf-6n5kxdz4pa-lz.a.run.app"
         },
         {
             "stepIdentifier": {
@@ -1015,6 +988,32 @@
                 "type": "text",
                 "maxLines": 5
             }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q18"
+            },
+            "type": "completion",
+            "text": "$user_input_story_idea",
+            "title": "All done! Do you want to generate your story now?",
+            "buttonText": "Generate Audiobook!",
+            "parameters": {
+                "creator_user_id": "$user_id",
+                "user_input_genre": "$user_input_genre",
+                "user_input_explicit": "$user_input_explicit",
+                "user_input_story_place": "$user_input_story_place",
+                "user_input_story_time": "$user_input_story_time",
+                "user_input_story_idea": "$user_input_story_idea",
+                "user_input_target_duration": "$user_input_target_duration",
+                "user_input_language_complexity": "$user_input_language_complexity",
+                "user_input_narrator_voice": "$user_input_narrator_voice",
+                "user_input_audiobook_language_code": "$user_input_language",
+                "user_input_character_ids": "$user_input_character_ids",
+                "user_input_main_character_id": "$user_input_main_character_id",
+                "user_input_target_listener_age": "$user_input_target_listener_age"
+            },
+            "requestType": "POST",
+            "endpointUrl": "https://initiate-audiobook-cf-6n5kxdz4pa-lz.a.run.app"
         }
     ]
 }
