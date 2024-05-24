@@ -11,7 +11,7 @@
         "user_input_target_duration": 2.5,
         "user_input_language_complexity": 4,
         "user_input_narrator_voice": "",
-        "user_input_language": "english",
+        "user_input_audiobook_language_code": "en",
         "user_input_character_ids": "",
         "user_input_main_character_id": "",
         "user_input_target_listener_age": ""
@@ -1007,7 +1007,7 @@
                 "user_input_target_duration": "$user_input_target_duration",
                 "user_input_language_complexity": "$user_input_language_complexity",
                 "user_input_narrator_voice": "$user_input_narrator_voice",
-                "user_input_audiobook_language_code": "$user_input_language",
+                "user_input_audiobook_language_code": "$user_input_audiobook_language_code",
                 "user_input_character_ids": "$user_input_character_ids",
                 "user_input_main_character_id": "$user_input_main_character_id",
                 "user_input_target_listener_age": "$user_input_target_listener_age"
