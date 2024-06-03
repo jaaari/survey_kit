@@ -135,7 +135,7 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
                   fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
                   fontWeight:
                       Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).primaryColor),
+                  color: Theme.of(context).colorScheme.primary),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(

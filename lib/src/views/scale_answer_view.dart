@@ -61,7 +61,11 @@ class _ScaleAnswerViewState extends State<ScaleAnswerView> {
       title: widget.questionStep.title.isNotEmpty
           ? Text(
               widget.questionStep.title,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               textAlign: TextAlign.center,
             )
           : widget.questionStep.content,

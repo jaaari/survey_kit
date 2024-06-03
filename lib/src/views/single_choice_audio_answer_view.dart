@@ -170,11 +170,10 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
               style: TextStyle(
-                  fontSize:
-                      Theme.of(context).textTheme.titleMedium?.fontSize,
-                  fontWeight:
-                      Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).primaryColor),
+                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
