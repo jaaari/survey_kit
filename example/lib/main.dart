@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: _buildTheme(LightModeTheme()),
-      darkTheme: _buildTheme(DarkModeTheme()),
+      darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       home: Scaffold(
         body: Container(
@@ -53,99 +53,7 @@ class _MyAppState extends State<MyApp> {
                       'cancel': 'Cancel',
                       'next': 'Next',
                     },
-                    themeData: Theme.of(context).copyWith(
-                      primaryColor: KulukoTheme.of(context).primary,
-                      appBarTheme: AppBarTheme(
-                        color: KulukoTheme.of(context).primaryBackground,
-                        iconTheme: IconThemeData(
-                          color: KulukoTheme.of(context).primary,
-                        ),
-                        titleTextStyle: TextStyle(
-                          color: KulukoTheme.of(context).primary,
-                        ),
-                      ),
-                      iconTheme: IconThemeData(
-                        color: KulukoTheme.of(context).primary,
-                      ),
-                      textSelectionTheme: TextSelectionThemeData(
-                        cursorColor: KulukoTheme.of(context).primary,
-                        selectionColor: KulukoTheme.of(context).primary,
-                        selectionHandleColor: KulukoTheme.of(context).primary,
-                      ),
-                      cupertinoOverrideTheme: CupertinoThemeData(
-                        primaryColor: KulukoTheme.of(context).primary,
-                      ),
-                      outlinedButtonTheme: OutlinedButtonThemeData(
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
-                            const Size(150.0, 60.0),
-                          ),
-                          side: MaterialStateProperty.resolveWith(
-                            (Set<MaterialState> state) {
-                              if (state.contains(MaterialState.disabled)) {
-                                return BorderSide(
-                                  color: KulukoTheme.of(context).secondary,
-                                );
-                              }
-                              return BorderSide(
-                                color: KulukoTheme.of(context).primary,
-                              );
-                            },
-                          ),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          textStyle: MaterialStateProperty.resolveWith(
-                            (Set<MaterialState> state) {
-                              if (state.contains(MaterialState.disabled)) {
-                                return Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(
-                                      color: KulukoTheme.of(context).secondary,
-                                    );
-                              }
-                              return Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                    color: KulukoTheme.of(context).primary,
-                                  );
-                            },
-                          ),
-                        ),
-                      ),
-                      textButtonTheme: TextButtonThemeData(
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all(
-                            Theme.of(context).textTheme.labelLarge?.copyWith(
-                                  color: KulukoTheme.of(context).primary,
-                                ),
-                          ),
-                        ),
-                      ),
-                      textTheme: TextTheme(
-                        displayMedium: KulukoTheme.of(context).typography.displayMedium,
-                        headlineSmall: KulukoTheme.of(context).typography.headlineSmall,
-                        bodyMedium: KulukoTheme.of(context).typography.bodyMedium,
-                        bodySmall: KulukoTheme.of(context).typography.bodySmall,
-                        titleMedium: KulukoTheme.of(context).typography.titleMedium,
-                      ),
-                      inputDecorationTheme: InputDecorationTheme(
-                        labelStyle: TextStyle(
-                          color: KulukoTheme.of(context).primaryText,
-                        ),
-                      ),
-                      colorScheme: ColorScheme.fromSwatch(
-                        primarySwatch: Colors.cyan,
-                      )
-                          .copyWith(
-                            onPrimary: KulukoTheme.of(context).primaryText,
-                          )
-                          .copyWith(background: KulukoTheme.of(context).primaryBackground),
-                    ),
+                    themeData: Theme.of(context),
                     surveyProgressbarConfiguration: SurveyProgressConfiguration(
                       backgroundColor: KulukoTheme.of(context).primaryBackground,
                     ),

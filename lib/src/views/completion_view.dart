@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/result/step/completion_step_result.dart';
@@ -105,7 +106,11 @@ class _CompletionViewState extends State<CompletionView> {
       ),
       title: Text(
         widget.completionStep.title,
-        style: Theme.of(context).textTheme.titleMedium,
+        style: TextStyle(
+          fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+          fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
+          color: Theme.of(context).colorScheme.primary,
+        ),
         textAlign: TextAlign.center,
       ),
       child: Padding(
@@ -117,27 +122,22 @@ class _CompletionViewState extends State<CompletionView> {
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: Container(
-                width: 150.0,
-                height: 150.0,
-                child: widget.assetPath.isNotEmpty
-                    ? Lottie.asset(
-                        widget.assetPath,
-                        repeat: false,
-                      )
-                    : Lottie.asset(
-                        'assets/fancy_checkmark.json',
-                        package: 'survey_kit',
-                        repeat: false,
-                      ),
-              ),
-            ),
             if (_isLoading)
               CircularProgressIndicator()
             else
               ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.surfaceContainerLowest),
+                    shape: WidgetStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                      EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+                    )
+                ),
                 onPressed: _completeForm,
                 child: Text(widget.completionStep.buttonText ?? 'End Survey'),
               ),

@@ -55,7 +55,7 @@ class _SurveyProgressState extends State<SurveyProgress> {
                           curve: Curves.linear,
                           width: progressWidth,
                           height: progressbarConfiguration.height,
-                          color: progressbarConfiguration.valueProgressbarColor ?? Theme.of(context).primaryColor,
+                          color: progressbarConfiguration.valueProgressbarColor ?? Theme.of(context).colorScheme.primary,
                         );
                       },
                     ),

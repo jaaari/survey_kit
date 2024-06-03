@@ -55,7 +55,7 @@ class StepView extends StatelessWidget {
                                 right: 10,
                                 top: 10,
                                 child: IconButton(
-                                  icon: Icon(Icons.info),
+                                  icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
                                   onPressed: () {
                                     showDialog(
                                       context: context,
@@ -135,13 +135,13 @@ class StepView extends StatelessWidget {
       bool enabled = true}) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.outlineVariant,
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(16),
       ),
       child: IconButton(
         icon: Icon(icon),
         onPressed: onPressed,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.primary,
         disabledColor: Colors.grey.withOpacity(0.5),
         iconSize: 24,
         padding: EdgeInsets.all(18),

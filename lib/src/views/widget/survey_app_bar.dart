@@ -40,7 +40,7 @@ class SurveyAppBar extends StatelessWidget {
                 Text(
                   context.read<Map<String, String>?>()?['cancel'] ?? 'Cancel',
                   style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
             onPressed: () => surveyController.closeSurvey(context),

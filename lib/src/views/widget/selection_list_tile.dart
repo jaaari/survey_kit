@@ -30,8 +30,8 @@ class SelectionListTile extends StatelessWidget {
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: isSelected
-                ? Theme.of(context).primaryColor.withOpacity(0.1)
-                : Theme.of(context).colorScheme.surfaceContainerLowest,
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                : Theme.of(context).colorScheme.surfaceContainer,
             borderRadius: BorderRadius.circular(14.0),
             image: imageURL != "" ? DecorationImage(
               image: NetworkImage(imageURL),
@@ -47,7 +47,7 @@ class SelectionListTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: isSelected
-                        ? Theme.of(context).primaryColor
+                        ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).textTheme.bodyMedium?.color,
                   ),
             ),

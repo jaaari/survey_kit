@@ -260,14 +260,14 @@
             },
             "type": "question",
             "isOptional": false,
-            "title": "Please read our Terms and Conditions",
+            "title": "Terms and Conditions",
             "answerFormat": {
                 "type": "agreement",
                 "defaultValue": "NEGATIVE",
-                "markdownDescription": "Please read our Terms and Conditions (https://www.kuluko.com/terms) and agree to them by clicking the checkbox below.",
-                "markdownAgreementText": "By clicking this option you agree to the Terms and Conditions (https://www.kuluko.com/terms) of Kuluko and agree to follow them."
+                "markdownDescription": "Please read our [Terms and Conditions](https://www.kuluko.com/terms) and confirm your acceptance by checking the box below.",
+                "markdownAgreementText": "I have read and accept the [Terms and Conditions](https://www.kuluko.com/terms) of Kuluko."
             }
-        },
+        },        
         {
             "stepIdentifier": {
                 "id": "q9"

@@ -120,7 +120,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
                   fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
                   fontWeight:
                       Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).primaryColor),
+                  color: Theme.of(context).colorScheme.primary),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       isValid: _isValid || widget.questionStep.isOptional,
@@ -149,7 +149,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
               hint: actualHint,
               borderColor: Theme.of(context).colorScheme.outlineVariant,
               hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
                   fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
                   fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight
               ),
