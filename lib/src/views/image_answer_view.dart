@@ -216,12 +216,14 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
 
   Future<void> _uploadImageToFirebase(XFile picture) async {
     String fileName = path.basename(picture.path);
-    String firebasePath = 'profilePictures/$user_id/$fileName';
+    String firebasePath = 'https://firebasestorage.googleapis.com/v0/b/profilePictures/$user_id/$fileName';
     Reference ref = storage.ref().child(firebasePath);
 
     try {
+      print("Uploading image to Firebase Storage");
       await ref.putFile(File(picture.path));
       String downloadURL = await ref.getDownloadURL();
+      print("Got download URL: $downloadURL");
       setState(() {
         filePath = picture.path;
         publicURL = downloadURL;
