@@ -79,6 +79,7 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
             autofocus: true,
             decoration: textFieldInputDecoration(
               hint: _integerAnswerFormat.hint,
+              borderColor: Theme.of(context).colorScheme.outlineVariant,
             ),
             controller: _controller,
             onChanged: (String value) {
@@ -86,6 +87,11 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
             },
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              )
           ),
         ),
       ),

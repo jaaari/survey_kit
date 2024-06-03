@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:survey_kit/src/answer_format/api_call_answer_format.dart';
 import 'package:survey_kit/src/answer_format/text_answer_format.dart';
 import 'package:survey_kit/src/result/question/text_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
@@ -37,7 +39,9 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     _startDate = DateTime.now();
     _initHint();
     _initPlaceholder();
-    _checkValidation(_controller.text);
+    if (!widget.questionStep.isOptional) {
+      _checkValidation(_controller.text);
+    }
   }
 
   void _initHint() {
@@ -135,33 +139,30 @@ class _TextAnswerViewState extends State<TextAnswerView> {
               textAlign: TextAlign.center,
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outlineVariant,
-                width: 1.0,
+          TextField(
+            textInputAction: TextInputAction.next,
+            minLines: _textAnswerFormat.maxLines ?? 1,
+            maxLines: null,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            autofocus: true,
+            decoration: textFieldInputDecoration(
+              hint: actualHint,
+              borderColor: Theme.of(context).colorScheme.outlineVariant,
+              hintStyle: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                  fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                  fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight
               ),
-              borderRadius: BorderRadius.circular(14.0),
             ),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              maxLines: _textAnswerFormat.maxLines,
-              autofocus: true,
-              decoration: textFieldInputDecoration(
-                hint: actualHint,
-              ),
-              controller: _controller,
-              textAlign: TextAlign.center,
-              onChanged: (String text) {
-                _checkValidation(text);
-              },
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              )
+            controller: _controller,
+            textAlign: TextAlign.center,
+            onChanged: (String text) {
+              _checkValidation(text);
+            },
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+              fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         ],

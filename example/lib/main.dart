@@ -169,7 +169,7 @@ class _MyAppState extends State<MyApp> {
       };
       GlobalStateManager().updateData(data);
       final String taskJson =
-          await rootBundle.loadString('adult_customizer_flow.json');
+          await rootBundle.loadString('onboarding.json');
       final Map<String, dynamic> taskMap = json.decode(taskJson);
       print('Task loaded from JSON');
       return Task.fromJson(taskMap);

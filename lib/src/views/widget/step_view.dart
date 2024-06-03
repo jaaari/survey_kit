@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/steps/step.dart' as surveystep;
-import 'package:survey_kit/src/widget/survey_progress.dart'; // Importing the progress bar
+import 'package:survey_kit/src/widget/survey_progress.dart';
 
 class StepView extends StatelessWidget {
   final surveystep.Step step;
@@ -25,6 +25,7 @@ class StepView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _surveyController = controller ?? context.read<SurveyController>();
+    print("step.infoText: ${step.infoText}");
 
     return Scaffold(
       body: Padding(
@@ -37,9 +38,43 @@ class StepView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: title,
+                    Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: title,
+                          ),
+                        ),
+                        if (step.infoText != '')
+                          Positioned(
+                            right: 10,
+                            top: 10,
+                            child: IconButton(
+                              icon: Icon(Icons.info),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Information'),
+                                      content: Text(step.infoText),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          )
+                      ],
                     ),
                     child,
                   ],

@@ -16,6 +16,7 @@ abstract class Step {
   final bool canGoBack;
   final bool showProgress;
   final bool showAppBar;
+  final String infoText;
 
   Step({
     StepIdentifier? stepIdentifier,
@@ -24,6 +25,7 @@ abstract class Step {
     this.canGoBack = true,
     this.showProgress = true,
     this.showAppBar = false,
+    this.infoText = '',
   }) : stepIdentifier = stepIdentifier ?? StepIdentifier();
 
   Widget createView({required QuestionResult? questionResult});

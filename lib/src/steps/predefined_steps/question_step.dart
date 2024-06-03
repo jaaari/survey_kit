@@ -64,6 +64,8 @@ class QuestionStep extends Step {
   final String relatedParameter;
   final String relatedTextChoiceParameter;
   final AnswerFormat answerFormat;
+  final String infoText;
+
 
   QuestionStep({
     bool isOptional = false,
@@ -74,6 +76,7 @@ class QuestionStep extends Step {
     this.text = '',
     this.relatedParameter = '',
     this.relatedTextChoiceParameter = '',
+    this.infoText = '',
     this.content = const SizedBox.shrink(),
     required this.answerFormat,
   }) : super(

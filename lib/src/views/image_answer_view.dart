@@ -4,6 +4,10 @@ import 'package:survey_kit/src/answer_format/image_answer_format.dart';
 import 'package:survey_kit/src/result/question/image_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:path/path.dart' as path;
+import 'dart:io';
 
 class ImageAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -25,12 +29,25 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
 
   bool _isValid = false;
   String filePath = '';
+  String user_id = '';
+  String publicURL = '';
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   @override
   void initState() {
     super.initState();
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
+    get_user_id();
+  }
+
+  void get_user_id() async {
+    user_id = GlobalStateManager().getData("user_id");
+    print("User ID: $user_id");
+  }
+
+  void get_firebase_storage_instance() async {
+    storage = GlobalStateManager().getData("firebase_storage");
   }
 
   @override
@@ -46,8 +63,8 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
         id: widget.questionStep.stepIdentifier,
         startDate: _startDate,
         endDate: DateTime.now(),
-        valueIdentifier: filePath,
-        result: filePath,
+        valueIdentifier: publicURL,
+        result: publicURL,
       ),
       isValid: _isValid || widget.questionStep.isOptional,
       title: widget.questionStep.title.isNotEmpty
@@ -70,31 +87,48 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                   horizontal: 32.0,
                   vertical: 8.0,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _optionsDialogBox();
-                      },
-                      child: Text(_imageAnswerFormat.buttonText),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.surfaceContainerLowest),
+                    shape: WidgetStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
-                    filePath.isNotEmpty
-                        ? Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                filePath
-                                    .split('/')[filePath.split('/').length - 1],
-                                style: TextStyle(
-                                  fontSize: 12,
+                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                      EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    _optionsDialogBox();
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.upload,
+                          size: 24.0,
+                          color: Theme.of(context).colorScheme.onSurface),
+                      SizedBox(width: 8.0),
+                      Text(_imageAnswerFormat.buttonText,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface)),
+                      filePath.isNotEmpty
+                          ? Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  filePath.split(
+                                      '/')[filePath.split('/').length - 1],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        : SizedBox(),
-                  ],
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -157,19 +191,15 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
   Future<void> _openCamera() async {
-    Container();
-
     var picture = await ImagePicker().pickImage(
       source: ImageSource.camera,
     );
 
     Navigator.pop(context);
 
-    picture?.readAsBytes().then((value) {
-      setState(() {
-        filePath = picture.path;
-      });
-    });
+    if (picture != null) {
+      _uploadImageToFirebase(picture);
+    }
   }
 
   Future<void> _openGallery() async {
@@ -179,10 +209,27 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
 
     Navigator.pop(context);
 
-    picture?.readAsBytes().then((value) {
+    if (picture != null) {
+      _uploadImageToFirebase(picture);
+    }
+  }
+
+  Future<void> _uploadImageToFirebase(XFile picture) async {
+    String fileName = path.basename(picture.path);
+    String firebasePath = 'profilePictures/$user_id/$fileName';
+    Reference ref = storage.ref().child(firebasePath);
+
+    try {
+      await ref.putFile(File(picture.path));
+      String downloadURL = await ref.getDownloadURL();
       setState(() {
         filePath = picture.path;
+        publicURL = downloadURL;
+        _isValid = true;
       });
-    });
+      print("Uploaded Image URL: $publicURL");
+    } catch (e) {
+      print("Error uploading image: $e");
+    }
   }
 }
