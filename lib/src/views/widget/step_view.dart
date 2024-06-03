@@ -28,102 +28,104 @@ class StepView extends StatelessWidget {
     print("step.infoText: ${step.infoText}");
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
+      body: Container(
+          color: Theme.of(context).colorScheme.surface,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20.0),
-                            child: title,
-                          ),
-                        ),
-                        if (step.infoText != '')
-                          Positioned(
-                            right: 10,
-                            top: 10,
-                            child: IconButton(
-                              icon: Icon(Icons.info),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Information'),
-                                      content: Text(step.infoText),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('OK'),
-                                        ),
-                                      ],
+                        Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20.0),
+                                child: title,
+                              ),
+                            ),
+                            if (step.infoText != '')
+                              Positioned(
+                                right: 10,
+                                top: 10,
+                                child: IconButton(
+                                  icon: Icon(Icons.info),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Information'),
+                                          content: Text(step.infoText),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
-                            ),
-                          )
+                                ),
+                              )
+                          ],
+                        ),
+                        child,
                       ],
                     ),
-                    child,
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0),
-              child: Column(
-                children: [
-                  SurveyProgress(), // Adding the progress bar
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Column(
                     children: [
-                      _buildIconButton(
-                        context,
-                        icon: Icons.arrow_upward,
-                        onPressed: () {
-                          print('Back button pressed');
-                          _surveyController.stepBack(context: context);
-                        },
-                      ),
-                      SizedBox(width: 16),
-                      _buildIconButton(
-                        context,
-                        icon: Icons.arrow_downward,
-                        onPressed: isValid || step.isOptional
-                            ? () {
-                                print('Next button pressed');
-                                if (FocusScope.of(context).hasFocus) {
-                                  FocusScope.of(context).unfocus();
-                                  print('Focus unfocused');
-                                }
-                                _surveyController.nextStep(
-                                    context, resultFunction);
-                              }
-                            : null,
-                        enabled: isValid || step.isOptional,
+                      SurveyProgress(), // Adding the progress bar
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildIconButton(
+                            context,
+                            icon: Icons.arrow_upward,
+                            onPressed: () {
+                              print('Back button pressed');
+                              _surveyController.stepBack(context: context);
+                            },
+                          ),
+                          SizedBox(width: 16),
+                          _buildIconButton(
+                            context,
+                            icon: Icons.arrow_downward,
+                            onPressed: isValid || step.isOptional
+                                ? () {
+                                    print('Next button pressed');
+                                    if (FocusScope.of(context).hasFocus) {
+                                      FocusScope.of(context).unfocus();
+                                      print('Focus unfocused');
+                                    }
+                                    _surveyController.nextStep(
+                                        context, resultFunction);
+                                  }
+                                : null,
+                            enabled: isValid || step.isOptional,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
