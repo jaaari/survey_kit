@@ -39,6 +39,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
     get_user_id();
+    get_firebase_storage_instance();
   }
 
   void get_user_id() async {
