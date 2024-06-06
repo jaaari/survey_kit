@@ -4,6 +4,7 @@ import 'package:survey_kit/src/result/question/integer_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
 
 class IntegerAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -47,6 +48,11 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
     setState(() {
       _isValid = text.isNotEmpty && int.tryParse(text) != null;
     });
+    // Save the value to the global state manager
+    final Map<String, dynamic> newData = {
+      widget.questionStep.stepIdentifier.id: int.tryParse(text) ?? null
+    };
+    GlobalStateManager().updateData(newData);
   }
 
   @override

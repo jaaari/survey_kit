@@ -2,6 +2,8 @@
     "id": "onboarding_flow",
     "type": "navigable",
     "initialValues": {
+        "user_input_photo_url": "",
+        "user_input_character_description": ""
     },
     "rules": [
         {
@@ -277,20 +279,20 @@
             "text": "Now have fun creating your first audiobook!",
             "buttonText": "Let's go!",
             "parameters": {
-                "creator_user_id": "$user_id",
-                "creator_user_first_name": "$user_input_first_name",
-                "creator_user_last_name": "$user_input_last_name",
-                "creator_user_age": "$user_input_age",
-                "creator_user_favorite_books": "$user_input_favorite_book",
-                "creator_user_favorite_genre": "$user_input_favorite_genre",
-                "creator_user_weekly_listening_time": "$user_input_weekly_listening_time",
-                "creator_user_how_did_you_hear_about_us": "$user_input_how_did_you_hear_about_us",
-                "creator_user_backstory_interests_personality": "$user_input_backstory_interests_personality",
-                "creator_user_character_description": "$user_input_character_description",
-                "creator_user_photo_url": "$user_input_user_photo_url"
+                "user_id": "$user_id",
+                "user_input_first_name": "$user_input_first_name",
+                "user_input_last_name": "$user_input_last_name",
+                "user_input_age": "$user_input_age",
+                "user_input_favorite_books": "$user_input_favorite_book",
+                "user_input_favorite_genre": "$user_input_favorite_genre",
+                "user_input_weekly_listening_time": "$user_input_weekly_listening_time",
+                "user_input_how_did_you_hear_about_us": "$user_input_how_did_you_hear_about_us",
+                "user_input_backstory_interests_personality": "$user_input_backstory_interests_personality",
+                "user_input_character_description": "$user_input_character_description",
+                "user_input_photo_url": "$user_input_user_photo_url"
             },
             "requestType": "POST",
-            "endpointUrl": "https://api.kuluko.com/v1/audiobook/creator/onboarding_flow/complete"
+            "endpointUrl": "https://onboard-user-6n5kxdz4pa-lz.a.run.app"
         }
     ]
 }
