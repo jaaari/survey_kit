@@ -29,7 +29,7 @@ class StepView extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(

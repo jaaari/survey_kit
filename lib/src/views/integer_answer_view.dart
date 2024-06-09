@@ -50,7 +50,7 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
     });
     // Save the value to the global state manager
     final Map<String, dynamic> newData = {
-      widget.questionStep.stepIdentifier.id: int.tryParse(text) ?? null
+      widget.questionStep.relatedParameter: int.tryParse(text) ?? null
     };
     GlobalStateManager().updateData(newData);
   }

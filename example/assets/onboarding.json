@@ -2,7 +2,7 @@
     "id": "onboarding_flow",
     "type": "navigable",
     "initialValues": {
-        "user_input_photo_url": "",
+        "user_input_character_image_url": "",
         "user_input_character_description": ""
     },
     "rules": [
@@ -22,7 +22,7 @@
                 "id": "c3"
             },
             "destinationStepIdentifier": {
-                "id": "q8"
+                "id": "q9"
             }
         }
     ],
@@ -71,6 +71,33 @@
                 "id": "q4"
             },
             "type": "question",
+            "title": "What gender do you identify as?",
+            "text": "This will be used to create the avatar for your character.",
+            "relatedParameter": "user_input_gender",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "Male",
+                        "value": "male"
+                    },
+                    {
+                        "text": "Female",
+                        "value": "female"
+                    },
+                    {
+                        "text": "Other / prefer not to say",
+                        "value": "other"
+                    }
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q5"
+            },
+            "type": "question",
             "optional": true,
             "relatedParameter": "user_input_favorite_book",
             "title": "What are some of your favorite books?",
@@ -83,7 +110,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q5"
+                "id": "q6"
             },
             "type": "question",
             "relatedParameter": "user_input_favorite_genre",
@@ -141,7 +168,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q6"
+                "id": "q7"
             },
             "type": "question",
             "relatedParameter": "user_input_weekly_listening_time",
@@ -171,7 +198,7 @@
         },
         {
             "stepIdentifier": {
-                "id": "q7"
+                "id": "q8"
             },
             "type": "question",
             "relatedParameter": "user_input_how_did_you_hear_about_us",
@@ -236,8 +263,8 @@
                 "id": "c3"
             },
             "type": "question",
-            "relatedParameter": "user_input_character_description",
-            "title": "Describe your character.",
+            "relatedParameter": "user_input_character_looks",
+            "title": "Describe how your character looks.",
             "text": "This will be used to generate a cartoon avatar for your character.",
             "answerFormat": {
                 "type": "text",
@@ -251,14 +278,14 @@
             },
             "type": "question",
             "title": "Please upload a picture of yourself. You should be clearly visible in the picture.",
-            "relatedParameter": "user_input_user_photo_url",
+            "relatedParameter": "user_input_user_character_image_url",
             "answerFormat": {
                 "type": "file"
             }
         },
         {
             "stepIdentifier": {
-                "id": "q8"
+                "id": "q9"
             },
             "type": "question",
             "isOptional": false,
@@ -272,7 +299,7 @@
         },        
         {
             "stepIdentifier": {
-                "id": "q9"
+                "id": "q10"
             },
             "type": "completion",
             "title": "Thank you for taking the time to fill out this form!",
@@ -288,8 +315,9 @@
                 "user_input_weekly_listening_time": "$user_input_weekly_listening_time",
                 "user_input_how_did_you_hear_about_us": "$user_input_how_did_you_hear_about_us",
                 "user_input_backstory_interests_personality": "$user_input_backstory_interests_personality",
-                "user_input_character_description": "$user_input_character_description",
-                "user_input_photo_url": "$user_input_user_photo_url"
+                "user_input_character_looks": "$user_input_character_looks",
+                "user_input_character_image_url": "$user_input_user_character_image_url",
+                "user_input_gender": "$user_input_gender"
             },
             "requestType": "POST",
             "endpointUrl": "https://onboard-user-6n5kxdz4pa-lz.a.run.app"
