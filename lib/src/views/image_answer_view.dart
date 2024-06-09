@@ -31,6 +31,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   String filePath = '';
   String user_id = '';
   String publicURL = '';
+  bool isUploading = false;
   FirebaseStorage storage = FirebaseStorage.instance;
 
   @override
@@ -128,6 +129,12 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                               ),
                             )
                           : SizedBox(),
+                        isUploading
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
+                          )
+                        : SizedBox(),
                     ],
                   ),
                 ),
@@ -216,6 +223,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
   Future<void> _uploadImageToFirebase(XFile picture) async {
+    isUploading = true;
     String fileName = path.basename(picture.path);
     String firebasePath = 'profilePictures/$user_id/$fileName';
     Reference ref = storage.ref().child(firebasePath);
@@ -230,6 +238,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
         publicURL = downloadURL;
         _isValid = true;
       });
+      isUploading = false;
       print("Uploaded Image URL: $publicURL");
     } catch (e) {
       print("Error uploading image: $e");

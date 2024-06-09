@@ -31,7 +31,7 @@ class SelectionListTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-                : Theme.of(context).colorScheme.surfaceContainer,
+                : Theme.of(context).colorScheme.surfaceContainerHigh,
             borderRadius: BorderRadius.circular(14.0),
             image: imageURL != "" ? DecorationImage(
               image: NetworkImage(imageURL),

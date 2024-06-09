@@ -122,13 +122,14 @@ class _CompletionViewState extends State<CompletionView> {
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
+            SizedBox(height: 32),
             if (_isLoading)
               CircularProgressIndicator()
             else
               ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.surfaceContainerLowest),
+                        Theme.of(context).colorScheme.surfaceContainerHigh),
                     shape: WidgetStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
