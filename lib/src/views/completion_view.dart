@@ -27,14 +27,14 @@ class _CompletionViewState extends State<CompletionView> {
   String? _errorMessage;
   String? text;
 
+  @override
   void initState() {
     super.initState();
     if (widget.completionStep.text.isNotEmpty && widget.completionStep.text.contains('\$')) {
       text = widget.completionStep.text;
       var dynamicKey = text!.substring(1); // Remove the '$'
       text = GlobalStateManager().getData(dynamicKey) ?? text!;
-    }
-    else {
+    } else {
       text = widget.completionStep.text;
     }
   }
@@ -55,27 +55,35 @@ class _CompletionViewState extends State<CompletionView> {
       print('Making API call to ${widget.completionStep.endpointUrl} with parameters: $parameters');
       if (widget.completionStep.requestType == "POST") {
         print('Making POST request');
-        response = await http.post(url, headers: headers, body: parameters);
-        print('Response: ${response.body}');
+        response = await http.post(url, headers: headers, body: parameters).timeout(Duration(seconds: 5));
       } else {
-        response = await http.get(url, headers: headers);
+        response = await http.get(url, headers: headers).timeout(Duration(seconds: 5));
       }
 
+      print('Response: ${response.body}');
       if (response.statusCode == 200) {
         Provider.of<SurveyController>(context, listen: false).nextStep(context, () => CompletionStepResult(
-        widget.completionStep.stepIdentifier,
-        _startDate,
-        DateTime.now()
-      ));
+          widget.completionStep.stepIdentifier,
+          _startDate,
+          DateTime.now()
+        ));
       } else {
         setState(() {
           _errorMessage = 'Error: ${response.body}';
         });
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Failed to make API call: $e';
-      });
+      if (e is TimeoutException) {
+        Provider.of<SurveyController>(context, listen: false).nextStep(context, () => CompletionStepResult(
+          widget.completionStep.stepIdentifier,
+          _startDate,
+          DateTime.now()
+        ));
+      } else {
+        setState(() {
+          _errorMessage = 'Failed to make API call: $e';
+        });
+      }
     } finally {
       setState(() {
         _isLoading = false;
@@ -128,14 +136,14 @@ class _CompletionViewState extends State<CompletionView> {
             else
               ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
+                    backgroundColor: MaterialStateProperty.all<Color>(
                         Theme.of(context).colorScheme.surfaceContainerHigh),
-                    shape: WidgetStateProperty.all<OutlinedBorder>(
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                       EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
                     )
                 ),

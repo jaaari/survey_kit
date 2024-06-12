@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:survey_kit/src/result/question/agreement_question_result.dart';
 import 'package:survey_kit/src/result/question/api_call_result.dart';
 import 'package:survey_kit/src/result/question/boolean_question_result.dart';
@@ -11,6 +12,7 @@ import 'package:survey_kit/src/result/question/single_choice_question_result.dar
 import 'package:survey_kit/src/result/question/text_question_result.dart';
 import 'package:survey_kit/src/result/question/time_question_result.dart';
 import 'package:survey_kit/src/result/question/single_choice_audio_question_result.dart';
+import 'package:survey_kit/src/result/question/image_question_result.dart';
 import 'package:survey_kit/src/result/result.dart';
 import 'package:survey_kit/src/result/step/completion_step_result.dart';
 import 'package:survey_kit/src/result/step/instruction_step_result.dart';
@@ -79,6 +81,10 @@ class _Converter implements JsonConverter<List<QuestionResult>, Object> {
       } else if (qr is DoubleQuestionResult) {
         final qrJson = qr.toJson();
         qrJson['type'] = (DoubleQuestionResult).toString();
+        allQuestionResultsEncoded.add(qrJson);
+      } else if (qr is ImageQuestionResult) {
+        final qrJson = qr.toJson();
+        qrJson['type'] = (ImageQuestionResult).toString();
         allQuestionResultsEncoded.add(qrJson);
       } else if (qr is IntegerQuestionResult) {
         final qrJson = qr.toJson();
@@ -149,6 +155,8 @@ class _Converter implements JsonConverter<List<QuestionResult>, Object> {
         results.add(DateQuestionResult.fromJson(qData));
       } else if (qType == (DoubleQuestionResult).toString()) {
         results.add(DoubleQuestionResult.fromJson(qData));
+      } else if (qType == (ImageQuestionResult).toString()) {
+        results.add(ImageQuestionResult.fromJson(qData));
       } else if (qType == (IntegerQuestionResult).toString()) {
         results.add(IntegerQuestionResult.fromJson(qData));
       } else if (qType == (MultipleChoiceQuestionResult).toString()) {

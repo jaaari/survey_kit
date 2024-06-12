@@ -45,7 +45,7 @@ class _SurveyProgressState extends State<SurveyProgress> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: progressbarConfiguration.height,
-                      color: progressbarConfiguration.progressbarColor,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                     ),
                     LayoutBuilder(
                       builder: (context, constraints) {
@@ -55,7 +55,7 @@ class _SurveyProgressState extends State<SurveyProgress> {
                           curve: Curves.linear,
                           width: progressWidth,
                           height: progressbarConfiguration.height,
-                          color: progressbarConfiguration.valueProgressbarColor ?? Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
                         );
                       },
                     ),

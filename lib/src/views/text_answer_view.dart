@@ -78,6 +78,11 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   }
 
   void _checkValidation(String text) {
+    if (widget.questionStep.isOptional) {
+      _isValid = true;
+      _updateGlobalState(text);
+      return;
+    }
     setState(() {
       if (_textAnswerFormat.validationRegEx != null) {
         RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
