@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'dart:async'; // Import for handling timeouts
 
 class CompletionView extends StatefulWidget {
   final CompletionStep completionStep;
@@ -72,18 +73,16 @@ class _CompletionViewState extends State<CompletionView> {
           _errorMessage = 'Error: ${response.body}';
         });
       }
+    } on TimeoutException catch (_) {
+      Provider.of<SurveyController>(context, listen: false).nextStep(context, () => CompletionStepResult(
+        widget.completionStep.stepIdentifier,
+        _startDate,
+        DateTime.now()
+      ));
     } catch (e) {
-      if (e is TimeoutException) {
-        Provider.of<SurveyController>(context, listen: false).nextStep(context, () => CompletionStepResult(
-          widget.completionStep.stepIdentifier,
-          _startDate,
-          DateTime.now()
-        ));
-      } else {
-        setState(() {
-          _errorMessage = 'Failed to make API call: $e';
-        });
-      }
+      setState(() {
+        _errorMessage = 'Failed to make API call: $e';
+      });
     } finally {
       setState(() {
         _isLoading = false;
@@ -136,14 +135,14 @@ class _CompletionViewState extends State<CompletionView> {
             else
               ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
+                    backgroundColor: WidgetStateProperty.all<Color>(
                         Theme.of(context).colorScheme.surfaceContainerHigh),
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                    shape: WidgetStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
                       EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
                     )
                 ),
