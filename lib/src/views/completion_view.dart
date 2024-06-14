@@ -95,7 +95,8 @@ class _CompletionViewState extends State<CompletionView> {
     resolvedParameters.forEach((key, value) {
       if (value is String && value.startsWith('\$')) {
         var dynamicKey = value.substring(1); // Remove the '$'
-        resolvedParameters[key] = GlobalStateManager().getData(dynamicKey) ?? value;
+        // fetch the value from the global state manager or leave empty string if not found
+        resolvedParameters[key] = GlobalStateManager().getData(dynamicKey) ?? "";
       }
     });
     return resolvedParameters;
