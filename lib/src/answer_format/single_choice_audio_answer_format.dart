@@ -13,6 +13,7 @@ class SingleChoiceAudioAnswerFormat implements AnswerFormat {
   final List<String> imageChoices;
   final String dynamicImageChoices;
   final List<String> audioChoices;
+  final List<String> premiumVoices;
 
   const SingleChoiceAudioAnswerFormat({
     required this.textChoices,
@@ -22,6 +23,7 @@ class SingleChoiceAudioAnswerFormat implements AnswerFormat {
     this.imageChoices = const [],
     this.dynamicImageChoices = '',
     this.audioChoices = const [],
+    this.premiumVoices = const [],
   }) : super();
 
   factory SingleChoiceAudioAnswerFormat.fromJson(Map<String, dynamic> json) =>

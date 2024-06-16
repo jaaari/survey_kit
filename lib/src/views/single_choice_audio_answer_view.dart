@@ -4,6 +4,7 @@ import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/answer_format/single_choice_audio_answer_format.dart';
 import 'package:survey_kit/src/result/question/single_choice_audio_question_result.dart';
+import 'package:survey_kit/src/views/widget/voice_selection_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -187,9 +188,11 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
               bool hasImage = idx < _imageChoices.length &&
                   _imageChoices[idx].isNotEmpty &&
                   _imageChoices[idx] != "";
-              return SelectionListTile(
+              return VoiceSelectionListTile(
                 text: tc.text,
                 imageURL: hasImage ? _imageChoices[idx] : "",
+                // check if the array "premiumVoices" contains the value of this tc
+                isPremium: _SingleChoiceAudioAnswerFormat.premiumVoices.contains(tc.value),
                 onTap: () {
                   setState(() {
                     _selectedChoice = tc;

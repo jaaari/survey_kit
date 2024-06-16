@@ -29,6 +29,10 @@ SingleChoiceAudioAnswerFormat _$SingleChoiceAudioAnswerFormatFromJson(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      premiumVoices: (json['premiumVoices'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$SingleChoiceAudioAnswerFormatToJson(
@@ -41,4 +45,5 @@ Map<String, dynamic> _$SingleChoiceAudioAnswerFormatToJson(
       'imageChoices': instance.imageChoices,
       'dynamicImageChoices': instance.dynamicImageChoices,
       'audioChoices': instance.audioChoices,
+      'premiumVoices': instance.premiumVoices,
     };
