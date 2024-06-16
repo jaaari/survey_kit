@@ -133,21 +133,19 @@ class _ScaleAnswerViewState extends State<ScaleAnswerView> {
                       ),
                     ),
                     Slider.adaptive(
-                      value: _sliderValue,
-                      onChanged: (double value) {
-                        setState(() {
-                          _sliderValue = value;
-                        });
-                        _onAnswerChanged(_sliderValue);
-                      },
-                      min: _scaleAnswerFormat.minimumValue,
-                      max: _scaleAnswerFormat.maximumValue,
-                      activeColor: Theme.of(context).primaryColor,
-                      divisions: (_scaleAnswerFormat.maximumValue -
-                              _scaleAnswerFormat.minimumValue) ~/
-                          _scaleAnswerFormat.step,
-                      label: _sliderValue.toString(),
-                    ),
+                        value: _sliderValue,
+                        onChanged: (double value) {
+                          setState(() {
+                            _sliderValue = value;
+                          });
+                          _onAnswerChanged(_sliderValue);
+                        },
+                        min: _scaleAnswerFormat.minimumValue,
+                        max: _scaleAnswerFormat.maximumValue,
+                        activeColor: Theme.of(context).colorScheme.primary,
+                        divisions: (_scaleAnswerFormat.maximumValue -
+                                _scaleAnswerFormat.minimumValue) ~/
+                            _scaleAnswerFormat.step),
                   ],
                 ),
               ],
