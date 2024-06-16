@@ -24,6 +24,15 @@
             "destinationStepIdentifier": {
                 "id": "q9"
             }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q1"
+            },
+            "destinationStepIdentifier": {
+                "id": "q10"
+            }
         }
     ],
     "steps": [

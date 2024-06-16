@@ -31,7 +31,8 @@ class _CompletionViewState extends State<CompletionView> {
   @override
   void initState() {
     super.initState();
-    if (widget.completionStep.text.isNotEmpty && widget.completionStep.text.contains('\$')) {
+    if (widget.completionStep.text.isNotEmpty &&
+        widget.completionStep.text.contains('\$')) {
       text = widget.completionStep.text;
       var dynamicKey = text!.substring(1); // Remove the '$'
       text = GlobalStateManager().getData(dynamicKey) ?? text!;
@@ -48,37 +49,40 @@ class _CompletionViewState extends State<CompletionView> {
 
     var headers = {'Content-Type': 'application/json'};
     var url = Uri.parse(widget.completionStep.endpointUrl);
-    var resolvedParameters = _resolveParameters(widget.completionStep.parameters);
+    var resolvedParameters =
+        _resolveParameters(widget.completionStep.parameters);
     var parameters = json.encode(resolvedParameters);
 
     http.Response response;
     try {
-      print('Making API call to ${widget.completionStep.endpointUrl} with parameters: $parameters');
+      print(
+          'Making API call to ${widget.completionStep.endpointUrl} with parameters: $parameters');
       if (widget.completionStep.requestType == "POST") {
         print('Making POST request');
-        response = await http.post(url, headers: headers, body: parameters).timeout(Duration(seconds: 5));
+        response = await http
+            .post(url, headers: headers, body: parameters)
+            .timeout(Duration(seconds: 5));
       } else {
-        response = await http.get(url, headers: headers).timeout(Duration(seconds: 5));
+        response =
+            await http.get(url, headers: headers).timeout(Duration(seconds: 5));
       }
 
       print('Response: ${response.body}');
       if (response.statusCode == 200) {
-        Provider.of<SurveyController>(context, listen: false).nextStep(context, () => CompletionStepResult(
-          widget.completionStep.stepIdentifier,
-          _startDate,
-          DateTime.now()
-        ));
+        Provider.of<SurveyController>(context, listen: false).nextStep(
+            context,
+            () => CompletionStepResult(widget.completionStep.stepIdentifier,
+                _startDate, DateTime.now()));
       } else {
         setState(() {
           _errorMessage = 'Error: ${response.body}';
         });
       }
     } on TimeoutException catch (_) {
-      Provider.of<SurveyController>(context, listen: false).nextStep(context, () => CompletionStepResult(
-        widget.completionStep.stepIdentifier,
-        _startDate,
-        DateTime.now()
-      ));
+      Provider.of<SurveyController>(context, listen: false).nextStep(
+          context,
+          () => CompletionStepResult(widget.completionStep.stepIdentifier,
+              _startDate, DateTime.now()));
     } catch (e) {
       setState(() {
         _errorMessage = 'Failed to make API call: $e';
@@ -96,7 +100,8 @@ class _CompletionViewState extends State<CompletionView> {
       if (value is String && value.startsWith('\$')) {
         var dynamicKey = value.substring(1); // Remove the '$'
         // fetch the value from the global state manager or leave empty string if not found
-        resolvedParameters[key] = GlobalStateManager().getData(dynamicKey) ?? "";
+        resolvedParameters[key] =
+            GlobalStateManager().getData(dynamicKey) ?? "";
       }
     });
     return resolvedParameters;
@@ -108,10 +113,7 @@ class _CompletionViewState extends State<CompletionView> {
       step: widget.completionStep,
       isValid: false,
       resultFunction: () => CompletionStepResult(
-        widget.completionStep.stepIdentifier,
-        _startDate,
-        DateTime.now()
-      ),
+          widget.completionStep.stepIdentifier, _startDate, DateTime.now()),
       title: Text(
         widget.completionStep.title,
         style: TextStyle(
@@ -144,11 +146,12 @@ class _CompletionViewState extends State<CompletionView> {
                       ),
                     ),
                     padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
-                    )
-                ),
+                      EdgeInsets.symmetric(vertical: 32.0, horizontal: 52.0),
+                    )),
                 onPressed: _completeForm,
-                child: Text(widget.completionStep.buttonText ?? 'End Survey'),
+                child: 
+                  Text(widget.completionStep.buttonText ?? 'End Survey'),
+                
               ),
             if (_errorMessage != null)
               Padding(
