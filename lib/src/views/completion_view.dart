@@ -150,8 +150,8 @@ class _CompletionViewState extends State<CompletionView> {
                     )),
                 onPressed: _completeForm,
                 child: 
-                  Text(widget.completionStep.buttonText ?? 'End Survey'),
-                
+                  Text(widget.completionStep.buttonText ?? 'End Survey', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
+                  )
               ),
             if (_errorMessage != null)
               Padding(
