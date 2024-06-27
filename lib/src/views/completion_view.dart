@@ -124,7 +124,7 @@ class _CompletionViewState extends State<CompletionView> {
         textAlign: TextAlign.center,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 64.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Column(
           children: [
             Text(

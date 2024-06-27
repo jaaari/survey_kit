@@ -92,7 +92,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.surfaceContainerLowest),
+                        Theme.of(context).colorScheme.surfaceContainerHigh),
                     shape: WidgetStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -120,10 +120,10 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  filePath.split(
-                                      '/')[filePath.split('/').length - 1],
+                                  "File selected!",
                                   style: TextStyle(
                                     fontSize: 12,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                               ),

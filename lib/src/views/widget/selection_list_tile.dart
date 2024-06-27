@@ -43,8 +43,6 @@ class SelectionListTile extends StatelessWidget {
             contentPadding: EdgeInsets.zero, // Remove ListTile's padding
             title: Text(
               text,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: isSelected
                         ? Theme.of(context).colorScheme.primary
