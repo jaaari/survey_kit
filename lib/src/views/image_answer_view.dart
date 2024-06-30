@@ -240,6 +240,11 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       });
       isUploading = false;
       print("Uploaded Image URL: $publicURL");
+
+      Map<String, dynamic> _resultMap = {
+        widget.questionStep.relatedParameter: publicURL,
+      };
+      GlobalStateManager().updateData(_resultMap);
     } catch (e) {
       print("Error uploading image: $e");
     }
