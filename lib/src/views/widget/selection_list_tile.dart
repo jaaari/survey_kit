@@ -26,6 +26,8 @@ class SelectionListTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 20), // Padding
           constraints: BoxConstraints(
             minHeight: 100.0, // Set your desired minimum height here
+            // set max height to 100.0 if an image is present
+            maxHeight: imageURL != "" ? 100.0 : double.infinity,
           ),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
@@ -47,6 +49,8 @@ class SelectionListTile extends StatelessWidget {
                     color: isSelected
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).textTheme.bodyMedium?.color,
+                        // ellipsis when there is an image
+                        overflow: imageURL != "" ? TextOverflow.ellipsis : null,
                   ),
             ),
             trailing: imageURL != "" ? Container(width: 100, color: Colors.transparent) : null,
