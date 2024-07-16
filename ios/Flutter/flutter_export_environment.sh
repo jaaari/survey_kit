@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/sachindahal/Documents/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/sachindahal/Github/Kuluko/test/survey_kit"
+export "FLUTTER_ROOT=/Users/keijo/Documents/SDK'S/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/keijo/Desktop/VSCodeProjects/Kuluko SurveyKit/survey_kit"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"

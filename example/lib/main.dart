@@ -69,22 +69,31 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<Task> getJsonTask() async {
-    try {
-      print('Loading task from JSON...');
-      // initialize global state manager (add creator_user_id to global state)
-      final Map<String, dynamic> data = <String, dynamic>{
-        'user_id': 'VUuZfqDLnsZissgtTobpdorbppC2',
-      };
-      GlobalStateManager().updateData(data);
-      final String taskJson =
-          await rootBundle.loadString('onboarding.json');
-      final Map<String, dynamic> taskMap = json.decode(taskJson);
-      print('Task loaded from JSON');
-      return Task.fromJson(taskMap);
-    } catch (e) {
-      rethrow;
-    }
+  try {
+    print('Loading task from JSON...');
+
+    // Initialize global state manager (add creator_user_id to global state)
+    final Map<String, dynamic> data = <String, dynamic>{
+      'user_id': 'jCa0yl7QTeZLSLd9sg25OXUqpVp2',
+    };
+    GlobalStateManager().updateData(data);
+
+    // Load the JSON file
+    final String taskJson = await rootBundle.loadString('assets/adult_customizer_flow.json');
+    print('Task JSON loaded: $taskJson');
+
+    // Decode the JSON file
+    final Map<String, dynamic> taskMap = json.decode(taskJson);
+    print('Task JSON decoded');
+
+    // Create and return the Task object
+    return Task.fromJson(taskMap);
+  } catch (e) {
+    print('Error loading task: $e');
+    rethrow;
   }
+}
+
 
   ThemeData _buildTheme(KulukoTheme theme) {
     return ThemeData(
