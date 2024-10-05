@@ -25,114 +25,121 @@ class StepView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _surveyController = controller ?? context.read<SurveyController>();
-    print("step.infoText: ${step.infoText}");
 
     return Scaffold(
-      body: Container(
-          color: Theme.of(context).colorScheme.surfaceContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Expanded(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            children: [
+              Expanded(
+                child: Center( // Center content vertically
                   child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight * 0.6, // Ensure it can grow
+                        
+                      ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20.0),
-                                child: title,
-                              ),
-                            ),
-                            if (step.infoText != '')
-                              Positioned(
-                                right: 10,
-                                top: 10,
-                                child: IconButton(
-                                  icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text('Information'),
-                                          content: Text(step.infoText),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text('OK'),
-                                            ),
-                                          ],
+                            // Title and optional info icon
+                            Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                                    child: title,
+                                  ),
+                                ),
+                                if (step.infoText.isNotEmpty)
+                                  Positioned(
+                                    right: 10,
+                                    top: 10,
+                                    child: IconButton(
+                                      icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('Information'),
+                                              content: Text(step.infoText),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('OK'),
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
-                                ),
-                              )
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            // Content section
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: child,
+                            ),
                           ],
                         ),
-                        child,
-                      ],
+                      ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Column(
-                    children: [
-                      SurveyProgress(), // Adding the progress bar
-                      SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildIconButton(
-                            context,
-                            icon: Icons.arrow_upward,
-                            onPressed: () {
-                              print('Back button pressed');
-                              _surveyController.stepBack(context: context);
-                            },
-                          ),
-                          SizedBox(width: 16),
-                          _buildIconButton(
-                            context,
-                            icon: Icons.arrow_downward,
-                            onPressed: isValid || step.isOptional
-                                ? () {
-                                    print('Next button pressed');
-                                    if (FocusScope.of(context).hasFocus) {
-                                      FocusScope.of(context).unfocus();
-                                      print('Focus unfocused');
-                                    }
-                                    _surveyController.nextStep(
-                                        context, resultFunction);
+              ),
+              // Fixed progress bar and buttons at the bottom
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Column(
+                  children: [
+                    SurveyProgress(), // Progress bar stays fixed at the bottom
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildIconButton(
+                          context,
+                          icon: Icons.arrow_upward,
+                          onPressed: () {
+                            _surveyController.stepBack(context: context);
+                          },
+                        ),
+                        SizedBox(width: 16),
+                        _buildIconButton(
+                          context,
+                          icon: Icons.arrow_downward,
+                          onPressed: isValid || step.isOptional
+                              ? () {
+                                  if (FocusScope.of(context).hasFocus) {
+                                    FocusScope.of(context).unfocus();
                                   }
-                                : null,
-                            enabled: isValid || step.isOptional,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                                  _surveyController.nextStep(context, resultFunction);
+                                }
+                              : null,
+                          enabled: isValid || step.isOptional,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
   Widget _buildIconButton(BuildContext context,
-      {required IconData icon,
-      required VoidCallback? onPressed,
-      bool enabled = true}) {
+      {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHigh,

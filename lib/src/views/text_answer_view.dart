@@ -131,19 +131,6 @@ class _TextAnswerViewState extends State<TextAnswerView> {
       isValid: _isValid || widget.questionStep.isOptional,
       child: Column(
         children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(bottom: 32.0, left: 14.0, right: 14.0),
-            child: Text(
-              widget.questionStep.text,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
           TextField(
             textInputAction: TextInputAction.next,
             minLines: _textAnswerFormat.maxLines ?? 1,
