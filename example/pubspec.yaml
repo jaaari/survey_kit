@@ -44,6 +44,7 @@ flutter:
   assets:
     - assets/example_json.json
     - assets/onboarding.json
+    - assets/onboarding_flow.json
     - assets/adult_customizer_flow.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

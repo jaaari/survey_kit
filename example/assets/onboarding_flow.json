@@ -1,0 +1,326 @@
+{
+    "id": "onboarding_flow",
+    "type": "navigable",
+    "initialValues": {
+        "user_input_character_image_url": "",
+        "user_input_character_description": ""
+    },
+    "rules": [
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": {
+                "id": "c2"
+            },
+            "values": {
+                "POSITIVE": "c4",
+                "NEGATIVE": "c3"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "c3"
+            },
+            "destinationStepIdentifier": {
+                "id": "q9"
+            }
+        }
+    ],
+    "steps": [
+        {
+            "stepIdentifier": {
+                "id": "q1"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_first_name",
+            "title": "What is your first name?",
+            "text": "(This will be visible on your published audiobook)",
+            "infoText": "First name stands for the first name you've been given by your parents. It is the name that is used to address you by your friends, family, and colleagues. It is the name that is used to identify you in official documents and records. It is the name that is used to create your character in your audiobook.",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 1
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q2"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_last_name",
+            "title": "What is your last name?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 1
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q3"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_age",
+            "title": "How old are you?",
+            "answerFormat": {
+                "type": "integer",
+                "minimumValue": 18,
+                "maximumValue": 100
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q4"
+            },
+            "type": "question",
+            "title": "What gender do you identify as?",
+            "text": "This will be used to create the avatar for your character.",
+            "relatedParameter": "user_input_gender",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "Male",
+                        "value": "male"
+                    },
+                    {
+                        "text": "Female",
+                        "value": "female"
+                    },
+                    {
+                        "text": "Other / prefer not to say",
+                        "value": "other"
+                    }
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q5"
+            },
+            "type": "question",
+            "optional": true,
+            "relatedParameter": "user_input_favorite_book",
+            "title": "What are some of your favorite books?",
+            "text": "If you can't think of any, just leave it empty.",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 3,
+                "hint": "Eg: Harry Potter, The Lord of the Rings, The Great Gatsby"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q6"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_favorite_genre",
+            "title": "What is your favorite genre?",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "Adventure",
+                        "value": "adventure"
+                    },
+                    {
+                        "text": "Fantasy",
+                        "value": "fantasy"
+                    },
+                    {
+                        "text": "Science Fiction",
+                        "value": "science fiction"
+                    },
+                    {
+                        "text": "Romance",
+                        "value": "romance"
+                    },
+                    {
+                        "text": "Mystery",
+                        "value": "mystery"
+                    },
+                    {
+                        "text": "Horror",
+                        "value": "horror"
+                    },
+                    {
+                        "text": "Comedy",
+                        "value": "comedy"
+                    },
+                    {
+                        "text": "Tragedy",
+                        "value": "tragedy"
+                    },
+                    {
+                        "text": "Historical Fiction",
+                        "value": "historical fiction"
+                    },
+                    {
+                        "text": "Realism",
+                        "value": "realism"
+                    },
+                    {
+                        "text": "Thriller",
+                        "value": "thriller"
+                    }
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q7"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_weekly_listening_time",
+            "title": "How many hours a week do you listen to audiobooks?",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "Less than 1 hour",
+                        "value": "less than 1 hour"
+                    },
+                    {
+                        "text": "1-2 hours",
+                        "value": "1-2 hours"
+                    },
+                    {
+                        "text": "2-5 hours",
+                        "value": "2-5 hours"
+                    },
+                    {
+                        "text": "More than 5 hours",
+                        "value": "more than 5 hours"
+                    }
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q8"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_how_did_you_hear_about_us",
+            "title": "How did you hear about us?",
+            "answerFormat": {
+                "type": "single",
+                "textChoices": [
+                    {
+                        "text": "Social Media",
+                        "value": "social media"
+                    },
+                    {
+                        "text": "Friend/Family",
+                        "value": "friend/family"
+                    },
+                    {
+                        "text": "Online Search",
+                        "value": "online search"
+                    },
+                    {
+                        "text": "Ads",
+                        "value": "ads"
+                    },
+                    {
+                        "text": "Other",
+                        "value": "other"
+                    }
+                ],
+                "buttonChoices": []
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c1"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_backstory_interests_personality",
+            "title": "Tell us about your backstory, interests, and personality.",
+            "text": "This will help create yourself as your first character for your books. Be as detailed as you want!",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 10,
+                "hint": "Eg: I grew up in ..., I love to ..., and I am a ... type of person."
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c2"
+            },
+            "type": "question",
+            "title": "Do you want to upload a picture for you character?",
+            "text": "This will be used to generate a cartoon avatar for your character.",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Yes",
+                "negativeAnswer": "No, I want to describe my character instead",
+                "result": "POSITIVE"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c3"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_character_looks",
+            "title": "Describe how your character looks.",
+            "text": "This will be used to generate a cartoon avatar for your character.",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 10,
+                "hint": "Eg: brown short hair (a bit messy), rectangle face shape, very light beard, light blue eyes, thin lips, roundish ray ban shades and a small diamond earring in his right ear"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "c4"
+            },
+            "type": "question",
+            "title": "Please upload a picture of yourself. You should be clearly visible in the picture.",
+            "relatedParameter": "user_input_user_character_image_url",
+            "answerFormat": {
+                "type": "file"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q9"
+            },
+            "type": "question",
+            "isOptional": false,
+            "title": "Terms and Conditions",
+            "answerFormat": {
+                "type": "agreement",
+                "defaultValue": "NEGATIVE",
+                "markdownDescription": "Please read our [Terms and Conditions](https://www.kuluko.com/terms) and confirm your acceptance by checking the box below.",
+                "markdownAgreementText": "I have read and accept the [Terms and Conditions](https://www.kuluko.com/terms) of Kuluko."
+            }
+        },        
+        {
+            "stepIdentifier": {
+                "id": "q10"
+            },
+            "type": "completion",
+            "title": "Thank you for taking the time to fill out this form!",
+            "text": "Now have fun creating your first audiobook!",
+            "buttonText": "Let's go!",
+            "parameters": {
+                "user_id": "$user_id",
+                "user_input_first_name": "$user_input_first_name",
+                "user_input_last_name": "$user_input_last_name",
+                "user_input_age": "$user_input_age",
+                "user_input_favorite_books": "$user_input_favorite_book",
+                "user_input_favorite_genre": "$user_input_favorite_genre",
+                "user_input_weekly_listening_time": "$user_input_weekly_listening_time",
+                "user_input_how_did_you_hear_about_us": "$user_input_how_did_you_hear_about_us",
+                "user_input_backstory_interests_personality": "$user_input_backstory_interests_personality",
+                "user_input_character_looks": "$user_input_character_looks",
+                "user_input_character_image_url": "$user_input_user_character_image_url",
+                "user_input_gender": "$user_input_gender"
+            },
+            "requestType": "POST",
+            "endpointUrl": "https://onboard-user-cf-6n5kxdz4pa-lz.a.run.app"
+        }
+    ]
+}

@@ -57,6 +57,8 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return StepView(
       step: widget.questionStep,
       resultFunction: () => IntegerQuestionResult(
@@ -80,12 +82,9 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
               textAlign: TextAlign.center,
             )
           : widget.questionStep.content,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32.0),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
+      child: Container(
+          width: width * 0.2, // Set your desired width here
           child: TextField(
-            textInputAction: TextInputAction.next,
             autofocus: true,
             decoration: textFieldInputDecoration(
               hint: _integerAnswerFormat.hint,
@@ -104,7 +103,6 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
               )
           ),
         ),
-      ),
     );
   }
 }

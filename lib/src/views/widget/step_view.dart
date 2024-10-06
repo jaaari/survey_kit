@@ -64,17 +64,34 @@ class StepView extends StatelessWidget {
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text('Information'),
-                                              content: Text(step.infoText),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text('OK'),
+                                            return Dialog( // Full-screen dialog
+                                              child: Container(
+                                                width: MediaQuery.of(context).size.width, // Full screen width
+                                                height: MediaQuery.of(context).size.height, // Full screen height
+                                                padding: EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      'Information',
+                                                      style: Theme.of(context).textTheme.titleMedium,
+                                                    ),
+                                                    SizedBox(height: 16),
+                                                    Expanded(
+                                                      child: SingleChildScrollView(
+                                                        child: Text(step.infoText),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 16),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text('OK'),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
+                                              ),
                                             );
                                           },
                                         );

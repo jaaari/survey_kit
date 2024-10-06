@@ -110,6 +110,8 @@ class _TextAnswerViewState extends State<TextAnswerView> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return StepView(
       step: widget.questionStep,
       resultFunction: () => TextQuestionResult(
@@ -131,6 +133,9 @@ class _TextAnswerViewState extends State<TextAnswerView> {
       isValid: _isValid || widget.questionStep.isOptional,
       child: Column(
         children: [
+          Container(
+          width: width * 0.7, // Set your desired width here
+          child: 
           TextField(
             textInputAction: TextInputAction.next,
             minLines: _textAnswerFormat.maxLines ?? 1,
@@ -156,6 +161,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
               fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
+          ),
           ),
         ],
       ),

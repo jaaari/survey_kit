@@ -20,8 +20,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final bool isPopupMode = true; // Set to 'false' for full-screen mode
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,24 +27,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       home: Scaffold(
-        body: Builder(
-          builder: (context) {
-            if (isPopupMode) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                showSurveyDialog(
-                  context, 
-                  'jCa0yl7QTeZLSLd9sg25OXUqpVp2',
-                  onCloseButtonPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                );
-              });
-            }
-            return isPopupMode
-                ? const SizedBox.shrink() 
-                : _buildFullScreenSurvey(context);
-          },
-        ),
+        body: _buildFullScreenSurvey(context), // Build the survey directly
       ),
     );
   }
@@ -59,20 +40,25 @@ class _MyAppState extends State<MyApp> {
             snapshot.hasData &&
             snapshot.data != null) {
           final Task task = snapshot.data!;
-          return SurveyKit(
-            onResult: (SurveyResult result) {
-              print('Survey finished!');
-              print(jsonEncode(result.toJson()));
-            },
-            task: task,
-            showProgress: true,
-            localizations: const <String, String>{
-              'cancel': 'Cancel',
-              'next': 'Next',
-            },
-            themeData: Theme.of(context),
-            surveyProgressbarConfiguration: SurveyProgressConfiguration(
-              backgroundColor: KulukoTheme.of(context).primaryBackground,
+          return Center(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.6, // 70% of the screen height
+              child: SurveyKit(
+                onResult: (SurveyResult result) {
+                  print('Survey finished!');
+                  print(jsonEncode(result.toJson()));
+                },
+                task: task,
+                showProgress: true,
+                localizations: const <String, String>{
+                  'cancel': 'Cancel',
+                  'next': 'Next',
+                },
+                themeData: Theme.of(context),
+                surveyProgressbarConfiguration: SurveyProgressConfiguration(
+                  backgroundColor: KulukoTheme.of(context).primaryBackground,
+                ),
+              ),
             ),
           );
         }
@@ -81,83 +67,10 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<void> showSurveyDialog(
-    BuildContext context, 
-    String userId, {
-    required VoidCallback onCloseButtonPressed,
-  }) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.5),
-      builder: (BuildContext context) {
-        final height = MediaQuery.of(context).size.height;
-        final width = MediaQuery.of(context).size.width;
-        return Dialog(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(
-              color: Theme.of(context).colorScheme.primary,
-              width: 2.0,
-            ),
-          ),
-          insetPadding: const EdgeInsets.all(20),
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: height * 0.05),
-                child: FutureBuilder<Task>(
-                  future: getJsonTask(),
-                  builder: (BuildContext context, AsyncSnapshot<Task> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData &&
-                        snapshot.data != null) {
-                      final Task task = snapshot.data!;
-                      return SurveyKit(
-                        onResult: (SurveyResult result) {
-                          print('Survey finished!');
-                          print(jsonEncode(result.toJson()));
-                          Navigator.of(context).pop(); // Close popup after completion
-                        },
-                        task: task,
-                        showProgress: true,
-                        localizations: const <String, String>{
-                          'cancel': 'Cancel',
-                          'next': 'Next',
-                        },
-                        themeData: Theme.of(context),
-                        surveyProgressbarConfiguration: SurveyProgressConfiguration(
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                        ),
-                      );
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
-              ),
-              Positioned(
-                top: 8,
-                left: 8,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios_rounded,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  onPressed: onCloseButtonPressed,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   Future<Task> getJsonTask() async {
     try {
       print('Loading task from JSON...');
-      final String taskJson = await rootBundle.loadString('assets/adult_customizer_flow.json');
+      final String taskJson = await rootBundle.loadString('assets/onboarding_flow.json');
       print('Task JSON loaded: $taskJson');
       final Map<String, dynamic> taskMap = json.decode(taskJson);
       return Task.fromJson(taskMap);
@@ -187,7 +100,6 @@ class _MyAppState extends State<MyApp> {
         selectionColor: theme.primary,
         selectionHandleColor: theme.primary,
       ),
-      
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
           minimumSize: MaterialStateProperty.all(
@@ -200,11 +112,6 @@ class _MyAppState extends State<MyApp> {
               }
               return BorderSide(color: theme.primary);
             },
-          ),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
           ),
         ),
       ),
