@@ -41,6 +41,9 @@ class SurveyKit extends StatefulWidget {
 
   final Map<String, String>? localizations;
 
+  // Optional height parameter
+  final double? height;
+
   const SurveyKit({
     required this.task,
     required this.onResult,
@@ -50,9 +53,9 @@ class SurveyKit extends StatefulWidget {
     this.showProgress,
     this.surveyProgressbarConfiguration,
     this.localizations,
+    this.height, // add height here
   });
-
-  @override
+@override
   _SurveyKitState createState() => _SurveyKitState();
 }
 
@@ -77,11 +80,6 @@ class _SurveyKitState extends State<SurveyKit> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Theme(
       data: widget.themeData ?? Theme.of(context),
@@ -95,7 +93,7 @@ class _SurveyKitState extends State<SurveyKit> {
             value: widget.surveyProgressbarConfiguration ??
                 SurveyProgressConfiguration(),
           ),
-          Provider<Map<String, String>?>.value(value: widget.localizations)
+          Provider<Map<String, String>?>.value(value: widget.localizations),
         ],
         child: BlocProvider(
           create: (BuildContext context) => SurveyPresenter(
@@ -106,6 +104,7 @@ class _SurveyKitState extends State<SurveyKit> {
             length: widget.task.steps.length,
             onResult: widget.onResult,
             appBar: widget.appBar,
+            height: widget.height, // pass the height to SurveyPage
           ),
         ),
       ),
@@ -117,11 +116,15 @@ class SurveyPage extends StatefulWidget {
   final int length;
   final Widget Function(AppBarConfiguration appBarConfiguration)? appBar;
   final Function(SurveyResult) onResult;
+  
+  // Optional height parameter
+  final double? height;
 
   const SurveyPage({
     required this.length,
     required this.onResult,
     this.appBar,
+    this.height, // add height here
   });
 
   @override
@@ -173,6 +176,7 @@ class _SurveyPageState extends State<SurveyPage>
                           (element) => element.id == e.stepIdentifier,
                         ),
                       ),
+                      height: widget.height, // pass the height to _SurveyView
                     ),
                   )
                   .toList(),
