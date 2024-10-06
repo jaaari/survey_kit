@@ -135,6 +135,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
         children: [
           Container(
           width: width * 0.7, // Set your desired width here
+          height: 100,
           child: 
           TextField(
             textInputAction: TextInputAction.next,

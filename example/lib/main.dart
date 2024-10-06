@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' hide Step;
 import 'package:flutter/services.dart';
 import 'package:survey_kit/survey_kit.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
@@ -27,58 +29,71 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       home: Scaffold(
-        body: _buildFullScreenSurvey(context), // Build the survey directly
+        body: Container(
+          color: KulukoTheme.of(context).primaryBackground,
+          child: Align(
+            alignment: Alignment.center,
+            child: FutureBuilder<Task>(
+              future: getJsonTask(),
+              builder: (BuildContext context, AsyncSnapshot<Task> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData &&
+                    snapshot.data != null) {
+                  final Task task = snapshot.data!;
+                  return SurveyKit(
+                    onResult: (SurveyResult result) {
+                      print('Survey finished!');
+                      print(jsonEncode(result.toJson()));
+                      print(result.finishReason);
+                      Navigator.pushNamed(context, '/');
+                    },
+                    task: task,
+                    showProgress: true,
+                    localizations: const <String, String>{
+                      'cancel': 'Cancel',
+                      'next': 'Next',
+                    },
+                    themeData: Theme.of(context),
+                    surveyProgressbarConfiguration: SurveyProgressConfiguration(
+                      backgroundColor: KulukoTheme.of(context).primaryBackground,
+                    ),
+                  );
+                }
+                return const CircularProgressIndicator.adaptive();
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildFullScreenSurvey(BuildContext context) {
-    return FutureBuilder<Task>(
-      future: getJsonTask(),
-      builder: (BuildContext context, AsyncSnapshot<Task> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData &&
-            snapshot.data != null) {
-          final Task task = snapshot.data!;
-          return Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.6, // 70% of the screen height
-              child: SurveyKit(
-                onResult: (SurveyResult result) {
-                  print('Survey finished!');
-                  print(jsonEncode(result.toJson()));
-                },
-                task: task,
-                showProgress: true,
-                localizations: const <String, String>{
-                  'cancel': 'Cancel',
-                  'next': 'Next',
-                },
-                themeData: Theme.of(context),
-                surveyProgressbarConfiguration: SurveyProgressConfiguration(
-                  backgroundColor: KulukoTheme.of(context).primaryBackground,
-                ),
-              ),
-            ),
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
   Future<Task> getJsonTask() async {
-    try {
-      print('Loading task from JSON...');
-      final String taskJson = await rootBundle.loadString('assets/onboarding_flow.json');
-      print('Task JSON loaded: $taskJson');
-      final Map<String, dynamic> taskMap = json.decode(taskJson);
-      return Task.fromJson(taskMap);
-    } catch (e) {
-      print('Error loading task: $e');
-      rethrow;
-    }
+  try {
+    print('Loading task from JSON...');
+
+    // Initialize global state manager (add creator_user_id to global state)
+    final Map<String, dynamic> data = <String, dynamic>{
+      'user_id': 'jCa0yl7QTeZLSLd9sg25OXUqpVp2',
+    };
+    GlobalStateManager().updateData(data);
+
+    // Load the JSON file
+    final String taskJson = await rootBundle.loadString('assets/onboarding.json');
+    print('Task JSON loaded: $taskJson');
+
+    // Decode the JSON file
+    final Map<String, dynamic> taskMap = json.decode(taskJson);
+    print('Task JSON decoded');
+
+    // Create and return the Task object
+    return Task.fromJson(taskMap);
+  } catch (e) {
+    print('Error loading task: $e');
+    rethrow;
   }
+}
+
 
   ThemeData _buildTheme(KulukoTheme theme) {
     return ThemeData(
@@ -100,6 +115,9 @@ class _MyAppState extends State<MyApp> {
         selectionColor: theme.primary,
         selectionHandleColor: theme.primary,
       ),
+      cupertinoOverrideTheme: CupertinoThemeData(
+        primaryColor: theme.primary,
+      ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
           minimumSize: MaterialStateProperty.all(
@@ -108,9 +126,30 @@ class _MyAppState extends State<MyApp> {
           side: MaterialStateProperty.resolveWith(
             (Set<MaterialState> state) {
               if (state.contains(MaterialState.disabled)) {
-                return BorderSide(color: theme.secondary);
+                return BorderSide(
+                  color: theme.secondary,
+                );
               }
-              return BorderSide(color: theme.primary);
+              return BorderSide(
+                color: theme.primary,
+              );
+            },
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          textStyle: MaterialStateProperty.resolveWith(
+            (Set<MaterialState> state) {
+              if (state.contains(MaterialState.disabled)) {
+                return TextStyle(
+                  color: theme.secondary,
+                );
+              }
+              return TextStyle(
+                color: theme.primary,
+              );
             },
           ),
         ),
@@ -118,7 +157,9 @@ class _MyAppState extends State<MyApp> {
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           textStyle: MaterialStateProperty.all(
-            TextStyle(color: theme.primary),
+            TextStyle(
+              color: theme.primary,
+            ),
           ),
         ),
       ),
@@ -130,10 +171,16 @@ class _MyAppState extends State<MyApp> {
         titleMedium: theme.typography.titleMedium,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        labelStyle: TextStyle(color: theme.primaryText),
+        labelStyle: TextStyle(
+          color: theme.primaryText,
+        ),
       ),
-      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.cyan)
-          .copyWith(onPrimary: theme.primaryText)
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.cyan,
+      )
+          .copyWith(
+            onPrimary: theme.primaryText,
+          )
           .copyWith(background: theme.primaryBackground),
     );
   }

@@ -192,10 +192,15 @@ class _SurveyPageState extends State<SurveyPage>
 }
 
 class _SurveyView extends StatelessWidget {
-  const _SurveyView({required this.id, required this.createView});
+  const _SurveyView({
+    required this.id,
+    required this.createView,
+    this.height, // Optional height parameter
+  });
 
   final String id;
   final Widget Function() createView;
+  final double? height; // Nullable height
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +208,16 @@ class _SurveyView extends StatelessWidget {
       key: ValueKey<String>(
         id,
       ),
-      child: createView(),
+      child: Center(
+        child: height != null
+            ? SizedBox(
+                height: height, // Use the provided height
+                child: createView(),
+              )
+            : createView(), // Default behavior when no height is provided
+      ),
     );
   }
 }
+
+
