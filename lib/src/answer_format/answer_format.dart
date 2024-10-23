@@ -12,11 +12,11 @@ import 'package:survey_kit/src/answer_format/scale_answer_format.dart';
 import 'package:survey_kit/src/answer_format/agreement_answer_format.dart';
 import 'package:survey_kit/src/answer_format/single_choice_answer_format.dart';
 import 'package:survey_kit/src/answer_format/text_answer_format.dart';
+import 'package:survey_kit/src/answer_format/password_answer_format.dart';
 import 'package:survey_kit/src/answer_format/time_answer_formart.dart';
 import 'package:survey_kit/src/answer_format/api_call_answer_format.dart';
 import 'package:survey_kit/src/answer_format/single_choice_audio_answer_format.dart';
 import 'package:survey_kit/src/steps/predefined_steps/answer_format_not_defined_exception.dart';
-
 
 abstract class AnswerFormat {
   const AnswerFormat();
@@ -34,6 +34,8 @@ abstract class AnswerFormat {
         return DoubleAnswerFormat.fromJson(json);
       case 'text':
         return TextAnswerFormat.fromJson(json);
+      case 'password':
+        return PasswordAnswerFormat.fromJson(json);
       case 'date':
         return DateAnswerFormat.fromJson(json);
       case 'single':

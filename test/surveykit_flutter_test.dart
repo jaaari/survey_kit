@@ -23,12 +23,13 @@ void main() {
                   hint: 'Please enter your age',
                 ),
               ),
-              CompletionStep(
+              /*CompletionStep(
                 stepIdentifier: StepIdentifier(id: '321'),
                 text: 'Thanks for taking the survey, we will contact you soon!',
                 title: 'Done!',
                 buttonText: 'Submit survey',
               ),
+              */
             ],
           ),
           onResult: (result) {

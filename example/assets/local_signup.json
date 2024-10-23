@@ -1,0 +1,104 @@
+{
+    "id": "onboarding_flow",
+    "type": "navigable",
+    "initialValues": {
+        "user_input_first_name": "",
+        "user_input_last_name": "",
+        "user_input_email": "",
+        "user_input_password": "",
+        "user_input_favorite_books": "",
+        "user_input_age": ""
+    },
+    "steps": [
+        {
+            "stepIdentifier": {
+                "id": "q1"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_first_name",
+            "title": "What is your first name?",
+            "text": "(This will be visible on your published audiobook)",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 1
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q2"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_last_name",
+            "title": "What is your last name?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 1
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q3"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_age",
+            "title": "How old are you?",
+            "answerFormat": {
+                "type": "integer",
+                "minimumValue": 18,
+                "maximumValue": 100
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q4"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_email",
+            "title": "What is your email?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 1
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q5"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_password",
+            "title": "Create a password",
+            "answerFormat": {
+                "type": "password",
+                "maxLines": 1
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q6"
+            },
+            "type": "question",
+            "relatedParameter": "user_input_favorite_books",
+            "title": "What are some of your favorite books?",
+            "text": "If you can't think of any, just leave it empty.",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 3,
+                "hint": "Eg: Harry Potter, The Lord of the Rings, The Great Gatsby"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q7"
+            },
+            "type": "question",
+            "isOptional": false,
+            "title": "Terms and Conditions",
+            "answerFormat": {
+                "type": "agreement",
+                "defaultValue": "NEGATIVE",
+                "markdownDescription": "Please read our [Terms and Conditions](https://www.kuluko.com/terms) and confirm your acceptance by checking the box below.",
+                "markdownAgreementText": "I have read and accept the [Terms and Conditions](https://www.kuluko.com/terms) of Kuluko."
+            }
+        }
+    ]
+}

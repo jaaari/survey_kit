@@ -1,5 +1,7 @@
 library survery_kit;
 
+
+export 'src/answer_format/password_answer_format.dart';
 export 'src/answer_format/answer_format.dart';
 export 'src/answer_format/boolean_answer_format.dart';
 export 'src/answer_format/date_answer_format.dart';
@@ -26,6 +28,7 @@ export 'src/navigator/task_navigator.dart';
 export 'src/presenter/survey_event.dart';
 export 'src/presenter/survey_presenter.dart';
 export 'src/presenter/survey_state.dart';
+export 'src/result/question/password_question_result.dart';
 export 'src/result/question/boolean_question_result.dart';
 export 'src/result/question/date_question_result.dart';
 export 'src/result/question/double_question_result.dart';
@@ -69,6 +72,7 @@ export 'src/views/integer_answer_view.dart';
 export 'src/views/multiple_choice_answer_view.dart';
 export 'src/views/scale_answer_view.dart';
 export 'src/views/single_choice_answer_view.dart';
+export 'src/views/password_answer_view.dart';
 export 'src/views/text_answer_view.dart';
 export 'src/views/time_answer_view.dart';
 export 'src/views/widget/selection_list_tile.dart';

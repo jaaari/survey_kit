@@ -31,93 +31,88 @@ class StepView extends StatelessWidget {
         builder: (context, constraints) {
           return Column(
             children: [
+              // Scrollable content area
               Expanded(
-                child: Center( // Center content vertically
-                  child: SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: constraints.maxHeight * 0.6, // Ensure it can grow
-                        
-                      ),
-                      child: IntrinsicHeight(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                child: SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight * 0.7,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Title section (with optional info icon)
+                        Stack(
                           children: [
-                            // Title and optional info icon
-                            Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                                    child: title,
-                                  ),
-                                ),
-                                if (step.infoText.isNotEmpty)
-                                  Positioned(
-                                    right: 10,
-                                    top: 10,
-                                    child: IconButton(
-                                      icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return Dialog( // Full-screen dialog
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width, // Full screen width
-                                                height: MediaQuery.of(context).size.height, // Full screen height
-                                                padding: EdgeInsets.all(16.0),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      'Information',
-                                                      style: Theme.of(context).textTheme.titleMedium,
-                                                    ),
-                                                    SizedBox(height: 16),
-                                                    Expanded(
-                                                      child: SingleChildScrollView(
-                                                        child: Text(step.infoText),
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 16),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: Text('OK'),
-                                                    ),
-                                                  ],
+                            Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                                child: title,
+                              ),
+                            ),
+                            if (step.infoText.isNotEmpty)
+                              Positioned(
+                                right: 10,
+                                top: 10,
+                                child: IconButton(
+                                  icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Dialog(
+                                          child: Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            height: MediaQuery.of(context).size.height,
+                                            padding: EdgeInsets.all(16.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  'Information',
+                                                  style: Theme.of(context).textTheme.titleMedium,
                                                 ),
-                                              ),
-                                            );
-                                          },
+                                                SizedBox(height: 16),
+                                                Expanded(
+                                                  child: SingleChildScrollView(
+                                                    child: Text(step.infoText),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('OK'),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         );
                                       },
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            // Content section
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: child,
-                            ),
+                                    );
+                                  },
+                                ),
+                              ),
                           ],
                         ),
-                      ),
+                        // Survey question content
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: child,
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              // Fixed progress bar and buttons at the bottom
+              // Fixed progress bar at the bottom
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Column(
                   children: [
-                    SurveyProgress(), // Progress bar stays fixed at the bottom
+                    SurveyProgress(), // Progress bar remains fixed
                     SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

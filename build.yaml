@@ -1,0 +1,9 @@
+targets:
+  $default:
+    sources:
+      - "lib/**"
+      - "assets/**"
+      - "!example/**"
+      - "!test/**"
+      - "!ios/.symlinks/**"
+      - "!windows/.symlinks/**"

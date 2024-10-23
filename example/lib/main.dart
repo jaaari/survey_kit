@@ -57,6 +57,7 @@ class _MyAppState extends State<MyApp> {
                     surveyProgressbarConfiguration: SurveyProgressConfiguration(
                       backgroundColor: KulukoTheme.of(context).primaryBackground,
                     ),
+                    height: MediaQuery.of(context).size.height * 0.5,
                   );
                 }
                 return const CircularProgressIndicator.adaptive();
@@ -79,7 +80,7 @@ class _MyAppState extends State<MyApp> {
     GlobalStateManager().updateData(data);
 
     // Load the JSON file
-    final String taskJson = await rootBundle.loadString('assets/onboarding.json');
+    final String taskJson = await rootBundle.loadString('assets/local_signup.json');
     print('Task JSON loaded: $taskJson');
 
     // Decode the JSON file
