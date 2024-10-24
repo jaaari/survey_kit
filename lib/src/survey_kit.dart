@@ -16,7 +16,6 @@ import 'package:survey_kit/src/task/task.dart';
 import 'package:survey_kit/src/views/widget/survey_app_bar.dart';
 import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
 import 'package:survey_kit/src/widget/survey_progress_with_animation.dart';
-import 'package:survey_kit/src/steps/step.dart' as surveystep;
 
 class SurveyKit extends StatefulWidget {
   final Task task;
@@ -26,8 +25,6 @@ class SurveyKit extends StatefulWidget {
   final Widget Function(AppBarConfiguration appBarConfiguration)? appBar;
   final Map<String, String>? localizations;
   final double? height;
-  final surveystep.Step step;
-  final bool isValid;
 
   const SurveyKit({
     required this.task,
@@ -37,8 +34,6 @@ class SurveyKit extends StatefulWidget {
     this.appBar,
     this.localizations,
     this.height,
-    required this.step,
-    required this.isValid,
   });
 
   @override
@@ -47,11 +42,13 @@ class SurveyKit extends StatefulWidget {
 
 class _SurveyKitState extends State<SurveyKit> {
   late TaskNavigator _taskNavigator;
+  late SurveyController _surveyController;
 
   @override
   void initState() {
     super.initState();
     _taskNavigator = _createTaskNavigator();
+    _surveyController = widget.surveyController ?? SurveyController();
   }
 
   TaskNavigator _createTaskNavigator() {
@@ -72,12 +69,10 @@ class _SurveyKitState extends State<SurveyKit> {
       child: MultiProvider(
         providers: [
           Provider<TaskNavigator>.value(value: _taskNavigator),
-          Provider<SurveyController>.value(
-              value: widget.surveyController ?? SurveyController()),
+          Provider<SurveyController>.value(value: _surveyController),
           Provider<Map<String, String>?>.value(value: widget.localizations),
-          // Ensure SurveyProgressConfiguration is provided
           Provider<SurveyProgressConfiguration>(
-            create: (_) => SurveyProgressConfiguration(), // Customize as needed
+            create: (_) => SurveyProgressConfiguration(),
           ),
         ],
         child: BlocProvider(
@@ -89,12 +84,14 @@ class _SurveyKitState extends State<SurveyKit> {
             length: widget.task.steps.length,
             onResult: widget.onResult,
             height: widget.height,
+            controller: _surveyController, // Pass controller here
           ),
         ),
       ),
     );
   }
 }
+
 class SurveyPage extends StatefulWidget {
   final int length;
   final Function(SurveyResult) onResult;
@@ -115,7 +112,6 @@ class SurveyPage extends StatefulWidget {
 
 class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
 
   @override
   void initState() {
@@ -131,7 +127,6 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final _surveyController = widget.controller ?? context.read<SurveyController>();
 
     return BlocConsumer<SurveyPresenter, SurveyState>(
       listenWhen: (previous, current) => previous != current,
@@ -198,7 +193,6 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
                 icon: Icons.arrow_back,
                 onPressed: _tabController.index > 0
                     ? () {
-                        _surveyController.stepBack(context: context);
                         setState(() {
                           _tabController.animateTo(_tabController.index - 1);
                         });
@@ -211,18 +205,9 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
                 icon: Icons.arrow_forward,
                 onPressed: _tabController.index < state.steps.length - 1
                     ? () {
-                        if (isValid || step.isOptional) {
-                          // Step 1: Call _surveyController.nextStep to handle logic
-                          _surveyController.nextStep(
-                            context,
-                            resultFunction,
-                          );
-
-                          // Step 2: Animate to the next tab
-                          setState(() {
-                            _tabController.animateTo(_tabController.index + 1);
-                          });
-                        }
+                        setState(() {
+                          _tabController.animateTo(_tabController.index + 1);
+                        });
                       }
                     : null,
               ),
@@ -292,4 +277,3 @@ class _SurveyView extends StatelessWidget {
     );
   }
 }
-
