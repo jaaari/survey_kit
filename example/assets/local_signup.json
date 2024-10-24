@@ -99,6 +99,31 @@
                 "markdownDescription": "Please read our [Terms and Conditions](https://www.kuluko.com/terms) and confirm your acceptance by checking the box below.",
                 "markdownAgreementText": "I have read and accept the [Terms and Conditions](https://www.kuluko.com/terms) of Kuluko."
             }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q10"
+            },
+            "type": "completion",
+            "title": "Thank you for taking the time to fill out this form!",
+            "text": "Now have fun creating your first audiobook!",
+            "buttonText": "Let's go!",
+            "parameters": {
+                "user_id": "$user_id",
+                "user_input_first_name": "$user_input_first_name",
+                "user_input_last_name": "$user_input_last_name",
+                "user_input_age": "$user_input_age",
+                "user_input_favorite_books": "$user_input_favorite_book",
+                "user_input_favorite_genre": "$user_input_favorite_genre",
+                "user_input_weekly_listening_time": "$user_input_weekly_listening_time",
+                "user_input_how_did_you_hear_about_us": "$user_input_how_did_you_hear_about_us",
+                "user_input_backstory_interests_personality": "$user_input_backstory_interests_personality",
+                "user_input_character_looks": "$user_input_character_looks",
+                "user_input_character_image_url": "$user_input_user_character_image_url",
+                "user_input_gender": "$user_input_gender"
+            },
+            "requestType": "POST",
+            "endpointUrl": "https://onboard-user-cf-6n5kxdz4pa-lz.a.run.app"
         }
     ]
 }

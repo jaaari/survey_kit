@@ -16,8 +16,6 @@ import 'package:survey_kit/src/task/task.dart';
 import 'package:survey_kit/src/views/widget/survey_app_bar.dart';
 import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
 import 'package:survey_kit/src/widget/survey_progress_with_animation.dart';
-import 'package:survey_kit/src/views/widget/step_view.dart';
-import 'package:survey_kit/src/steps/predefined_steps/completion_step.dart';
 
 class SurveyKit extends StatefulWidget {
   final Task task;
@@ -134,13 +132,7 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
       listenWhen: (previous, current) => previous != current,
       listener: (context, state) async {
         if (state is SurveyResultState) {
-          // Survey is complete, call the onResult callback
           widget.onResult.call(state.result);
-        } else if (state is PresentingSurveyState) {
-          // Update tab controller to match the current step index
-          if (_tabController.index != state.currentStepIndex) {
-            _tabController.animateTo(state.currentStepIndex);
-          }
         }
       },
       builder: (BuildContext context, SurveyState state) {
@@ -201,36 +193,21 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
                 icon: Icons.arrow_back,
                 onPressed: _tabController.index > 0
                     ? () {
-                        final surveyController = context.read<SurveyController>();
-                        surveyController.stepBack(
-                          context: context,
-                        );
                         setState(() {
                           _tabController.animateTo(_tabController.index - 1);
                         });
                       }
                     : null,
               ),
-              SizedBox(width: 16),
+              SizedBox(width: 16), // Space between the buttons
               _buildIconButton(
                 context,
                 icon: Icons.arrow_forward,
-                onPressed: _tabController.index < state.steps.length
+                onPressed: _tabController.index < state.steps.length - 1
                     ? () {
-                        final step = state.steps[_tabController.index];
-                        final view = step.createView(
-                          questionResult: state.questionResults.firstWhereOrNull(
-                            (element) => element.id == step.stepIdentifier,
-                          ),
-                        );
-                        
-                        if (view is StepView && (view.isValid || step.isOptional)) {
-                          final surveyController = context.read<SurveyController>();
-                          surveyController.nextStep(
-                            context,
-                            view.resultFunction,
-                          );
-                        }
+                        setState(() {
+                          _tabController.animateTo(_tabController.index + 1);
+                        });
                       }
                     : null,
               ),
@@ -300,6 +277,3 @@ class _SurveyView extends StatelessWidget {
     );
   }
 }
-
-
-
