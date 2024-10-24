@@ -16,6 +16,7 @@ import 'package:survey_kit/src/task/task.dart';
 import 'package:survey_kit/src/views/widget/survey_app_bar.dart';
 import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
 import 'package:survey_kit/src/widget/survey_progress_with_animation.dart';
+import 'package:survey_kit/src/steps/step.dart' as surveystep;
 
 class SurveyKit extends StatefulWidget {
   final Task task;
@@ -25,6 +26,8 @@ class SurveyKit extends StatefulWidget {
   final Widget Function(AppBarConfiguration appBarConfiguration)? appBar;
   final Map<String, String>? localizations;
   final double? height;
+  final surveystep.Step step;
+  final bool isValid;
 
   const SurveyKit({
     required this.task,
@@ -34,6 +37,8 @@ class SurveyKit extends StatefulWidget {
     this.appBar,
     this.localizations,
     this.height,
+    required this.step,
+    required this.isValid,
   });
 
   @override
@@ -287,3 +292,4 @@ class _SurveyView extends StatelessWidget {
     );
   }
 }
+
