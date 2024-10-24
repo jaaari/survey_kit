@@ -4,47 +4,18 @@ import 'package:survey_kit/src/presenter/survey_event.dart';
 import 'package:survey_kit/src/presenter/survey_presenter.dart';
 import 'package:survey_kit/src/result/question_result.dart';
 
+
 class SurveyController {
-  /// Defines what should happen if the next step is called
-  ///
-  /// If the function returns `true`, the default behavior will still be executed after it.
-  ///
-  /// Parameters:
-  /// - [context]: The build context of the widget triggering the next step.
-  /// - [resultFunction]: A function that returns a [QuestionResult] object.
-  ///
-  /// Returns:
-  /// - `true` if the default behavior should still be executed after this function, `false` otherwise.
   final bool Function(
     BuildContext context,
     QuestionResult Function() resultFunction,
   )? onNextStep;
 
-  /// Defines what should happen if the previus step is called
-  ///
-  /// If the function returns `true`, the default behavior will still be executed after it.
-  ///
-  /// Parameters:
-  /// - [context]: The build context of the widget triggering the next step.
-  /// - [resultFunction]: A function that returns a [QuestionResult] object.
-  ///
-  /// Returns:
-  /// - `true` if the default behavior should still be executed after this function, `false` otherwise.
   final bool Function(
     BuildContext context,
     QuestionResult Function()? resultFunction,
   )? onStepBack;
 
-  /// Defines what should happen if the survey should be closed
-  ///
-  /// If the function returns `true`, the default behavior will still be executed after it.
-  ///
-  /// Parameters:
-  /// - [context]: The build context of the widget triggering the next step.
-  /// - [resultFunction]: A function that returns a [QuestionResult] object.
-  ///
-  /// Returns:
-  /// - `true` if the default behavior should still be executed after this function, `false` otherwise.
   final bool Function(
     BuildContext context,
     QuestionResult Function()? resultFunction,
@@ -60,13 +31,17 @@ class SurveyController {
     BuildContext context,
     QuestionResult Function() resultFunction,
   ) {
+    // Print current JSON data when moving to the next step
     if (onNextStep != null) {
       if (!onNextStep!(context, resultFunction)) return;
     }
+
+    // Get the current result
+    final currentResult = resultFunction.call();
+    
+
     BlocProvider.of<SurveyPresenter>(context).add(
-      NextStep(
-        resultFunction.call(),
-      ),
+      NextStep(currentResult),
     );
   }
 

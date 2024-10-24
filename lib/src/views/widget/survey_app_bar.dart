@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:survey_kit/src/configuration/app_bar_configuration.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/widget/survey_progress.dart';
@@ -49,3 +49,4 @@ class SurveyAppBar extends StatelessWidget {
     );
   }
 }
+ */
