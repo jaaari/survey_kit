@@ -23,23 +23,24 @@ class StepView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final _surveyController = controller ?? context.read<SurveyController>();
+Widget build(BuildContext context) {
+  final _surveyController = controller ?? context.read<SurveyController>();
 
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            children: [
-              // Scrollable content area
-              Expanded(
-                child: SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight * 0.7,
-                    ),
+  return Scaffold(
+    body: LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          children: [
+            // Scrollable content area
+            Expanded(
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight, // Ensures it takes up the full height
+                  ),
+                  child: Center( // Centers the content horizontally and vertically
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center, // Center vertically
                       children: [
                         // Title section (with optional info icon)
                         Stack(
@@ -97,7 +98,7 @@ class StepView extends StatelessWidget {
                               ),
                           ],
                         ),
-                        // Survey question content
+                        // Survey question content (child widget)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: child,
@@ -107,48 +108,14 @@ class StepView extends StatelessWidget {
                   ),
                 ),
               ),
-              // Fixed progress bar at the bottom
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Column(
-                  children: [
-                    SurveyProgress(), // Progress bar remains fixed
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildIconButton(
-                          context,
-                          icon: Icons.arrow_upward,
-                          onPressed: () {
-                            _surveyController.stepBack(context: context);
-                          },
-                        ),
-                        SizedBox(width: 16),
-                        _buildIconButton(
-                          context,
-                          icon: Icons.arrow_downward,
-                          onPressed: isValid || step.isOptional
-                              ? () {
-                                  if (FocusScope.of(context).hasFocus) {
-                                    FocusScope.of(context).unfocus();
-                                  }
-                                  _surveyController.nextStep(context, resultFunction);
-                                }
-                              : null,
-                          enabled: isValid || step.isOptional,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
+            ),
+          ],
+        );
+      },
+    ),
+  );
+}
+
 
   Widget _buildIconButton(BuildContext context,
       {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {

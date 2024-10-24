@@ -48,15 +48,12 @@ class _MyAppState extends State<MyApp> {
                       Navigator.pushNamed(context, '/');
                     },
                     task: task,
-                    showProgress: true,
                     localizations: const <String, String>{
                       'cancel': 'Cancel',
                       'next': 'Next',
                     },
                     themeData: Theme.of(context),
-                    surveyProgressbarConfiguration: SurveyProgressConfiguration(
-                      backgroundColor: KulukoTheme.of(context).primaryBackground,
-                    ),
+                    
                     height: MediaQuery.of(context).size.height * 0.5,
                   );
                 }
