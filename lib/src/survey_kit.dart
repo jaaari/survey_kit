@@ -110,6 +110,7 @@ class SurveyPage extends StatefulWidget {
 
 class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  
 
   @override
   void initState() {
@@ -125,7 +126,7 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final _surveyController = controller ?? context.read<SurveyController>();
+    final _surveyController = widget.controller ?? context.read<SurveyController>();
 
     return BlocConsumer<SurveyPresenter, SurveyState>(
       listenWhen: (previous, current) => previous != current,
@@ -192,6 +193,7 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
                 icon: Icons.arrow_back,
                 onPressed: _tabController.index > 0
                     ? () {
+                        _surveyController.stepBack(context: context);
                         setState(() {
                           _tabController.animateTo(_tabController.index - 1);
                         });
@@ -204,9 +206,18 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
                 icon: Icons.arrow_forward,
                 onPressed: _tabController.index < state.steps.length - 1
                     ? () {
-                        setState(() {
-                          _tabController.animateTo(_tabController.index + 1);
-                        });
+                        if (isValid || step.isOptional) {
+                          // Step 1: Call _surveyController.nextStep to handle logic
+                          _surveyController.nextStep(
+                            context,
+                            resultFunction,
+                          );
+
+                          // Step 2: Animate to the next tab
+                          setState(() {
+                            _tabController.animateTo(_tabController.index + 1);
+                          });
+                        }
                       }
                     : null,
               ),
