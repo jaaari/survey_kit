@@ -94,11 +94,14 @@ class SurveyPage extends StatefulWidget {
   final int length;
   final Function(SurveyResult) onResult;
   final double? height;
+  final SurveyController? controller;
+
 
   const SurveyPage({
     required this.length,
     required this.onResult,
     this.height,
+    this.controller,
   });
 
   @override
@@ -122,6 +125,8 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final _surveyController = controller ?? context.read<SurveyController>();
+
     return BlocConsumer<SurveyPresenter, SurveyState>(
       listenWhen: (previous, current) => previous != current,
       listener: (context, state) async {
