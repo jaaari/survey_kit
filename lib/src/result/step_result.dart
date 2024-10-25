@@ -10,6 +10,7 @@ import 'package:survey_kit/src/result/question/multiple_double_question_result.d
 import 'package:survey_kit/src/result/question/scale_question_result.dart';
 import 'package:survey_kit/src/result/question/single_choice_question_result.dart';
 import 'package:survey_kit/src/result/question/text_question_result.dart';
+import 'package:survey_kit/src/result/question/password_question_result.dart';
 import 'package:survey_kit/src/result/question/time_question_result.dart';
 import 'package:survey_kit/src/result/question/single_choice_audio_question_result.dart';
 import 'package:survey_kit/src/result/question/image_question_result.dart';
@@ -113,6 +114,10 @@ class _Converter implements JsonConverter<List<QuestionResult>, Object> {
       } else if (qr is TextQuestionResult) {
         final qrJson = qr.toJson();
         qrJson['type'] = (TextQuestionResult).toString();
+        allQuestionResultsEncoded.add(qrJson);
+      } else if (qr is PasswordQuestionResult) {
+        final qrJson = qr.toJson();
+        qrJson['type'] = (PasswordQuestionResult).toString();
         allQuestionResultsEncoded.add(qrJson);
       } else if (qr is TimeQuestionResult) {
         final qrJson = qr.toJson();
