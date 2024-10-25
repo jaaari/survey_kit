@@ -112,14 +112,14 @@ class StepView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Column(
                   children: [
-                    SurveyProgress(), // Progress bar remains fixed
+                    SurveyProgress(), 
                     SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildIconButton(
                           context,
-                          icon: Icons.arrow_upward,
+                          icon: Icons.arrow_back,
                           onPressed: () {
                             _surveyController.stepBack(context: context);
                           },
@@ -127,7 +127,7 @@ class StepView extends StatelessWidget {
                         SizedBox(width: 16),
                         _buildIconButton(
                           context,
-                          icon: Icons.arrow_downward,
+                          icon: Icons.arrow_forward,
                           onPressed: isValid || step.isOptional
                               ? () {
                                   if (FocusScope.of(context).hasFocus) {

@@ -131,22 +131,7 @@ class SurveyPage extends StatefulWidget {
   _SurveyPageState createState() => _SurveyPageState();
 }
 
-class _SurveyPageState extends State<SurveyPage>
-    with SingleTickerProviderStateMixin {
-  late final TabController tabController;
-
-  @override
-  void initState() {
-    tabController = TabController(length: widget.length, vsync: this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
-
+class _SurveyPageState extends State<SurveyPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SurveyPresenter, SurveyState>(
@@ -155,31 +140,32 @@ class _SurveyPageState extends State<SurveyPage>
         if (state is SurveyResultState) {
           widget.onResult.call(state.result);
         }
-        if (state is PresentingSurveyState) {
-          tabController.animateTo(state.currentStepIndex);
-        }
+        // No need for tabController.animateTo here, we'll handle transition with AnimatedSwitcher
       },
       builder: (BuildContext context, SurveyState state) {
         if (state is PresentingSurveyState) {
           return Scaffold(
             backgroundColor: Colors.red,
             appBar: null,
-            body: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              controller: tabController,
-              children: state.steps
-                  .map(
-                    (e) => _SurveyView(
-                      id: e.stepIdentifier.id,
-                      createView: () => e.createView(
-                        questionResult: state.questionResults.firstWhereOrNull(
-                          (element) => element.id == e.stepIdentifier,
-                        ),
-                      ),
-                      height: widget.height, // pass the height to _SurveyView
-                    ),
-                  )
-                  .toList(),
+            body: AnimatedSwitcher(
+              duration: Duration(milliseconds: 0), // Duration of the fade transition
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                // Swipe transition
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: _SurveyView(
+                 // Helps AnimatedSwitcher recognize changes
+                id: state.steps[state.currentStepIndex].stepIdentifier.id,
+                createView: () => state.steps[state.currentStepIndex].createView(
+                  questionResult: state.questionResults.firstWhereOrNull(
+                    (element) => element.id == state.steps[state.currentStepIndex].stepIdentifier,
+                  ),
+                ),
+                height: widget.height, // pass the height to _SurveyView
+              ),
             ),
           );
         } else if (state is SurveyResultState && state.currentStep != null) {
@@ -194,6 +180,7 @@ class _SurveyPageState extends State<SurveyPage>
     );
   }
 }
+
 
 class _SurveyView extends StatelessWidget {
   const _SurveyView({
