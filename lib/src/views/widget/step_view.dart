@@ -108,14 +108,48 @@ Widget build(BuildContext context) {
                   ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
-    ),
-  );
-}
-
+              // Fixed progress bar at the bottom
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Column(
+                  children: [
+                    SurveyProgress(), 
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildIconButton(
+                          context,
+                          icon: Icons.arrow_back,
+                          onPressed: () {
+                            _surveyController.stepBack(context: context);
+                          },
+                        ),
+                        SizedBox(width: 16),
+                        _buildIconButton(
+                          context,
+                          icon: Icons.arrow_forward,
+                          onPressed: isValid || step.isOptional
+                              ? () {
+                                  if (FocusScope.of(context).hasFocus) {
+                                    FocusScope.of(context).unfocus();
+                                  }
+                                  _surveyController.nextStep(context, resultFunction);
+                                }
+                              : null,
+                          enabled: isValid || step.isOptional,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
   Widget _buildIconButton(BuildContext context,
       {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {

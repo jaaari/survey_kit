@@ -24,6 +24,7 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
   late final TextEditingController _confirmPasswordController;
   bool _isValid = false;
   bool _passwordsMatch = true;
+  bool _passwordTooShort = false;
   late DateTime _startDate;
 
   @override
@@ -45,15 +46,23 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
 
   void _validatePasswords() {
     setState(() {
-      _isValid = _passwordController.text.isNotEmpty &&
-          _passwordController.text == _confirmPasswordController.text;
+      // Check if passwords match
       _passwordsMatch = _passwordController.text == _confirmPasswordController.text;
+
+      // Check if the password is at least 6 characters long
+      _passwordTooShort = _passwordController.text.length < 6;
+
+      // Validate if all conditions are met
+      _isValid = _passwordController.text.isNotEmpty &&
+          _passwordsMatch &&
+          !_passwordTooShort;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return StepView(
       step: widget.questionStep,
@@ -88,7 +97,7 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
               autofocus: true,
               decoration: textFieldInputDecoration(
-                hint: 'Enter Password', 
+                hint: 'Enter Password',
                 borderColor: Theme.of(context).colorScheme.outlineVariant,
                 hintStyle: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
@@ -133,19 +142,36 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
             ),
           ),
           SizedBox(
-            height: 20,
-            child: Visibility(
-              visible: !_passwordsMatch,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5.0),
-                child: Text(
-                  'Passwords do not match',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error, 
-                    fontSize: 14,
+            height: height * 0.06,
+            child: Column(
+              children: [
+                Visibility(
+                  visible: _passwordController.text.isNotEmpty && _passwordTooShort,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      'Password must be at least 6 characters',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Visibility(
+                  visible: _confirmPasswordController.text.isNotEmpty && !_passwordsMatch,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      'Passwords do not match',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

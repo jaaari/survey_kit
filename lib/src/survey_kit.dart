@@ -110,21 +110,7 @@ class SurveyPage extends StatefulWidget {
   _SurveyPageState createState() => _SurveyPageState();
 }
 
-class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: widget.length, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
+class _SurveyPageState extends State<SurveyPage> {
   @override
   Widget build(BuildContext context) {
 
@@ -134,123 +120,48 @@ class _SurveyPageState extends State<SurveyPage> with SingleTickerProviderStateM
         if (state is SurveyResultState) {
           widget.onResult.call(state.result);
         }
+        // No need for tabController.animateTo here, we'll handle transition with AnimatedSwitcher
       },
       builder: (BuildContext context, SurveyState state) {
         if (state is PresentingSurveyState) {
           return Scaffold(
             backgroundColor: Colors.red,
-            body: Center(
-              child: SizedBox(
-                height: widget.height ?? MediaQuery.of(context).size.height,
-                child: Column(
-                  children: [
-                    // Survey content with TabBarView (displays the questions)
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: state.steps.map((e) {
-                          return _SurveyView(
-                            id: e.stepIdentifier.id,
-                            createView: () => e.createView(
-                              questionResult: state.questionResults.firstWhereOrNull(
-                                (element) => element.id == e.stepIdentifier,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    // Attach progress bar and buttons below the TabBarView
-                    Column(
-  children: [
-    // Background container for progress bar and buttons
-    Container(
-      color: Theme.of(context).colorScheme.surface, // Set your desired background color here
-      padding: EdgeInsets.symmetric(vertical: 16.0), // Optional: Add some padding
-      child: Column(
-        children: [
-          // Rounded and narrower progress bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0), // Adjust horizontal padding for narrowing
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.0), // Makes the progress bar rounded
-              child: SurveyProgressWithAnimation(
-        currentStep: _tabController.index + 1,  // Current step
-        totalSteps: widget.length,              // Total number of steps
-      ),
-            ),
-          ),
-
-          SizedBox(height: 16), // Space between the progress bar and buttons
-
-          // Navigation buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildIconButton(
-                context,
-                icon: Icons.arrow_back,
-                onPressed: _tabController.index > 0
-                    ? () {
-                        setState(() {
-                          _tabController.animateTo(_tabController.index - 1);
-                        });
-                      }
-                    : null,
-              ),
-              SizedBox(width: 16), // Space between the buttons
-              _buildIconButton(
-                context,
-                icon: Icons.arrow_forward,
-                onPressed: _tabController.index < state.steps.length - 1
-                    ? () {
-                        setState(() {
-                          _tabController.animateTo(_tabController.index + 1);
-                        });
-                      }
-                    : null,
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  ],
-)
-
-                  ],
+            appBar: null,
+            body: AnimatedSwitcher(
+              duration: Duration(milliseconds: 0), // Duration of the fade transition
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                // Swipe transition
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: _SurveyView(
+                 // Helps AnimatedSwitcher recognize changes
+                id: state.steps[state.currentStepIndex].stepIdentifier.id,
+                createView: () => state.steps[state.currentStepIndex].createView(
+                  questionResult: state.questionResults.firstWhereOrNull(
+                    (element) => element.id == state.steps[state.currentStepIndex].stepIdentifier,
+                  ),
                 ),
+                height: widget.height, // pass the height to _SurveyView
               ),
             ),
           );
+        } else if (state is SurveyResultState && state.currentStep != null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
-        return Center(child: CircularProgressIndicator());
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
-    );
-  }
-
-  Widget _buildIconButton(BuildContext context,
-      {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: IconButton(
-        icon: Icon(icon),
-        onPressed: onPressed,
-        color: Theme.of(context).colorScheme.primary,
-        disabledColor: Colors.grey.withOpacity(0.5),
-        iconSize: 24,
-        padding: EdgeInsets.all(18),
-      ),
     );
   }
 }
 
 
-// Define _SurveyView as before
 class _SurveyView extends StatelessWidget {
   final String id;
   final Widget Function() createView;
