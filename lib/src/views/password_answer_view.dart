@@ -4,6 +4,7 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/result/question/password_question_result.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
+import 'package:survey_kit/src/views/global_state_manager.dart';
 
 class PasswordAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -57,6 +58,18 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
           _passwordsMatch &&
           !_passwordTooShort;
     });
+    
+    // Update global state if valid
+    if (_isValid) {
+      _updateGlobalState(_passwordController.text);
+    }
+  }
+
+  void _updateGlobalState(String password) {
+    // Store the password in the global state with a key
+    GlobalStateManager()
+        .updateData({widget.questionStep.relatedParameter: password});
+    print("Updated global state with password: $password");
   }
 
   @override
