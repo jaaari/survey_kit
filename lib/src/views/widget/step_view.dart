@@ -32,82 +32,85 @@ class StepView extends StatelessWidget {
           return Column(
             children: [
               // Scrollable content area
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: constraints.maxHeight,
-                    child: Center( // Ensures vertical and horizontal centering
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min, // Center the content without taking up full height
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Title section (with optional info icon)
-                          Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                                  child: title,
-                                ),
-                              ),
-                              if (step.infoText.isNotEmpty)
-                                Positioned(
-                                  right: 10,
-                                  top: 10,
-                                  child: IconButton(
-                                    icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Dialog(
-                                            child: Container(
-                                              width: MediaQuery.of(context).size.width,
-                                              height: MediaQuery.of(context).size.height,
-                                              padding: EdgeInsets.all(16.0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    'Information',
-                                                    style: Theme.of(context).textTheme.titleMedium,
-                                                  ),
-                                                  SizedBox(height: 16),
-                                                  Expanded(
-                                                    child: SingleChildScrollView(
-                                                      child: Text(step.infoText),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 16),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop();
-                                                    },
-                                                    child: Text('OK'),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                            ],
-                          ),
-                          // Survey question content (child widget)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: child,
-                          ),
-                        ],
-                      ),
-                    ),
+              // Scrollable content area
+Expanded(
+  child: SingleChildScrollView(
+    child: Center( // Centers the content within the available space
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: constraints.maxHeight * 0.7,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Ensures center alignment within the column
+          children: [
+            // Title section (with optional info icon)
+            Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: title,
                   ),
                 ),
-              ),
+                if (step.infoText.isNotEmpty)
+                  Positioned(
+                    right: 10,
+                    top: 10,
+                    child: IconButton(
+                      icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Information',
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        child: Text(step.infoText),
+                                      ),
+                                    ),
+                                    SizedBox(height: 16),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+            // Survey question content
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: child,
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+),
+
               // Fixed progress bar and navigation buttons at the bottom
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
