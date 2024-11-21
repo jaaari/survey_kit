@@ -29,20 +29,35 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final TextEditingController _controller;
   bool _isValid = false;
   var actualHint = "";
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    _startDate = DateTime.now();
     _controller = TextEditingController();
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
     _controller.text =
         widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
-    _startDate = DateTime.now();
     _initHint();
     _initPlaceholder();
     if (!widget.questionStep.isOptional) {
       _checkValidation(_controller.text);
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      _initializeController();
+      _isInitialized = true;
+    }
+  }
+
+  void _initializeController() {
+    _controller.text =
+        widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
   }
 
   void _initHint() {
