@@ -185,6 +185,7 @@ class QuestionStep extends Step {
         return ImageAnswerView(
           key: key,
           questionStep: this,
+          
           result: questionResult as ImageQuestionResult?,
         );
       case SingleChoiceAudioAnswerFormat:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:survey_kit/src/answer_format/image_answer_format.dart';
+import 'package:survey_kit/src/kuluko_0.2_theme.dart';
 import 'package:survey_kit/src/result/question/image_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
@@ -8,7 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
-
+import 'package:survey_kit/src/theme_extensions.dart';
 class ImageAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
   final ImageQuestionResult? result;
@@ -32,25 +33,25 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   String user_id = '';
   String publicURL = '';
   bool isUploading = false;
-  FirebaseStorage storage = FirebaseStorage.instance;
-
+/*   FirebaseStorage storage = FirebaseStorage.instance;
+ */
   @override
   void initState() {
     super.initState();
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
     get_user_id();
-    get_firebase_storage_instance();
-  }
+/*     get_firebase_storage_instance();
+ */  }
 
   void get_user_id() async {
     user_id = GlobalStateManager().getData("user_id");
     print("User ID: $user_id");
   }
 
-  void get_firebase_storage_instance() async {
+  /* void get_firebase_storage_instance() async {
     storage = GlobalStateManager().getData("firebase_storage");
-  }
+  } */
 
   @override
   void dispose() {
@@ -71,11 +72,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       isValid: _isValid || widget.questionStep.isOptional,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                  fontWeight:
-                      Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).colorScheme.primary),
+              style: context.body,
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
@@ -92,7 +89,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.surfaceContainerHigh),
+                        context.surface),
                     shape: WidgetStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -110,7 +107,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                     children: [
                       Icon(Icons.upload,
                           size: 24.0,
-                          color: Theme.of(context).colorScheme.onSurface),
+                          color: context.secondaryPurple),
                       SizedBox(width: 8.0),
                       Text(_imageAnswerFormat.buttonText,
                           style: TextStyle(
@@ -164,7 +161,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                         builder: (context) => AlertDialog(
                           title: Text(
                             _imageAnswerFormat.hintTitle.toString(),
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: context.accentGreen),
                           ),
                           content: Image.network(
                             _imageAnswerFormat.hintImage.toString(),
@@ -206,8 +203,8 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     Navigator.pop(context);
 
     if (picture != null) {
-      _uploadImageToFirebase(picture);
-    }
+/*       _uploadImageToFirebase(picture);
+ */    }
   }
 
   Future<void> _openGallery() async {
@@ -218,11 +215,11 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     Navigator.pop(context);
 
     if (picture != null) {
-      _uploadImageToFirebase(picture);
-    }
+/*       _uploadImageToFirebase(picture);
+ */    }
   }
 
-  Future<void> _uploadImageToFirebase(XFile picture) async {
+  /* Future<void> _uploadImageToFirebase(XFile picture) async {
     isUploading = true;
     String fileName = path.basename(picture.path);
     String firebasePath = 'profilePictures/$user_id/$fileName';
@@ -248,5 +245,5 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     } catch (e) {
       print("Error uploading image: $e");
     }
-  }
+  } */
 }
