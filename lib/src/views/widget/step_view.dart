@@ -135,13 +135,17 @@ Expanded(
                           icon: Icons.arrow_forward,
                           onPressed: isValid || step.isOptional
                               ? () {
-                                  // Ensure we remove focus before navigation
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  Future.delayed(Duration(milliseconds: 100), () {
-                                    if (context.mounted) {
-                                      _surveyController.nextStep(context, resultFunction);
-                                    }
-                                  });
+                                  if (FocusScope.of(context).hasFocus) {
+                                    FocusScope.of(context).unfocus();
+                                    // Add a small delay to ensure unfocus completes
+                                    Future.delayed(Duration(milliseconds: 50), () {
+                                      if (context.mounted) {
+                                        _surveyController.nextStep(context, resultFunction);
+                                      }
+                                    });
+                                  } else {
+                                    _surveyController.nextStep(context, resultFunction);
+                                  }
                                 }
                               : null,
                           enabled: isValid || step.isOptional,

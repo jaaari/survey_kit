@@ -26,6 +26,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final TextAnswerFormat _textAnswerFormat;
   late final DateTime _startDate;
   late final TextEditingController _controller;
+  late final FocusNode _focusNode;
   bool _isValid = false;
   var actualHint = "";
 
@@ -33,6 +34,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   void initState() {
     super.initState();
     print("TextAnswerView - initState called");
+    _focusNode = FocusNode();
     _controller = TextEditingController();
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
     _controller.text =
@@ -107,6 +109,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   @override
   void dispose() {
     print("TextAnswerView - dispose called");
+    _focusNode.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -147,12 +150,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             autofocus: false,
-            focusNode: FocusNode()..addListener(() {
-              // Prevent focus from triggering rebuild
-              if (mounted) {
-                setState(() {});
-              }
-            }),
+            focusNode: _focusNode,
             decoration: textFieldInputDecoration(
               hint: actualHint,
               borderColor: Theme.of(context).colorScheme.outlineVariant,
