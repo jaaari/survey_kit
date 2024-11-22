@@ -26,20 +26,16 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final TextAnswerFormat _textAnswerFormat;
   late final DateTime _startDate;
   late final TextEditingController _controller;
-  late final FocusNode _focusNode;
   bool _isValid = false;
   var actualHint = "";
 
   @override
   void initState() {
     super.initState();
-    print("TextAnswerView - initState called");
-    _focusNode = FocusNode();
     _controller = TextEditingController();
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
     _controller.text =
         widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
-    print("TextAnswerView - Initial text: ${_controller.text}");
     _startDate = DateTime.now();
     _initHint();
     _initPlaceholder();
@@ -108,17 +104,12 @@ class _TextAnswerViewState extends State<TextAnswerView> {
 
   @override
   void dispose() {
-    print("TextAnswerView - dispose called");
-    _focusNode.dispose();
     _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("TextAnswerView - build called");
-    final width = MediaQuery.of(context).size.width;
-
     return StepView(
       step: widget.questionStep,
       resultFunction: () => TextQuestionResult(
@@ -140,17 +131,25 @@ class _TextAnswerViewState extends State<TextAnswerView> {
       isValid: _isValid || widget.questionStep.isOptional,
       child: Column(
         children: [
-          Container(
-          width: width * 0.7, // Set your desired width here
-          height: 100,
-          child: 
+          Padding(
+            padding:
+                const EdgeInsets.only(bottom: 32.0, left: 14.0, right: 14.0),
+            child: Text(
+              widget.questionStep.text,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           TextField(
             textInputAction: TextInputAction.next,
             minLines: _textAnswerFormat.maxLines ?? 1,
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            autofocus: false,
-            focusNode: _focusNode,
+            autofocus: true,
             decoration: textFieldInputDecoration(
               hint: actualHint,
               borderColor: Theme.of(context).colorScheme.outlineVariant,
@@ -170,7 +169,6 @@ class _TextAnswerViewState extends State<TextAnswerView> {
               fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
-          ),
           ),
         ],
       ),
