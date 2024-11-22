@@ -34,13 +34,40 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     super.initState();
     _controller = TextEditingController();
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
-    _controller.text =
-        widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
     _startDate = DateTime.now();
+    
+    // Initialize text without triggering validation
+    final initialText = widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
+    _controller.text = initialText;
+    
+    // Initialize hint and placeholder without setState
     _initHint();
     _initPlaceholder();
+    
+    // Only validate after initialization if required
     if (!widget.questionStep.isOptional) {
-      _checkValidation(_controller.text);
+      _isValid = _validateText(_controller.text);
+    }
+  }
+
+  // Separate validation logic from setState
+  bool _validateText(String text) {
+    if (widget.questionStep.isOptional) return true;
+    
+    if (_textAnswerFormat.validationRegEx != null) {
+      RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
+      return regExp.hasMatch(text);
+    }
+    return text.isNotEmpty;
+  }
+
+  // Modified check validation to use the separate validation method
+  void _checkValidation(String text) {
+    if (mounted) {
+      setState(() {
+        _isValid = _validateText(text);
+      });
+      _updateGlobalState(text);
     }
   }
 
@@ -75,24 +102,6 @@ class _TextAnswerViewState extends State<TextAnswerView> {
         _controller.text = _textAnswerFormat.placeholder;
       }
     }
-  }
-
-  void _checkValidation(String text) {
-    if (widget.questionStep.isOptional) {
-      _isValid = true;
-      _updateGlobalState(text);
-      return;
-    }
-    setState(() {
-      if (_textAnswerFormat.validationRegEx != null) {
-        RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
-        _isValid = regExp.hasMatch(text);
-      } else {
-        _isValid =
-            text.isNotEmpty; // Assume valid if not empty, adjust as needed
-      }
-    });
-    _updateGlobalState(text);
   }
 
   void _updateGlobalState(String text) {
