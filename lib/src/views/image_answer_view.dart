@@ -33,25 +33,25 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   String user_id = '';
   String publicURL = '';
   bool isUploading = false;
-/*   FirebaseStorage storage = FirebaseStorage.instance;
- */
+  FirebaseStorage storage = FirebaseStorage.instance;
+ 
   @override
   void initState() {
     super.initState();
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
     get_user_id();
-/*     get_firebase_storage_instance();
- */  }
+    get_firebase_storage_instance();
+  }
 
   void get_user_id() async {
     user_id = GlobalStateManager().getData("user_id");
     print("User ID: $user_id");
   }
 
-  /* void get_firebase_storage_instance() async {
+   void get_firebase_storage_instance() async {
     storage = GlobalStateManager().getData("firebase_storage");
-  } */
+    }
 
   @override
   void dispose() {
@@ -203,8 +203,8 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     Navigator.pop(context);
 
     if (picture != null) {
-/*       _uploadImageToFirebase(picture);
- */    }
+      _uploadImageToFirebase(picture);
+     }
   }
 
   Future<void> _openGallery() async {
@@ -215,11 +215,11 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     Navigator.pop(context);
 
     if (picture != null) {
-/*       _uploadImageToFirebase(picture);
- */    }
+      _uploadImageToFirebase(picture);
+     }
   }
 
-  /* Future<void> _uploadImageToFirebase(XFile picture) async {
+  Future<void> _uploadImageToFirebase(XFile picture) async {
     isUploading = true;
     String fileName = path.basename(picture.path);
     String firebasePath = 'profilePictures/$user_id/$fileName';
@@ -245,5 +245,5 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     } catch (e) {
       print("Error uploading image: $e");
     }
-  } */
+  } 
 }

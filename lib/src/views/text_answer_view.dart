@@ -29,6 +29,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final TextEditingController _controller;
   bool _isValid = false;
   var actualHint = "";
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -41,14 +42,19 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     final initialText = widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
     _controller.text = initialText;
     
-    // Initialize hint and placeholder without setState
+    // Initialize hint and placeholder
     _initHint();
     _initPlaceholder();
     
-    // Only validate after initialization if required
-    if (!widget.questionStep.isOptional) {
-      _isValid = _validateText(_controller.text);
-    }
+    // Delay the initial validation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !widget.questionStep.isOptional) {
+        setState(() {
+          _isValid = _validateText(_controller.text);
+          _isInitialized = true;
+        });
+      }
+    });
   }
 
   // Separate validation logic from setState
@@ -62,14 +68,16 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     return text.isNotEmpty;
   }
 
-  // Modified check validation to use the separate validation method
   void _checkValidation(String text) {
-    if (mounted) {
+    if (!mounted || !_isInitialized) return;
+    
+    final newIsValid = _validateText(text);
+    if (_isValid != newIsValid) {
       setState(() {
-        _isValid = _validateText(text);
+        _isValid = newIsValid;
       });
-      _updateGlobalState(text);
     }
+    _updateGlobalState(text);
   }
 
   void _initHint() {
