@@ -7,6 +7,7 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class TextAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -132,11 +133,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
       ),
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                  fontWeight:
-                      Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).colorScheme.primary),
+              style: context.body,
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       isValid: _isValid || widget.questionStep.isOptional,
@@ -154,23 +151,15 @@ class _TextAnswerViewState extends State<TextAnswerView> {
             autofocus: true,
             decoration: textFieldInputDecoration(
               hint: actualHint,
-              borderColor: Theme.of(context).colorScheme.outlineVariant,
-              hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
-                  fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                  fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight
-              ),
+              borderColor: context.border,
+              hintStyle: context.body.copyWith(color: context.body.color?.withOpacity(0.5)),
             ),
             controller: _controller,
             textAlign: TextAlign.center,
             onChanged: (String text) {
               _checkValidation(text);
             },
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-              fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
+            style: context.body,
           ),
           ),
         ],
