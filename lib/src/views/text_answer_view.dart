@@ -146,7 +146,13 @@ class _TextAnswerViewState extends State<TextAnswerView> {
             minLines: _textAnswerFormat.maxLines ?? 1,
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            autofocus: true,
+            autofocus: false,
+            focusNode: FocusNode()..addListener(() {
+              // Prevent focus from triggering rebuild
+              if (mounted) {
+                setState(() {});
+              }
+            }),
             decoration: textFieldInputDecoration(
               hint: actualHint,
               borderColor: Theme.of(context).colorScheme.outlineVariant,

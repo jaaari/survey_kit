@@ -135,10 +135,13 @@ Expanded(
                           icon: Icons.arrow_forward,
                           onPressed: isValid || step.isOptional
                               ? () {
-                                  if (FocusScope.of(context).hasFocus) {
-                                    FocusScope.of(context).unfocus();
-                                  }
-                                  _surveyController.nextStep(context, resultFunction);
+                                  // Ensure we remove focus before navigation
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  Future.delayed(Duration(milliseconds: 100), () {
+                                    if (context.mounted) {
+                                      _surveyController.nextStep(context, resultFunction);
+                                    }
+                                  });
                                 }
                               : null,
                           enabled: isValid || step.isOptional,
