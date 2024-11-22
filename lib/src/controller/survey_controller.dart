@@ -31,14 +31,14 @@ class SurveyController {
     BuildContext context,
     QuestionResult Function() resultFunction,
   ) {
-    // Print current JSON data when moving to the next step
+    print("SurveyController - nextStep called");
     if (onNextStep != null) {
+      print("SurveyController - onNextStep callback exists");
       if (!onNextStep!(context, resultFunction)) return;
     }
 
-    // Get the current result
     final currentResult = resultFunction.call();
-    
+    print("SurveyController - Current result: $currentResult");
 
     BlocProvider.of<SurveyPresenter>(context).add(
       NextStep(currentResult),

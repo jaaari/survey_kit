@@ -89,11 +89,17 @@ class SurveyPresenter extends Bloc<SurveyEvent, SurveyState> {
 
   SurveyState _handleNextStep(
       NextStep event, PresentingSurveyState currentState) {
+    print("SurveyPresenter - _handleNextStep called");
+    print("Current step ID: ${currentState.currentStep.stepIdentifier.id}");
+    
     _addResult(event.questionResult);
     final Step? nextStep = taskNavigator.nextStep(
         step: currentState.currentStep, questionResult: event.questionResult);
+        
+    print("Next step ID: ${nextStep?.stepIdentifier.id}");
 
     if (nextStep == null) {
+      print("SurveyPresenter - No next step, finishing survey");
       return _handleSurveyFinished(currentState);
     }
 
