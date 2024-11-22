@@ -28,48 +28,42 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final DateTime _startDate;
   late final TextEditingController _controller;
   bool _isValid = false;
-  var actualHint = "";
-  bool _isInitialized = false;
+  String actualHint = "";
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
+    _controller = TextEditingController();
     _startDate = DateTime.now();
     
-    // Initialize text without triggering validation
+    // Set initial text if exists
     final initialText = widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
     _controller.text = initialText;
     
-    // Initialize hint and placeholder
-    _initHint();
-    _initPlaceholder();
-    
-    // Delay the initial validation
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && !widget.questionStep.isOptional) {
-        setState(() {
-          _isValid = _validateText(_controller.text);
-          _isInitialized = true;
-        });
+    // Initialize hint
+    if (_textAnswerFormat.hint.isNotEmpty) {
+      actualHint = _textAnswerFormat.hint;
+      if (actualHint.startsWith('\$')) {
+        final dynamicKey = actualHint.substring(1);
+        actualHint = GlobalStateManager().getData(dynamicKey) ?? actualHint;
       }
-    });
+    }
+
+    // Set initial validation state
+    _isValid = widget.questionStep.isOptional || _validateText(_controller.text);
   }
 
-  // Separate validation logic from setState
   bool _validateText(String text) {
     if (widget.questionStep.isOptional) return true;
-    
     if (_textAnswerFormat.validationRegEx != null) {
-      RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
-      return regExp.hasMatch(text);
+      return RegExp(_textAnswerFormat.validationRegEx!).hasMatch(text);
     }
     return text.isNotEmpty;
   }
 
   void _checkValidation(String text) {
-    if (!mounted || !_isInitialized) return;
+    if (!mounted) return;
     
     final newIsValid = _validateText(text);
     if (_isValid != newIsValid) {
@@ -77,47 +71,10 @@ class _TextAnswerViewState extends State<TextAnswerView> {
         _isValid = newIsValid;
       });
     }
-    _updateGlobalState(text);
-  }
-
-  void _initHint() {
-    print("initHint: ${_textAnswerFormat.hint}");
-    if (_textAnswerFormat.hint != "") {
-      actualHint = _textAnswerFormat.hint;
-      print("Hint: $actualHint");
-      if (_textAnswerFormat.hint.contains("\$")) {
-        var dynamicKey = _textAnswerFormat.hint.substring(1); // Remove the '$'
-        var hintValue = GlobalStateManager().getData(dynamicKey);
-        if (hintValue != null) {
-          actualHint = hintValue;
-        }
-        print("Hint after resolving: $actualHint");
-      }
+    
+    if (widget.questionStep.relatedParameter != null) {
+      GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
     }
-  }
-
-  void _initPlaceholder() {
-    print("initPlaceholder: ${_textAnswerFormat.placeholder}");
-    if (_textAnswerFormat.placeholder != "") {
-      if (_textAnswerFormat.placeholder.contains("\$")) {
-        var dynamicKey =
-            _textAnswerFormat.placeholder.substring(1); // Remove the '$'
-        var placeholderValue = GlobalStateManager().getData(dynamicKey);
-        if (placeholderValue != null) {
-          _controller.text = placeholderValue;
-        }
-        print("Placeholder after resolving: ${_controller.text}");
-      } else {
-        _controller.text = _textAnswerFormat.placeholder;
-      }
-    }
-  }
-
-  void _updateGlobalState(String text) {
-    // Update the global state with the current text input
-    GlobalStateManager()
-        .updateData({widget.questionStep.relatedParameter: text});
-    print("Updated global state with text: $text");
   }
 
   @override
