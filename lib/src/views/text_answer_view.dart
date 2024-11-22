@@ -7,7 +7,6 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
-import 'package:survey_kit/src/theme_extensions.dart';
 
 class TextAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -28,53 +27,88 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final DateTime _startDate;
   late final TextEditingController _controller;
   bool _isValid = false;
-  String actualHint = "";
+  var actualHint = "";
 
   @override
   void initState() {
     super.initState();
-    _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
     _controller = TextEditingController();
+    _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
     _startDate = DateTime.now();
     
-    // Set initial text if exists
+    // Initialize text without triggering validation
     final initialText = widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
     _controller.text = initialText;
     
-    // Initialize hint
-    if (_textAnswerFormat.hint.isNotEmpty) {
-      actualHint = _textAnswerFormat.hint;
-      if (actualHint.startsWith('\$')) {
-        final dynamicKey = actualHint.substring(1);
-        actualHint = GlobalStateManager().getData(dynamicKey) ?? actualHint;
-      }
+    // Initialize hint and placeholder without setState
+    _initHint();
+    _initPlaceholder();
+    
+    // Only validate after initialization if required
+    if (!widget.questionStep.isOptional) {
+      _isValid = _validateText(_controller.text);
     }
-
-    // Set initial validation state
-    _isValid = widget.questionStep.isOptional || _validateText(_controller.text);
   }
 
+  // Separate validation logic from setState
   bool _validateText(String text) {
     if (widget.questionStep.isOptional) return true;
+    
     if (_textAnswerFormat.validationRegEx != null) {
-      return RegExp(_textAnswerFormat.validationRegEx!).hasMatch(text);
+      RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
+      return regExp.hasMatch(text);
     }
     return text.isNotEmpty;
   }
 
+  // Modified check validation to use the separate validation method
   void _checkValidation(String text) {
-    if (!mounted) return;
-    
-    final newIsValid = _validateText(text);
-    if (_isValid != newIsValid) {
+    if (mounted) {
       setState(() {
-        _isValid = newIsValid;
+        _isValid = _validateText(text);
       });
+      _updateGlobalState(text);
     }
-    
-    if (widget.questionStep.relatedParameter != null) {
-      GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
+  }
+
+  void _initHint() {
+    print("initHint: ${_textAnswerFormat.hint}");
+    if (_textAnswerFormat.hint != "") {
+      actualHint = _textAnswerFormat.hint;
+      print("Hint: $actualHint");
+      if (_textAnswerFormat.hint.contains("\$")) {
+        var dynamicKey = _textAnswerFormat.hint.substring(1); // Remove the '$'
+        var hintValue = GlobalStateManager().getData(dynamicKey);
+        if (hintValue != null) {
+          actualHint = hintValue;
+        }
+        print("Hint after resolving: $actualHint");
+      }
     }
+  }
+
+  void _initPlaceholder() {
+    print("initPlaceholder: ${_textAnswerFormat.placeholder}");
+    if (_textAnswerFormat.placeholder != "") {
+      if (_textAnswerFormat.placeholder.contains("\$")) {
+        var dynamicKey =
+            _textAnswerFormat.placeholder.substring(1); // Remove the '$'
+        var placeholderValue = GlobalStateManager().getData(dynamicKey);
+        if (placeholderValue != null) {
+          _controller.text = placeholderValue;
+        }
+        print("Placeholder after resolving: ${_controller.text}");
+      } else {
+        _controller.text = _textAnswerFormat.placeholder;
+      }
+    }
+  }
+
+  void _updateGlobalState(String text) {
+    // Update the global state with the current text input
+    GlobalStateManager()
+        .updateData({widget.questionStep.relatedParameter: text});
+    print("Updated global state with text: $text");
   }
 
   @override
@@ -98,7 +132,11 @@ class _TextAnswerViewState extends State<TextAnswerView> {
       ),
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: context.body,
+              style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                  fontWeight:
+                      Theme.of(context).textTheme.titleMedium?.fontWeight,
+                  color: Theme.of(context).colorScheme.primary),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       isValid: _isValid || widget.questionStep.isOptional,
@@ -116,15 +154,23 @@ class _TextAnswerViewState extends State<TextAnswerView> {
             autofocus: true,
             decoration: textFieldInputDecoration(
               hint: actualHint,
-              borderColor: context.border,
-              hintStyle: context.body.copyWith(color: context.body.color?.withOpacity(0.5)),
+              borderColor: Theme.of(context).colorScheme.outlineVariant,
+              hintStyle: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+                  fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                  fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight
+              ),
             ),
             controller: _controller,
             textAlign: TextAlign.center,
             onChanged: (String text) {
               _checkValidation(text);
             },
-            style: context.body,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+              fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
+            ),
           ),
           ),
         ],
