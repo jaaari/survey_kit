@@ -30,6 +30,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   var actualHint = "";
   Timer? _debounceTimer;
   String? _lastUpdatedText;
+  bool _isUpdating = false;
 
   @override
   void initState() {
@@ -80,35 +81,46 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   }
 
   void _checkValidation(String text) {
+    if (_isUpdating) return;
+    
     if (widget.questionStep.isOptional) {
       _isValid = true;
-      _updateGlobalState(text);
+      _safeUpdateGlobalState(text);
       return;
     }
+
     setState(() {
       if (_textAnswerFormat.validationRegEx != null) {
         RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
         _isValid = regExp.hasMatch(text);
       } else {
-        _isValid =
-            text.isNotEmpty; // Assume valid if not empty, adjust as needed
+        _isValid = text.isNotEmpty;
       }
     });
-    _updateGlobalState(text);
+    _safeUpdateGlobalState(text);
   }
 
-  void _updateGlobalState(String text) {
+  void _safeUpdateGlobalState(String text) {
+    if (_lastUpdatedText == text) return;
+    _lastUpdatedText = text;
+    
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
-      GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
+      _isUpdating = true;
+      try {
+        GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
+      } finally {
+        _isUpdating = false;
+      }
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     _debounceTimer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
