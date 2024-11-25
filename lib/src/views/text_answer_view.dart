@@ -7,7 +7,7 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
-
+import 'dart:async';
 class TextAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
   final TextQuestionResult? result;
@@ -28,6 +28,8 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final TextEditingController _controller;
   bool _isValid = false;
   var actualHint = "";
+  Timer? _debounceTimer;
+  String? _lastUpdatedText;
 
   @override
   void initState() {
@@ -96,15 +98,17 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   }
 
   void _updateGlobalState(String text) {
-    // Update the global state with the current text input
-    GlobalStateManager()
-        .updateData({widget.questionStep.relatedParameter: text});
-    print("Updated global state with text: $text");
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
+      GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
