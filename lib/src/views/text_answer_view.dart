@@ -30,18 +30,23 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   var actualHint = "";
   Timer? _debounceTimer;
   String? _lastUpdatedText;
-  bool _isUpdating = false;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
-    _controller.text =
-        widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
+    
+    if (!_isInitialized) {
+      _controller.text = widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
+      _isInitialized = true;
+    }
+    
     _startDate = DateTime.now();
     _initHint();
     _initPlaceholder();
+    
     if (!widget.questionStep.isOptional) {
       _checkValidation(_controller.text);
     }
@@ -81,14 +86,14 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   }
 
   void _checkValidation(String text) {
-    if (_isUpdating) return;
-    
     if (widget.questionStep.isOptional) {
       _isValid = true;
       _safeUpdateGlobalState(text);
       return;
     }
-
+    
+    if (!mounted) return;
+    
     setState(() {
       if (_textAnswerFormat.validationRegEx != null) {
         RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
@@ -108,20 +113,12 @@ class _TextAnswerViewState extends State<TextAnswerView> {
     
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
-      _isUpdating = true;
-      try {
+      
+      final currentValue = GlobalStateManager().getData(widget.questionStep.relatedParameter);
+      if (currentValue != text) {
         GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
-      } finally {
-        _isUpdating = false;
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _debounceTimer?.cancel();
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -135,59 +132,32 @@ class _TextAnswerViewState extends State<TextAnswerView> {
         valueIdentifier: _controller.text,
         result: _controller.text,
       ),
-      title: widget.questionStep.title.isNotEmpty
-          ? Text(widget.questionStep.title,
-              style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                  fontWeight:
-                      Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).colorScheme.primary),
-              textAlign: TextAlign.center)
-          : widget.questionStep.content,
       isValid: _isValid || widget.questionStep.isOptional,
-      child: Column(
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(bottom: 32.0, left: 14.0, right: 14.0),
-            child: Text(
-              widget.questionStep.text,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              ),
+      title: widget.questionStep.title.isNotEmpty
+          ? Text(
+              widget.questionStep.title,
+              style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
-            ),
+            )
+          : widget.questionStep.content,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+        child: TextField(
+          controller: _controller,
+          onChanged: _checkValidation,
+          decoration: InputDecoration(
+            hintText: actualHint,
           ),
-          TextField(
-            textInputAction: TextInputAction.next,
-            minLines: _textAnswerFormat.maxLines ?? 1,
-            maxLines: null,
-            maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            autofocus: true,
-            decoration: textFieldInputDecoration(
-              hint: actualHint,
-              borderColor: Theme.of(context).colorScheme.outlineVariant,
-              hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
-                  fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                  fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight
-              ),
-            ),
-            controller: _controller,
-            textAlign: TextAlign.center,
-            onChanged: (String text) {
-              _checkValidation(text);
-            },
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-              fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
-          ),
-        ],
+          maxLines: _textAnswerFormat.maxLines,
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    _controller.dispose();
+    super.dispose();
   }
 }
