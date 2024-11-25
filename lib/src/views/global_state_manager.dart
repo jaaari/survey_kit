@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'dart:async';
 
 
 class GlobalStateManager {
@@ -12,31 +11,37 @@ class GlobalStateManager {
   GlobalStateManager._internal();
 
   final Map<String, dynamic> _data = {};
-  final _stateController = StreamController<Map<String, dynamic>>.broadcast();
+  final List<VoidCallback> _listeners = [];
 
   void updateData(Map<String, dynamic> newData) {
-    bool hasChanges = false;
-    
-    newData.forEach((key, value) {
-      if (_data[key] != value) {
-        _data[key] = value;
-        hasChanges = true;
-      }
-    });
-    
-    // Only notify listeners if there are actual changes
-    if (hasChanges) {
-      _stateController.add(_data);
+    _data.addAll(newData);
+    _notifyListeners();
+  }
+
+  dynamic getData(String key) {
+    return _data[key];
+  }
+
+  Map<String, dynamic> getAllData() {
+    return Map.from(_data); // Return a copy to prevent external modification
+  }
+
+  void clearData() {
+    _data.clear();
+    _notifyListeners();
+  }
+
+  void addListener(VoidCallback listener) {
+    _listeners.add(listener);
+  }
+
+  void removeListener(VoidCallback listener) {
+    _listeners.remove(listener);
+  }
+
+  void _notifyListeners() {
+    for (var listener in _listeners) {
+      listener();
     }
   }
-
-  dynamic getData(String key) => _data[key];
-  Map<String, dynamic> getAllData() => Map.from(_data);
-
-  void clear() {
-    _data.clear();
-    _stateController.add(_data);
-  }
-
-  Stream<Map<String, dynamic>> get stream => _stateController.stream;
 }
