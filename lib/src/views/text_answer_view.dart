@@ -7,7 +7,8 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
-import 'dart:async';
+import 'package:survey_kit/src/theme_extensions.dart';
+
 class TextAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
   final TextQuestionResult? result;
@@ -28,25 +29,17 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   late final TextEditingController _controller;
   bool _isValid = false;
   var actualHint = "";
-  Timer? _debounceTimer;
-  String? _lastUpdatedText;
-  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
     _textAnswerFormat = widget.questionStep.answerFormat as TextAnswerFormat;
-    
-    if (!_isInitialized) {
-      _controller.text = widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
-      _isInitialized = true;
-    }
-    
+    _controller.text =
+        widget.result?.result ?? _textAnswerFormat.defaultValue ?? '';
     _startDate = DateTime.now();
     _initHint();
     _initPlaceholder();
-    
     if (!widget.questionStep.isOptional) {
       _checkValidation(_controller.text);
     }
@@ -88,41 +81,38 @@ class _TextAnswerViewState extends State<TextAnswerView> {
   void _checkValidation(String text) {
     if (widget.questionStep.isOptional) {
       _isValid = true;
-      _safeUpdateGlobalState(text);
+      _updateGlobalState(text);
       return;
     }
-    
-    if (!mounted) return;
-    
     setState(() {
       if (_textAnswerFormat.validationRegEx != null) {
         RegExp regExp = RegExp(_textAnswerFormat.validationRegEx!);
         _isValid = regExp.hasMatch(text);
       } else {
-        _isValid = text.isNotEmpty;
+        _isValid =
+            text.isNotEmpty; // Assume valid if not empty, adjust as needed
       }
     });
-    _safeUpdateGlobalState(text);
+    _updateGlobalState(text);
   }
 
-  void _safeUpdateGlobalState(String text) {
-    if (_lastUpdatedText == text) return;
-    _lastUpdatedText = text;
-    
-    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      if (!mounted) return;
-      
-      final currentValue = GlobalStateManager().getData(widget.questionStep.relatedParameter);
-      if (currentValue != text) {
-        GlobalStateManager().updateData({widget.questionStep.relatedParameter: text});
-      }
-    });
+  void _updateGlobalState(String text) {
+    // Update the global state with the current text input
+    GlobalStateManager()
+        .updateData({widget.questionStep.relatedParameter: text});
+    print("Updated global state with text: $text");
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return StepView(
       step: widget.questionStep,
       resultFunction: () => TextQuestionResult(
@@ -132,32 +122,43 @@ class _TextAnswerViewState extends State<TextAnswerView> {
         valueIdentifier: _controller.text,
         result: _controller.text,
       ),
-      isValid: _isValid || widget.questionStep.isOptional,
       title: widget.questionStep.title.isNotEmpty
-          ? Text(
-              widget.questionStep.title,
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            )
+          ? Text(widget.questionStep.title,
+              style: context.body,
+              textAlign: TextAlign.center)
           : widget.questionStep.content,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-        child: TextField(
-          controller: _controller,
-          onChanged: _checkValidation,
-          decoration: InputDecoration(
-            hintText: actualHint,
+      isValid: _isValid || widget.questionStep.isOptional,
+      child: Column(
+        children: [
+          Container(
+          width: width * 0.7, // Set your desired width here
+          height: 100,
+          child: 
+          TextField(
+            textInputAction: TextInputAction.next,
+            minLines: _textAnswerFormat.maxLines ?? 1,
+            maxLines: null,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            autofocus: true,
+            decoration: textFieldInputDecoration(
+              hint: actualHint,
+              borderColor: context.border,
+              hintStyle: TextStyle(
+                  color: context.border,
+                  fontStyle: context.h2?.fontStyle,
+              ),
+            ),
+            controller: _controller,
+            textAlign: TextAlign.center,
+            onChanged: (String text) {
+              _checkValidation(text);
+            },
+            style: context.body,
           ),
-          maxLines: _textAnswerFormat.maxLines,
-        ),
+          ),
+          
+        ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _debounceTimer?.cancel();
-    _controller.dispose();
-    super.dispose();
   }
 }
