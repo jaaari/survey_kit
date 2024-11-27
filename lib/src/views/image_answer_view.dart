@@ -40,6 +40,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     super.initState();
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
+    storage = FirebaseStorage.instance;
     get_user_id();
     get_firebase_storage_instance();
   }
@@ -50,8 +51,19 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
    void get_firebase_storage_instance() async {
-    storage = GlobalStateManager().getData("firebase_storage");
+    try {
+      var storageInstance = GlobalStateManager().getData("firebase_storage");
+      if (storageInstance != null && storageInstance is FirebaseStorage) {
+        storage = storageInstance;
+      } else {
+        print("Warning: firebase_storage not found in GlobalStateManager, using default instance");
+        storage = FirebaseStorage.instance;
+      }
+    } catch (e) {
+      print("Error getting firebase_storage: $e");
+      storage = FirebaseStorage.instance;
     }
+  }
 
   @override
   void dispose() {
