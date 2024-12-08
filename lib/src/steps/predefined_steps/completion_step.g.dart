@@ -19,6 +19,8 @@ CompletionStep _$CompletionStepFromJson(Map<String, dynamic> json) =>
       endpointUrl: json['endpointUrl'] as String,
       parameters: json['parameters'] as Map<String, dynamic>,
       requestType: json['requestType'] as String? ?? "POST",
+      errorMessage: json['errorMessage'] as String? ?? "",
+      timeoutMessage: json['timeoutMessage'] as String? ?? "",
     );
 
 Map<String, dynamic> _$CompletionStepToJson(CompletionStep instance) =>
@@ -33,4 +35,6 @@ Map<String, dynamic> _$CompletionStepToJson(CompletionStep instance) =>
       'endpointUrl': instance.endpointUrl,
       'parameters': instance.parameters,
       'requestType': instance.requestType,
+      'errorMessage': instance.errorMessage,
+      'timeoutMessage': instance.timeoutMessage,
     };

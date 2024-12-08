@@ -15,6 +15,8 @@ class CompletionStep extends Step {
   final String endpointUrl;
   final Map<String, dynamic> parameters;
   final String requestType;
+  final String errorMessage;
+  final String timeoutMessage;
 
   CompletionStep({
     bool isOptional = false,
@@ -27,6 +29,8 @@ class CompletionStep extends Step {
     required this.endpointUrl,
     required this.parameters,
     this.requestType = "POST",
+    this.errorMessage = "",
+    this.timeoutMessage = "",
   }) : super(
           stepIdentifier: stepIdentifier,
           isOptional: isOptional,

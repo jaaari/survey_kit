@@ -6,10 +6,22 @@ import 'package:flutter/services.dart';
 import 'package:survey_kit/survey_kit.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/kuluko_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        // You can add your Firebase options here if needed
+        // options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+  } catch (e) {
+    print('Failed to initialize Firebase: $e');
+  }
+
   await KulukoTheme.initialize();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.white,

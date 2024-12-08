@@ -1,59 +1,46 @@
 {
-    "id": "character_creation_survey",
-    "type": "navigable",
-    "canGoBack": true,
-    "initialValues": {
-        "user_input_image_url": ""
-    },
-    "steps": [
-      {
-        "stepIdentifier": {
-          "id": "q1"
-        },
-        "type": "question",
-        "title": "Describe your character",
-        "text": "Tell us about your character",
-        
-        "infoText": "Name, personality, habits… We will base the character off of the information you give in this field. You can choose how much you want to specify and you will be able to edit this information later.",
-        "canGoBack": true,
-        "relatedParameter": "user_input_character_description",
-        "answerFormat": {
-          "type": "text",
-          "maxLines": 10,
-          "hint": "Name, personality, habits…"
-        }
+  "id": "character_creation_survey",
+  "type": "navigable",
+  "canGoBack": true,
+  "initialValues": {
+      "user_input_image_url": ""
+  },
+  "steps": [
+    {
+      "stepIdentifier": {
+        "id": "q1"
       },
-      {
-        "stepIdentifier": {
-            "id": "q2"
-        },
-        "type": "question",
-        "isOptional": true,
-        "title": "Upload a photo of your character",
-        "text": "Submit a photo",
-        "infoText": "We will use this photo to create the avatar for this character if you did not specify looks in the last question.",
-        "relatedParameter": "input_image_url",
-        "canGoBack": true,
-        "answerFormat": {
-            "type": "file"
-        }
-    },
-      {
-        "stepIdentifier": {
-          "id": "q3"
-        },
-        "type": "completion",
-        "title": "All done!",
-        "text": "Generate your character",
-        "buttonText": "Finish",
-        "endpointUrl": "your_api_endpoint",
-        "parameters": {
-            "user_id": "$user_id",
-            "user_input_character_description": "$user_input_character_description",
-            "user_input_image_url": "$user_input_image_url"
-        },
-        "requestType": "POST",
-        "canGoBack": true
+      "type": "question",
+      "title": "Describe your character",
+      "text": "Tell us about your character",
+      
+      "infoText": "Name, personality, habits… We will base the character off of the information you give in this field. You can choose how much you want to specify and you will be able to edit this information later.",
+      "canGoBack": true,
+      "relatedParameter": "user_input_character_description",
+      "answerFormat": {
+        "type": "text",
+        "maxLines": 10,
+        "hint": "Name, personality, habits…"
       }
-    ]
-  }
+    },
+    {
+      "stepIdentifier": {
+        "id": "q2"
+      },
+      "type": "completion",
+      "title": "All done!",
+      "text": "Generate your character",
+      "buttonText": "Finish",
+      "errorMessage": "Something went wrong. Please try again later. Support has been notified!",
+      "timeoutMessage": "Request timed out",
+      "endpointUrl": "https://europe-north1-audiobookgen.cloudfunctions.net/create_character_cf",
+      "parameters": {
+          "creator_user_id": "$user_id",
+          "user_input_character_desc": "$user_input_character_description",
+          "user_input_image_url": ""
+      },
+      "requestType": "POST",
+      "canGoBack": true
+    }
+  ]
+}

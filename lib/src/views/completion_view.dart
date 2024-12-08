@@ -10,7 +10,8 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
-import 'dart:async'; // Import for handling timeouts
+import 'dart:async';
+import 'package:survey_kit/src/k_snackbar.dart';
 
 class CompletionView extends StatefulWidget {
   final CompletionStep completionStep;
@@ -53,18 +54,20 @@ class _CompletionViewState extends State<CompletionView> {
         _resolveParameters(widget.completionStep.parameters);
     var parameters = json.encode(resolvedParameters);
 
-    http.Response response;
     try {
       print(
           'Making API call to ${widget.completionStep.endpointUrl} with parameters: $parameters');
+      http.Response response;
+      
       if (widget.completionStep.requestType == "POST") {
         print('Making POST request');
         response = await http
             .post(url, headers: headers, body: parameters)
             .timeout(Duration(seconds: 5));
       } else {
-        response =
-            await http.get(url, headers: headers).timeout(Duration(seconds: 5));
+        response = await http
+            .get(url, headers: headers)
+            .timeout(Duration(seconds: 5));
       }
 
       print('Response: ${response.body}');
@@ -74,19 +77,24 @@ class _CompletionViewState extends State<CompletionView> {
             () => CompletionStepResult(widget.completionStep.stepIdentifier,
                 _startDate, DateTime.now()));
       } else {
-        setState(() {
-          _errorMessage = 'Error: ${response.body}';
-        });
+        // Use KSnackbar for non-200 response
+        KSnackbar.showError(
+          context: context,
+          message: widget.completionStep.errorMessage ?? 'Failed to submit survey. Please try again.',
+        );
       }
     } on TimeoutException catch (_) {
-      Provider.of<SurveyController>(context, listen: false).nextStep(
-          context,
-          () => CompletionStepResult(widget.completionStep.stepIdentifier,
-              _startDate, DateTime.now()));
+      // Use KSnackbar for timeout error
+      KSnackbar.showError(
+        context: context,
+        message: widget.completionStep.timeoutMessage ?? 'Request timed out. Please try again.',
+      );
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Failed to make API call: $e';
-      });
+      // Use KSnackbar for general error
+      KSnackbar.showError(
+        context: context,
+        message: widget.completionStep.errorMessage ?? 'An error occurred. Please try again.',
+      );
     } finally {
       setState(() {
         _isLoading = false;
