@@ -77,20 +77,26 @@ class _CompletionViewState extends State<CompletionView> {
             () => CompletionStepResult(widget.completionStep.stepIdentifier,
                 _startDate, DateTime.now()));
       } else {
-        // Use KSnackbar for non-200 response
+        // Close the survey first
+        Navigator.of(context).pop();
+        // Then show the error snackbar
         KSnackbar.showError(
           context: context,
           message: widget.completionStep.errorMessage ?? 'Failed to submit survey. Please try again.',
         );
       }
     } on TimeoutException catch (_) {
-      // Use KSnackbar for timeout error
+      // Close the survey first
+      Navigator.of(context).pop();
+      // Then show the timeout error
       KSnackbar.showError(
         context: context,
         message: widget.completionStep.timeoutMessage ?? 'Request timed out. Please try again.',
       );
     } catch (e) {
-      // Use KSnackbar for general error
+      // Close the survey first
+      Navigator.of(context).pop();
+      // Then show the general error
       KSnackbar.showError(
         context: context,
         message: widget.completionStep.errorMessage ?? 'An error occurred. Please try again.',
