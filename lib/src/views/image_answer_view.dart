@@ -34,6 +34,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   String publicURL = '';
   bool isUploading = false;
   FirebaseStorage storage = FirebaseStorage.instance;
+  bool _mounted = true;
 
   @override
   void initState() {
@@ -67,6 +68,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
 
   @override
   void dispose() {
+    _mounted = false;
     super.dispose();
   }
 
@@ -229,7 +231,10 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
   Future<void> _uploadImageToFirebase(XFile picture) async {
-    isUploading = true;
+    setState(() {
+      isUploading = true;
+    });
+    
     String fileName = path.basename(picture.path);
     String firebasePath = 'profilePictures/$user_id/$fileName';
     Reference ref = storage.ref().child(firebasePath);
@@ -239,19 +244,28 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       await ref.putFile(File(picture.path));
       String downloadURL = await ref.getDownloadURL();
       print("Got download URL: $downloadURL");
-      setState(() {
-        filePath = picture.path;
-        publicURL = downloadURL;
-        _isValid = true;
-      });
-      isUploading = false;
-      print("Uploaded Image URL: $publicURL");
+      
+      if (_mounted) {
+        setState(() {
+          filePath = picture.path;
+          publicURL = downloadURL;
+          _isValid = true;
+          isUploading = false;
+        });
+        
+        print("Uploaded Image URL: $publicURL");
 
-      Map<String, dynamic> _resultMap = {
-        widget.questionStep.relatedParameter: publicURL,
-      };
-      GlobalStateManager().updateData(_resultMap);
+        Map<String, dynamic> _resultMap = {
+          widget.questionStep.relatedParameter: publicURL,
+        };
+        GlobalStateManager().updateData(_resultMap);
+      }
     } catch (e) {
+      if (_mounted) {
+        setState(() {
+          isUploading = false;
+        });
+      }
       print("Error uploading image: $e");
     }
   } 

@@ -33,112 +33,97 @@ class StepView extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          // Fixed title section
+          // Fixed title section with centered info button
           Container(
             color: context.background,
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
               children: [
-                // Left (invisible) icon
-                if (step.infoText.isNotEmpty)
-                  SizedBox(
-                    width: context.screenWidth * 0.05,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.info_outline_rounded,
-                        color: context.background,
-                        size: context.screenWidth * 0.05,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                
-                // Title with consistent padding
+                // Title
                 Container(
                   width: context.screenWidth * 0.8,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: title,
+                    child: title,
                   ),
                 ),
-              
-                // Right (visible) icon
+                
+                // Info button (if info text exists)
                 if (step.infoText.isNotEmpty)
-                  SizedBox(
-                    width: context.screenWidth * 0.05,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.info_outline_rounded,
-                        color: context.textPrimary,
-                        size: context.screenWidth * 0.05,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                  IconButton(
+                    icon: Icon(
+                      Icons.info_outline_rounded,
+                      color: context.textPrimary,
+                      size: context.screenWidth * 0.05,
+                    ),
+                    onPressed: () {
+                      print("Info button pressed");
+                      print(step.infoText);
+                      showDialog(
+                        
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(24.0),
+                              decoration: BoxDecoration(
+                                color: context.surface,
+                                borderRadius: BorderRadius.circular(28),
                               ),
-                              child: Container(
-                                padding: const EdgeInsets.all(24.0),
-                                decoration: BoxDecoration(
-                                  color: context.surface,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      step.infoTitle,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    step.infoTitle,
+                                    style: context.body.copyWith(
+                                      color: context.primaryPurple,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 24.0,
+                                      vertical: 12.0,
+                                    ),
+                                    child: Divider(
+                                      height: 1,
+                                      color: context.border,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                    child: Text(
+                                      step.infoText,
                                       style: context.body.copyWith(
-                                        color: context.textPrimary,
-                                        fontWeight: FontWeight.bold,
+                                        color: context.textSecondary,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 24.0,
-                                        vertical: 12.0,
-                                      ),
-                                      child: Divider(
-                                        height: 1,
-                                        color: context.border,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: TextButton(
                                       child: Text(
-                                        step.infoText,
+                                        'Close',
                                         style: context.body.copyWith(
                                           color: context.textSecondary,
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
+                                      onPressed: () => Navigator.of(context).pop(),
                                     ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: TextButton(
-                                        child: Text(
-                                          'Close',
-                                          style: context.body.copyWith(
-                                            color: context.textSecondary,
-                                          ),
-                                        ),
-                                        onPressed: () => Navigator.of(context).pop(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),    
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
               ],
             ),
           ),

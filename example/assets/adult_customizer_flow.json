@@ -189,6 +189,8 @@
             "type": "question",
             "relatedParameter": "user_input_genre",
             "title": "What genre should your story be?",
+            "infoText": "Please select the genre of your story",
+            "infoTitle": "Genre",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [
