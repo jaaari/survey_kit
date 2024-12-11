@@ -145,19 +145,7 @@ class StepView extends StatelessWidget {
           // Scrollable content
           Expanded(
             child: SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height * 0.5, // Adjust this value as needed
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      child,
-                    ],
-                  ),
-                ),
-              ),
+              child: child,
             ),
           ),
           // Bottom navigation section
