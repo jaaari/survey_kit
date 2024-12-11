@@ -126,6 +126,7 @@ class _SurveyPageState extends State<SurveyPage> {
         if (state is PresentingSurveyState) {
           return Scaffold(
             backgroundColor: Colors.red,
+            resizeToAvoidBottomInset: false,
             appBar: null,
             body: AnimatedSwitcher(
               duration: Duration(milliseconds: 0), // Duration of the fade transition

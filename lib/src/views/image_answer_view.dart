@@ -33,15 +33,15 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   String user_id = '';
   String publicURL = '';
   bool isUploading = false;
-/*   FirebaseStorage storage = FirebaseStorage.instance;
- */ 
+  FirebaseStorage storage = FirebaseStorage.instance;
+
   @override
   void initState() {
     super.initState();
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
-/*     storage = FirebaseStorage.instance;
- */    get_user_id();
+    storage = FirebaseStorage.instance;
+     get_user_id();
     get_firebase_storage_instance();
   }
 
@@ -54,15 +54,15 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     try {
       var storageInstance = GlobalStateManager().getData("firebase_storage");
       if (storageInstance != null && storageInstance is FirebaseStorage) {
-/*         storage = storageInstance;
- */      } else {
+        storage = storageInstance;
+      } else {
         print("Warning: firebase_storage not found in GlobalStateManager, using default instance");
-/*         storage = FirebaseStorage.instance;
- */      }
+       storage = FirebaseStorage.instance;
+   }
     } catch (e) {
       print("Error getting firebase_storage: $e");
-/*       storage = FirebaseStorage.instance;
- */    }
+      storage = FirebaseStorage.instance;
+    }
   }
 
   @override
@@ -232,17 +232,17 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     isUploading = true;
     String fileName = path.basename(picture.path);
     String firebasePath = 'profilePictures/$user_id/$fileName';
-/*     Reference ref = storage.ref().child(firebasePath);
- */
+    Reference ref = storage.ref().child(firebasePath);
+
     try {
       print("Uploading image to Firebase Storage");
-/*       await ref.putFile(File(picture.path));
-/*  */      String downloadURL = await ref.getDownloadURL();
-/*  */      print("Got download URL: $downloadURL");
- */      setState(() {
+      await ref.putFile(File(picture.path));
+      String downloadURL = await ref.getDownloadURL();
+      print("Got download URL: $downloadURL");
+      setState(() {
         filePath = picture.path;
-/*         publicURL = downloadURL;
- */        _isValid = true;
+        publicURL = downloadURL;
+        _isValid = true;
       });
       isUploading = false;
       print("Uploaded Image URL: $publicURL");

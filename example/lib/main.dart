@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           color: KulukoTheme.of(context).primary,
           child: Align(
@@ -67,7 +68,7 @@ class _MyAppState extends State<MyApp> {
                     },
                     themeData: Theme.of(context),
                     
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.8,
                   );
                 }
                 return const CircularProgressIndicator.adaptive();
@@ -90,7 +91,7 @@ class _MyAppState extends State<MyApp> {
     GlobalStateManager().updateData(data);
 
     // Load the JSON file
-    final String taskJson = await rootBundle.loadString('assets/character_creation.json');
+    final String taskJson = await rootBundle.loadString('assets/adult_customizer_flow.json');
     print('Task JSON loaded: $taskJson');
 
     // Decode the JSON file

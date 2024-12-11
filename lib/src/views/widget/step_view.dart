@@ -30,23 +30,48 @@ class StepView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: context.background,
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           // Fixed title section
           Container(
             color: context.background,
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: Stack(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Left (invisible) icon
                 if (step.infoText.isNotEmpty)
-                  Positioned(
-                    right: 35,
-                    top: -12,
+                  SizedBox(
+                    width: context.screenWidth * 0.05,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.info_outline_rounded,
+                        color: context.background,
+                        size: context.screenWidth * 0.05,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                
+                // Title with consistent padding
+                Container(
+                  width: context.screenWidth * 0.8,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: title,
+                  ),
+                ),
+              
+                // Right (visible) icon
+                if (step.infoText.isNotEmpty)
+                  SizedBox(
+                    width: context.screenWidth * 0.05,
                     child: IconButton(
                       icon: Icon(
                         Icons.info_outline_rounded,
                         color: context.textPrimary,
-                        size: 20,
+                        size: context.screenWidth * 0.05,
                       ),
                       onPressed: () {
                         showDialog(
@@ -94,7 +119,7 @@ class StepView extends StatelessWidget {
                                       ),
                                     ),
                                     Align(
-                                      alignment: Alignment.centerLeft,
+                                      alignment: Alignment.center,
                                       child: TextButton(
                                         child: Text(
                                           'Close',
@@ -113,18 +138,26 @@ class StepView extends StatelessWidget {
                         );
                       },
                     ),
-                  ),
-                Align(
-                  alignment: Alignment.center,
-                  child: title,
-                ),
+                  ),    
               ],
             ),
           ),
           // Scrollable content
           Expanded(
             child: SingleChildScrollView(
-              child: child,
+              child: Center(
+                child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height * 0.5, // Adjust this value as needed
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      child,
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
           // Bottom navigation section

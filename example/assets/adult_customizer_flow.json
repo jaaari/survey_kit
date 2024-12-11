@@ -181,38 +181,7 @@
         }
     ],
     "steps": [
-        {
-            "stepIdentifier": {
-              "id": "q1"
-            },
-            "type": "question",
-            "title": "Describe your character",
-            "text": "Tell us about your character",
-            "infoText": "Name, personality, habits… We will base the character off of the information you give in this field. You can choose how much you want to specify and you will be able to edit this information later.",
-            "infoTitle": "Character description",
-            "canGoBack": true,
-            "relatedParameter": "user_input_character_description",
-            "answerFormat": {
-              "type": "text",
-              "maxLines": 10,
-              "hint": "Name, personality, habits…"
-            }
-          },
-        
-        {
-            "stepIdentifier": {
-                "id": "q1"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_target_audience_is_child",
-            "title": "Is this audiobook for you or a child?",
-            "answerFormat": {
-                "type": "bool",
-                "positiveAnswer": "A Child",
-                "negativeAnswer": "Me",
-                "result": "POSITIVE"
-            }
-        },
+       
         {
             "stepIdentifier": {
                 "id": "q2"
