@@ -12,7 +12,25 @@ class SurveyProgress extends StatefulWidget {
   State<SurveyProgress> createState() => _SurveyProgressState();
 }
 
-class _SurveyProgressState extends State<SurveyProgress> {
+class _SurveyProgressState extends State<SurveyProgress> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  static double _currentProgress = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final progressbarConfiguration = context.read<SurveyProgressConfiguration>();
@@ -23,12 +41,10 @@ class _SurveyProgressState extends State<SurveyProgress> {
         final childFlowSteps = state.steps.where((step) => step.stepIdentifier.id.contains('cq')).length;
         final adultFlowSteps = totalSteps - childFlowSteps - state.steps.where((step) => step.stepIdentifier.id.contains('a')).length;
 
-        final childFlowResults = state.questionResults.where((result) => result.id?.id.contains('cq') ?? false).length;
-        final adultFlowResults = state.questionResults.where((result) => result.id?.id.contains('cq') == false && result.id?.id.contains('a') == false).length;
-
         final isChildFlow = state.questionResults.any((result) => result.id?.id.contains('cq') ?? false);
-        final completedSteps = isChildFlow ? childFlowResults : adultFlowResults;
         final totalFlowSteps = isChildFlow ? childFlowSteps : adultFlowSteps;
+
+        final targetProgress = (state.currentStepIndex + 1) / totalFlowSteps;
 
         return Padding(
           padding: progressbarConfiguration.padding,
@@ -48,17 +64,27 @@ class _SurveyProgressState extends State<SurveyProgress> {
                       height: progressbarConfiguration.height,
                       color: context.card,
                     ),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        final progressWidth = (completedSteps + 1) / totalFlowSteps * constraints.maxWidth;
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.linear,
-                          width: progressWidth,
-                          height: progressbarConfiguration.height,
-                          decoration: BoxDecoration(
-                            gradient: context.buttonGradient,
-                          ),
+                    TweenAnimationBuilder(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                      tween: Tween<double>(
+                        begin: _currentProgress,
+                        end: targetProgress,
+                      ),
+                      onEnd: () {
+                        _currentProgress = targetProgress;
+                      },
+                      builder: (context, double value, child) {
+                        return LayoutBuilder(
+                          builder: (context, constraints) {
+                            return Container(
+                              width: constraints.maxWidth * value,
+                              height: progressbarConfiguration.height,
+                              decoration: BoxDecoration(
+                                gradient: context.buttonGradient,
+                              ),
+                            );
+                          },
                         );
                       },
                     ),

@@ -131,32 +131,42 @@ class _TextAnswerViewState extends State<TextAnswerView> {
       child: Column(
         children: [
           Container(
-          width: width * 0.7, // Set your desired width here
-          height: 100,
-          child: 
-          TextField(
-            textInputAction: TextInputAction.next,
-            minLines: _textAnswerFormat.maxLines ?? 1,
-            maxLines: null,
-            maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            autofocus: true,
-            decoration: textFieldInputDecoration(
-              hint: actualHint,
-              borderColor: context.border,
-              hintStyle: TextStyle(
-                  color: context.border,
-                  fontStyle: context.h2?.fontStyle,
+            width: width * 0.7,
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              maxLines: 8,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
+              autofocus: true,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: context.surface,
+                hintText: actualHint,
+                hintStyle: context.body.copyWith(
+                  color: context.textSecondary.withOpacity(0.5),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: context.border),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: context.border),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: context.border),
+                ),
+                contentPadding: const EdgeInsets.all(16),
+              ),
+              controller: _controller,
+              onChanged: (String text) {
+                _checkValidation(text);
+              },
+              style: context.body.copyWith(
+                color: context.textPrimary,
               ),
             ),
-            controller: _controller,
-            textAlign: TextAlign.center,
-            onChanged: (String text) {
-              _checkValidation(text);
-            },
-            style: context.body,
           ),
-          ),
-          
         ],
       ),
     );

@@ -7,7 +7,8 @@ import 'package:survey_kit/src/result/question/single_choice_audio_question_resu
 import 'package:survey_kit/src/views/widget/voice_selection_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
-
+import 'package:survey_kit/src/theme_extensions.dart';
+import 'package:survey_kit/src/views/decorations/gradient_box_border.dart';
 class SingleChoiceAudioAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
   final SingleChoiceAudioQuestionResult? result;
@@ -170,43 +171,34 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
       isValid: widget.questionStep.isOptional || _selectedChoice != null,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              style:context.body.copyWith(color: context.textPrimary),             
               textAlign: TextAlign.center)
           : widget.questionStep.content,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ..._choices.asMap().entries.map((entry) {
-              int idx = entry.key;
-              TextChoice tc = entry.value;
-              bool hasImage = idx < _imageChoices.length &&
-                  _imageChoices[idx].isNotEmpty &&
-                  _imageChoices[idx] != "";
-              return VoiceSelectionListTile(
-                text: tc.text,
-                imageURL: hasImage ? _imageChoices[idx] : "",
-                // check if the array "premiumVoices" contains the value of this tc
-                isPremium: _SingleChoiceAudioAnswerFormat.premiumVoices.contains(tc.value),
-                onTap: () {
-                  setState(() {
-                    _selectedChoice = tc;
-                  });
-                  _onAnswerChanged(tc);
-                  if (_audioChoices.isNotEmpty && idx < _audioChoices.length) {
-                    _playAudio(idx);
-                  }
-                },
-                isSelected: _selectedChoice == tc,
-              );
-            }).toList(),
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ..._choices.asMap().entries.map((entry) {
+            int idx = entry.key;
+            TextChoice tc = entry.value;
+            bool hasImage = idx < _imageChoices.length &&
+                _imageChoices[idx].isNotEmpty &&
+                _imageChoices[idx] != "";
+            return VoiceSelectionListTile(
+              text: tc.text,
+              imageURL: hasImage ? _imageChoices[idx] : "",
+              onTap: () {
+                setState(() {
+                  _selectedChoice = tc;
+                });
+                _onAnswerChanged(tc);
+                if (_audioChoices.isNotEmpty && idx < _audioChoices.length) {
+                  _playAudio(idx);
+                }
+              },
+              isSelected: _selectedChoice == tc,
+            );
+          }).toList(),
+        ],
       ),
     );
   }

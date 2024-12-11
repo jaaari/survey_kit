@@ -13,10 +13,16 @@ abstract class Step {
   final bool isOptional;
   @JsonKey(defaultValue: 'Next')
   final String? buttonText;
+  @JsonKey(defaultValue: true)
   final bool canGoBack;
+  @JsonKey(defaultValue: true)
   final bool showProgress;
+  @JsonKey(defaultValue: false)
   final bool showAppBar;
+  @JsonKey(defaultValue: '')
   final String infoText;
+  @JsonKey(defaultValue: '')
+  final String infoTitle;
 
   Step({
     StepIdentifier? stepIdentifier,
@@ -26,6 +32,7 @@ abstract class Step {
     this.showProgress = true,
     this.showAppBar = false,
     this.infoText = '',
+    this.infoTitle = '',
   }) : stepIdentifier = stepIdentifier ?? StepIdentifier();
 
   Widget createView({required QuestionResult? questionResult});

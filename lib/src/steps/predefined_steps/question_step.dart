@@ -68,8 +68,6 @@ class QuestionStep extends Step {
   final String relatedParameter;
   final String relatedTextChoiceParameter;
   final AnswerFormat answerFormat;
-  final String infoText;
-
 
   QuestionStep({
     bool isOptional = false,
@@ -80,7 +78,8 @@ class QuestionStep extends Step {
     this.text = '',
     this.relatedParameter = '',
     this.relatedTextChoiceParameter = '',
-    this.infoText = '',
+    String infoText = '',
+    String infoTitle = '',
     this.content = const SizedBox.shrink(),
     required this.answerFormat,
   }) : super(
@@ -88,6 +87,8 @@ class QuestionStep extends Step {
           isOptional: isOptional,
           buttonText: buttonText,
           showAppBar: showAppBar,
+          infoText: infoText,
+          infoTitle: infoTitle,
         );
 
   @override

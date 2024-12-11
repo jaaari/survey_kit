@@ -154,27 +154,30 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
               children: [
                 ..._choices
                     .map(
-                      (TextChoice tc) => SelectionListTile(
-                        imageURL: _imageChoices.isNotEmpty
-                            ? _imageChoices[_choices.indexOf(tc)]
-                            : "",
-                        text: tc.text,
-                        onTap: () {
-                          setState(
-                            () {
-                              if (_selectedChoices.contains(tc)) {
-                                _selectedChoices.remove(tc);
-                              } else {
-                                if (_multipleChoiceAnswer.maxAnswers >
-                                    _selectedChoices.length) {
-                                  _selectedChoices = [..._selectedChoices, tc];
+                      (TextChoice tc) => SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: SelectionListTile(
+                          imageURL: _imageChoices.isNotEmpty
+                              ? _imageChoices[_choices.indexOf(tc)]
+                              : "",
+                          text: tc.text,
+                          onTap: () {
+                            setState(
+                              () {
+                                if (_selectedChoices.contains(tc)) {
+                                  _selectedChoices.remove(tc);
+                                } else {
+                                  if (_multipleChoiceAnswer.maxAnswers >
+                                      _selectedChoices.length) {
+                                    _selectedChoices = [..._selectedChoices, tc];
+                                  }
                                 }
-                              }
-                              _onAnswerChanged();
-                            },
-                          );
-                        },
-                        isSelected: _selectedChoices.contains(tc),
+                                _onAnswerChanged();
+                              },
+                            );
+                          },
+                          isSelected: _selectedChoices.contains(tc),
+                        ),
                       ),
                     )
                     .toList(),

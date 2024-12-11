@@ -3,6 +3,7 @@ import 'package:survey_kit/survey_kit.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class SingleChoiceAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -108,32 +109,30 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
     print('Total choices available after update: ${_choices.length}');
   }
 
-  void _onAnswerChanged(TextChoice selectedChoice) {
-    isClicked = true;
+  void _onAnswerChanged(TextChoice tc) {
+    setState(() {
+      _selectedChoice = tc;
+    });
+    
     Map<String, dynamic> _resultMap = {};
+    
     // Update for relatedParameter
-    print("SingleChoiceAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
     if (widget.questionStep.relatedParameter.isNotEmpty) {
-      _resultMap[widget.questionStep.relatedParameter] = selectedChoice.value;
-      print(
-          "SingleChoiceAnswerView: Updated relatedParameter ${widget.questionStep.relatedParameter}: ${selectedChoice.value}");
+      _resultMap[widget.questionStep.relatedParameter] = tc.value;
     }
 
     // Update for relatedTextChoiceParameter
     if (widget.questionStep.relatedTextChoiceParameter.isNotEmpty) {
       _resultMap[widget.questionStep.relatedTextChoiceParameter] = [
-        {'text': selectedChoice.text, 'value': selectedChoice.value}
+        {'text': tc.text, 'value': tc.value}
       ];
     }
 
     GlobalStateManager().updateData(_resultMap);
-    print('SingleChoiceAnswerView: Updated data: $_resultMap');
-    print("GlobalStateManager data: ${GlobalStateManager().getAllData()}");
   }
 
   @override
   Widget build(BuildContext context) {
-    print("SingleChoiceAnswerView: Building");
     return StepView(
       step: widget.questionStep,
       resultFunction: () => SingleChoiceQuestionResult(
@@ -143,15 +142,10 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
         valueIdentifier: _selectedChoice?.value ?? '',
         result: _selectedChoice,
       ),
-      isValid: widget.questionStep.isOptional ||
-          _selectedChoice != null, // Ensure a choice is made if not optional
+      isValid: widget.questionStep.isOptional || _selectedChoice != null,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              style: context.body.copyWith(color: context.textPrimary),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
@@ -162,29 +156,14 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
             ..._choices.asMap().entries.map((entry) {
               int idx = entry.key;
               TextChoice tc = entry.value;
-              bool hasImage =
-                  idx < _imageChoices.length && _imageChoices[idx].isNotEmpty && _imageChoices[idx] != "";
+              bool hasImage = idx < _imageChoices.length && 
+                  _imageChoices[idx].isNotEmpty && 
+                  _imageChoices[idx] != "";
               return SelectionListTile(
                 text: tc.text,
-                imageURL: hasImage
-                    ? _imageChoices[idx]
-                    : "",
+                imageURL: hasImage ? _imageChoices[idx] : "",
                 onTap: () {
-                  setState(() {
-                    _selectedChoice = tc;
-                  });
                   _onAnswerChanged(tc);
-                  // go to next step
-                  final resultFunction = () => SingleChoiceQuestionResult(
-                        id: widget.questionStep.stepIdentifier,
-                        startDate: _startDate,
-                        endDate: DateTime.now(),
-                        valueIdentifier: _selectedChoice?.value ?? '',
-                        result: _selectedChoice,
-                      );
-                  final surveyController =
-                      Provider.of<SurveyController>(context, listen: false);
-                  surveyController.nextStep(context, resultFunction);
                 },
                 isSelected: _selectedChoice == tc,
               );

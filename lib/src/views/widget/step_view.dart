@@ -5,7 +5,7 @@ import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/steps/step.dart' as surveystep;
 import 'package:survey_kit/src/widget/survey_progress.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
-
+import 'package:survey_kit/src/views/decorations/gradient_box_border.dart';
 class StepView extends StatelessWidget {
   final surveystep.Step step;
   final Widget title;
@@ -30,66 +30,80 @@ class StepView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: context.background,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            children: [
-              // Scrollable content area
-              // Scrollable content area
-Expanded(
-  child: SingleChildScrollView(
-    child: Center( // Centers the content within the available space
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: constraints.maxHeight * 0.7,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Ensures center alignment within the column
-          children: [
-            // Title section (with optional info icon)
-            Stack(
+      body: Column(
+        children: [
+          // Fixed title section
+          Container(
+            color: context.background,
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Stack(
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: title,
-                  ),
-                ),
                 if (step.infoText.isNotEmpty)
                   Positioned(
-                    right: 10,
-                    top: 10,
+                    right: 35,
+                    top: -12,
                     child: IconButton(
-                      icon: Icon(Icons.info, color: Theme.of(context).colorScheme.primary),
+                      icon: Icon(
+                        Icons.info_outline_rounded,
+                        color: context.textPrimary,
+                        size: 20,
+                      ),
                       onPressed: () {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                                padding: EdgeInsets.all(16.0),
+                                padding: const EdgeInsets.all(24.0),
+                                decoration: BoxDecoration(
+                                  color: context.surface,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      'Information',
-                                      style: Theme.of(context).textTheme.titleMedium,
+                                      step.infoTitle,
+                                      style: context.body.copyWith(
+                                        color: context.textPrimary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    SizedBox(height: 16),
-                                    Expanded(
-                                      child: SingleChildScrollView(
-                                        child: Text(step.infoText),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0,
+                                        vertical: 12.0,
+                                      ),
+                                      child: Divider(
+                                        height: 1,
+                                        color: context.border,
                                       ),
                                     ),
-                                    SizedBox(height: 16),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('OK'),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                      child: Text(
+                                        step.infoText,
+                                        style: context.body.copyWith(
+                                          color: context.textSecondary,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: TextButton(
+                                        child: Text(
+                                          'Close',
+                                          style: context.body.copyWith(
+                                            color: context.textSecondary,
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -100,66 +114,62 @@ Expanded(
                       },
                     ),
                   ),
+                Align(
+                  alignment: Alignment.center,
+                  child: title,
+                ),
               ],
             ),
-            // Survey question content
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          ),
+          // Scrollable content
+          Expanded(
+            child: SingleChildScrollView(
               child: child,
             ),
-          ],
-        ),
-      ),
-    ),
-  ),
-),
-
-              // Fixed progress bar and navigation buttons at the bottom
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Column(
+          ),
+          // Bottom navigation section
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              children: [
+                SurveyProgress(),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SurveyProgress(),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildIconButton(
-                          context,
-                          icon: Icons.arrow_back,
-                          onPressed: () {
-                            _surveyController.stepBack(context: context);
-                          },
-                        ),
-                        SizedBox(width: 16),
-                        _buildIconButton(
-                          context,
-                          icon: Icons.arrow_forward,
-                          onPressed: isValid || step.isOptional
-                              ? () {
-                                  if (FocusScope.of(context).hasFocus) {
-                                    FocusScope.of(context).unfocus();
-                                    // Add a small delay to ensure unfocus completes
-                                    Future.delayed(Duration(milliseconds: 50), () {
-                                      if (context.mounted) {
-                                        _surveyController.nextStep(context, resultFunction);
-                                      }
-                                    });
-                                  } else {
+                    _buildIconButton(
+                      context,
+                      icon: Icons.arrow_back,
+                      onPressed: () {
+                        _surveyController.stepBack(context: context);
+                      },
+                    ),
+                    SizedBox(width: 16),
+                    _buildIconButton(
+                      context,
+                      icon: Icons.arrow_forward,
+                      onPressed: isValid || step.isOptional
+                          ? () {
+                              if (FocusScope.of(context).hasFocus) {
+                                FocusScope.of(context).unfocus();
+                                Future.delayed(Duration(milliseconds: 50), () {
+                                  if (context.mounted) {
                                     _surveyController.nextStep(context, resultFunction);
                                   }
-                                }
-                              : null,
-                          enabled: isValid || step.isOptional,
-                        ),
-                      ],
+                                });
+                              } else {
+                                _surveyController.nextStep(context, resultFunction);
+                              }
+                            }
+                          : null,
+                      enabled: isValid || step.isOptional,
                     ),
                   ],
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -170,19 +180,22 @@ Expanded(
       decoration: BoxDecoration(
         color: context.card,
         borderRadius: BorderRadius.circular(16),
+        border: enabled ? 
+          GradientBoxBorder(
+            gradient: context.buttonGradient,
+            width: 2,
+          ) : 
+          Border.all(
+            color: context.border,
+            width: 2,
+          ),
       ),
       child: IconButton(
-        icon: ShaderMask(
-          shaderCallback: (Rect bounds) {
-            return context.buttonGradient.createShader(bounds);
-          },
-          child: Icon(
-            icon,
-            color: Colors.white, // The base color that the gradient will be applied to
-          ),
+        icon: Icon(
+          icon,
+          color: enabled ? Colors.white : context.border,
         ),
         onPressed: onPressed,
-        disabledColor: context.border,
         iconSize: 24,
         padding: EdgeInsets.all(18),
       ),

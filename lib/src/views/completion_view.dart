@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 import 'dart:async';
 import 'package:survey_kit/src/k_snackbar.dart';
 
@@ -35,7 +36,7 @@ class _CompletionViewState extends State<CompletionView> {
     if (widget.completionStep.text.isNotEmpty &&
         widget.completionStep.text.contains('\$')) {
       text = widget.completionStep.text;
-      var dynamicKey = text!.substring(1); // Remove the '$'
+      var dynamicKey = text!.substring(1);
       text = GlobalStateManager().getData(dynamicKey) ?? text!;
     } else {
       text = widget.completionStep.text;
@@ -130,49 +131,60 @@ class _CompletionViewState extends State<CompletionView> {
           widget.completionStep.stepIdentifier, _startDate, DateTime.now()),
       title: Text(
         widget.completionStep.title,
-        style: TextStyle(
-          fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-          fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
-          color: Theme.of(context).colorScheme.primary,
-        ),
+        style: context.body.copyWith(color: context.textPrimary),
         textAlign: TextAlign.center,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 80.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              text!,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 32),
+            if (text != null && text!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 32.0),
+                child: Text(
+                  text!,
+                  style: context.body.copyWith(color: context.textSecondary),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             if (_isLoading)
-              CircularProgressIndicator()
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(context.primaryPurple),
+              )
             else
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.surfaceContainerHigh),
-                    shape: WidgetStateProperty.all<OutlinedBorder>(
+              Container(
+                decoration: BoxDecoration(
+                  gradient: context.buttonGradient,
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(vertical: 32.0, horizontal: 52.0),
-                    )),
-                onPressed: _completeForm,
-                child: 
-                  Text(widget.completionStep.buttonText ?? 'End Survey', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-                  )
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                    ),
+                  ),
+                  onPressed: _completeForm,
+                  child: Text(
+                    widget.completionStep.buttonText ?? 'End Survey',
+                    style: context.body.copyWith(color: context.textPrimary),
+                  ),
+                ),
               ),
             if (_errorMessage != null)
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   _errorMessage!,
-                  style: TextStyle(color: Colors.red),
+                  style: context.body.copyWith(color: context.accentGreen),
                 ),
               ),
           ],

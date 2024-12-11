@@ -13,8 +13,8 @@
       "type": "question",
       "title": "Describe your character",
       "text": "Tell us about your character",
-      
       "infoText": "Name, personality, habits… We will base the character off of the information you give in this field. You can choose how much you want to specify and you will be able to edit this information later.",
+      "infoTitle": "Character description",
       "canGoBack": true,
       "relatedParameter": "user_input_character_description",
       "answerFormat": {
@@ -25,7 +25,22 @@
     },
     {
       "stepIdentifier": {
-        "id": "q2"
+          "id": "q2"
+      },
+      "type": "question",
+      "isOptional": true,
+      "title": "Upload a photo of your character",
+      "text": "Submit a photo",
+      "infoText": "We will use this photo to create the avatar for this character if you did not specify looks in the last question.",
+      "relatedParameter": "input_image_url",
+      "canGoBack": true,
+      "answerFormat": {
+          "type": "file"
+      }
+  },
+    {
+      "stepIdentifier": {
+        "id": "q3"
       },
       "type": "completion",
       "title": "All done!",
@@ -37,7 +52,7 @@
       "parameters": {
           "creator_user_id": "$user_id",
           "user_input_character_desc": "$user_input_character_description",
-          "user_input_image_url": ""
+          "user_input_image_url": "$input_image_url"
       },
       "requestType": "POST",
       "canGoBack": true

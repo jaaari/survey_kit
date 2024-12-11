@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:survey_kit/src/answer_format/image_answer_format.dart';
-import 'package:survey_kit/src/kuluko_0.2_theme.dart';
+import 'package:survey_kit/src/kuluko_0.2_theme.dart' as custom_theme;
 import 'package:survey_kit/src/result/question/image_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
@@ -33,15 +33,15 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   String user_id = '';
   String publicURL = '';
   bool isUploading = false;
-  FirebaseStorage storage = FirebaseStorage.instance;
- 
+/*   FirebaseStorage storage = FirebaseStorage.instance;
+ */ 
   @override
   void initState() {
     super.initState();
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
-    storage = FirebaseStorage.instance;
-    get_user_id();
+/*     storage = FirebaseStorage.instance;
+ */    get_user_id();
     get_firebase_storage_instance();
   }
 
@@ -54,15 +54,15 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     try {
       var storageInstance = GlobalStateManager().getData("firebase_storage");
       if (storageInstance != null && storageInstance is FirebaseStorage) {
-        storage = storageInstance;
-      } else {
+/*         storage = storageInstance;
+ */      } else {
         print("Warning: firebase_storage not found in GlobalStateManager, using default instance");
-        storage = FirebaseStorage.instance;
-      }
+/*         storage = FirebaseStorage.instance;
+ */      }
     } catch (e) {
       print("Error getting firebase_storage: $e");
-      storage = FirebaseStorage.instance;
-    }
+/*       storage = FirebaseStorage.instance;
+ */    }
   }
 
   @override
@@ -98,53 +98,50 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                   horizontal: 32.0,
                   vertical: 8.0,
                 ),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
-                        context.surface),
-                    shape: WidgetStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    height: MediaQuery.of(context).size.height * 0.065,
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      gradient: context.buttonGradient,
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    child: ElevatedButton.icon(
+                      icon: _isValid 
+                        ? Icon(Icons.check, color: context.textPrimary)
+                        : Icon(Icons.upload, color: context.textPrimary),
+                      label: Text(
+                        isUploading 
+                          ? 'Uploading...'
+                          : _isValid 
+                            ? ''  // Empty text when showing checkmark
+                            : 'Upload',
+                        style: context.body.copyWith(
+                          color: context.textPrimary,
+                        ),
+                      ),
+                      onPressed: _isValid ? null : () {
+                        _optionsDialogBox();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        minimumSize: Size(
+                          MediaQuery.of(context).size.width * 0.7,
+                          MediaQuery.of(context).size.height * 0.065,
+                        ),
+                        fixedSize: Size(
+                          MediaQuery.of(context).size.width * 0.7,
+                          MediaQuery.of(context).size.height * 0.065,
+                        ),
+                        padding: EdgeInsets.zero,
+                        shadowColor: Colors.transparent,
+                        elevation: 0,
                       ),
                     ),
-                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    _optionsDialogBox();
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.upload,
-                          size: 24.0,
-                          color: context.secondaryPurple),
-                      SizedBox(width: 8.0),
-                      Text(_imageAnswerFormat.buttonText,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface)),
-                      filePath.isNotEmpty
-                          ? Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "File selected!",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : SizedBox(),
-                        isUploading
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          )
-                        : SizedBox(),
-                    ],
                   ),
                 ),
               ),
@@ -235,17 +232,17 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     isUploading = true;
     String fileName = path.basename(picture.path);
     String firebasePath = 'profilePictures/$user_id/$fileName';
-    Reference ref = storage.ref().child(firebasePath);
-
+/*     Reference ref = storage.ref().child(firebasePath);
+ */
     try {
       print("Uploading image to Firebase Storage");
-      await ref.putFile(File(picture.path));
-      String downloadURL = await ref.getDownloadURL();
-      print("Got download URL: $downloadURL");
-      setState(() {
+/*       await ref.putFile(File(picture.path));
+/*  */      String downloadURL = await ref.getDownloadURL();
+/*  */      print("Got download URL: $downloadURL");
+ */      setState(() {
         filePath = picture.path;
-        publicURL = downloadURL;
-        _isValid = true;
+/*         publicURL = downloadURL;
+ */        _isValid = true;
       });
       isUploading = false;
       print("Uploaded Image URL: $publicURL");
