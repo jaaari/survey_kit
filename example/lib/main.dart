@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       themeMode: ThemeMode.dark,
       home: Scaffold(
         body: Container(
-          color: KulukoTheme.of(context).primaryBackground,
+          color: KulukoTheme.of(context).primary,
           child: Align(
             alignment: Alignment.center,
             child: FutureBuilder<Task>(
@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
     GlobalStateManager().updateData(data);
 
     // Load the JSON file
-    final String taskJson = await rootBundle.loadString('assets/character_creation.json');
+    final String taskJson = await rootBundle.loadString('assets/adult_customizer_flow.json');
     print('Task JSON loaded: $taskJson');
 
     // Decode the JSON file
@@ -192,7 +192,7 @@ class _MyAppState extends State<MyApp> {
           .copyWith(
             onPrimary: theme.primaryText,
           )
-          .copyWith(background: theme.primaryBackground),
+          .copyWith(background: theme.primary),
     );
   }
 }

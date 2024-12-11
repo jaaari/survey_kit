@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_kit/src/presenter/survey_presenter.dart';
 import 'package:survey_kit/src/presenter/survey_state.dart';
 import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class SurveyProgress extends StatefulWidget {
   const SurveyProgress({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _SurveyProgressState extends State<SurveyProgress> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: progressbarConfiguration.height,
-                      color: Theme.of(context).colorScheme.primaryContainer,
+                      color: context.card,
                     ),
                     LayoutBuilder(
                       builder: (context, constraints) {
@@ -55,7 +56,9 @@ class _SurveyProgressState extends State<SurveyProgress> {
                           curve: Curves.linear,
                           width: progressWidth,
                           height: progressbarConfiguration.height,
-                          color: Theme.of(context).colorScheme.primary,
+                          decoration: BoxDecoration(
+                            gradient: context.buttonGradient,
+                          ),
                         );
                       },
                     ),

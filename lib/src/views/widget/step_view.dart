@@ -4,6 +4,7 @@ import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/steps/step.dart' as surveystep;
 import 'package:survey_kit/src/widget/survey_progress.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class StepView extends StatelessWidget {
   final surveystep.Step step;
@@ -28,6 +29,7 @@ class StepView extends StatelessWidget {
     final _surveyController = controller ?? context.read<SurveyController>();
 
     return Scaffold(
+      backgroundColor: context.background,
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Column(
@@ -166,14 +168,21 @@ Expanded(
       {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+        color: context.card,
         borderRadius: BorderRadius.circular(16),
       ),
       child: IconButton(
-        icon: Icon(icon),
+        icon: ShaderMask(
+          shaderCallback: (Rect bounds) {
+            return context.buttonGradient.createShader(bounds);
+          },
+          child: Icon(
+            icon,
+            color: Colors.white, // The base color that the gradient will be applied to
+          ),
+        ),
         onPressed: onPressed,
-        color: Theme.of(context).colorScheme.primary,
-        disabledColor: Colors.grey.withOpacity(0.5),
+        disabledColor: context.border,
         iconSize: 24,
         padding: EdgeInsets.all(18),
       ),
