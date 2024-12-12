@@ -80,6 +80,7 @@ class QuestionStep extends Step {
     this.relatedTextChoiceParameter = '',
     String infoText = '',
     String infoTitle = '',
+    String type = '',
     this.content = const SizedBox.shrink(),
     required this.answerFormat,
   }) : super(
@@ -88,6 +89,7 @@ class QuestionStep extends Step {
           buttonText: buttonText,
           showAppBar: showAppBar,
           infoText: infoText,
+          type: type,
           infoTitle: infoTitle,
         );
 

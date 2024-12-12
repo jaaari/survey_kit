@@ -16,9 +16,9 @@ InstructionStep _$InstructionStepFromJson(Map<String, dynamic> json) =>
           ? null
           : StepIdentifier.fromJson(
               json['stepIdentifier'] as Map<String, dynamic>),
-      canGoBack: json['canGoBack'] as bool?,
-      showProgress: json['showProgress'] as bool?,
-      showAppBar: json['showAppBar'] as bool? ?? true,
+      canGoBack: json['canGoBack'] as bool? ?? true,
+      showProgress: json['showProgress'] as bool? ?? true,
+      showAppBar: json['showAppBar'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$InstructionStepToJson(InstructionStep instance) =>

@@ -23,6 +23,8 @@ abstract class Step {
   final String infoText;
   @JsonKey(defaultValue: '')
   final String infoTitle;
+  @JsonKey(defaultValue: '')
+  final String type;
 
   Step({
     StepIdentifier? stepIdentifier,
@@ -33,6 +35,7 @@ abstract class Step {
     this.showAppBar = false,
     this.infoText = '',
     this.infoTitle = '',
+    this.type = '',
   }) : stepIdentifier = stepIdentifier ?? StepIdentifier();
 
   Widget createView({required QuestionResult? questionResult});

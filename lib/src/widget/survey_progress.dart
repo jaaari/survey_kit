@@ -37,14 +37,38 @@ class _SurveyProgressState extends State<SurveyProgress> with SingleTickerProvid
 
     return BlocBuilder<SurveyPresenter, SurveyState>(builder: (context, state) {
       if (state is PresentingSurveyState) {
-        final totalSteps = state.steps.length;
-        final childFlowSteps = state.steps.where((step) => step.stepIdentifier.id.contains('cq')).length;
-        final adultFlowSteps = totalSteps - childFlowSteps - state.steps.where((step) => step.stepIdentifier.id.contains('a')).length;
+        // Debug print all steps and their types
+        print('All steps:');
+        state.steps.forEach((step) {
+          print('Step ID: ${step.stepIdentifier.id}, Type: ${step.type}');
+        });
 
-        final isChildFlow = state.questionResults.any((result) => result.id?.id.contains('cq') ?? false);
-        final totalFlowSteps = isChildFlow ? childFlowSteps : adultFlowSteps;
+        // Find the completion step and get its question number
+        final completionStep = state.steps.where((step) => step.type != "question").firstOrNull;
+        print('Completion step found: ${completionStep?.stepIdentifier.id ?? "none"}');
 
-        final targetProgress = (state.currentStepIndex + 1) / totalFlowSteps;
+        final lastQuestionNumber = completionStep != null 
+            ? int.tryParse(completionStep.stepIdentifier.id.substring(1)) ?? 0
+            : 0;
+        print('Last question number from completion step: $lastQuestionNumber');
+
+        // Get the current question number
+        final currentId = state.steps[state.currentStepIndex].stepIdentifier.id;
+        print('Current step ID: $currentId');
+
+        int currentNumber = 0;
+        if (currentId.startsWith('q')) {
+          final numberStr = currentId.substring(1);
+          currentNumber = int.tryParse(numberStr) ?? 0;
+          print('Current question number: $currentNumber');
+        }
+
+        // Calculate progress based on question numbers
+        final targetProgress = lastQuestionNumber > 0 
+            ? (currentNumber / lastQuestionNumber).clamp(0.0, 1.0)
+            : 0.0;
+
+        print('Final Progress Calculation: $currentNumber / $lastQuestionNumber = $targetProgress');
 
         return Padding(
           padding: progressbarConfiguration.padding,
@@ -54,7 +78,7 @@ class _SurveyProgressState extends State<SurveyProgress> with SingleTickerProvid
             children: [
               if (progressbarConfiguration.showLabel && progressbarConfiguration.label != null)
                 progressbarConfiguration.label!(
-                    state.currentStepIndex.toString(), state.stepCount.toString()),
+                    currentNumber.toString(), lastQuestionNumber.toString()),
               ClipRRect(
                 borderRadius: progressbarConfiguration.borderRadius ?? BorderRadius.circular(14.0),
                 child: Stack(

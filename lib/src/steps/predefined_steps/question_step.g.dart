@@ -21,6 +21,7 @@ QuestionStep _$QuestionStepFromJson(Map<String, dynamic> json) => QuestionStep(
           json['relatedTextChoiceParameter'] as String? ?? '',
       infoText: json['infoText'] as String? ?? '',
       infoTitle: json['infoTitle'] as String? ?? '',
+      type: json['type'] as String? ?? '',
       answerFormat:
           AnswerFormat.fromJson(json['answerFormat'] as Map<String, dynamic>),
     );
@@ -31,11 +32,12 @@ Map<String, dynamic> _$QuestionStepToJson(QuestionStep instance) =>
       'isOptional': instance.isOptional,
       'buttonText': instance.buttonText,
       'showAppBar': instance.showAppBar,
+      'infoText': instance.infoText,
+      'infoTitle': instance.infoTitle,
+      'type': instance.type,
       'title': instance.title,
       'text': instance.text,
       'relatedParameter': instance.relatedParameter,
       'relatedTextChoiceParameter': instance.relatedTextChoiceParameter,
       'answerFormat': instance.answerFormat,
-      'infoText': instance.infoText,
-      'infoTitle': instance.infoTitle,
     };

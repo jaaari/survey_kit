@@ -6,6 +6,8 @@ import 'package:survey_kit/src/steps/step.dart' as surveystep;
 import 'package:survey_kit/src/widget/survey_progress.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
 import 'package:survey_kit/src/views/decorations/gradient_box_border.dart';
+import 'dart:ui';
+
 class StepView extends StatelessWidget {
   final surveystep.Step step;
   final Widget title;
@@ -33,113 +35,144 @@ class StepView extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          // Fixed title section with centered info button
+          SizedBox(height: context.extraLarge.value),
+          // Title section
           Container(
             color: context.background,
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Column(
+            child: Container(
+              width: context.screenWidth * 0.8,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: title,
+              ),
+            ),
+          ),
+          
+          // Scrollable content with fading edges
+          Expanded(
+            child: Stack(
               children: [
-                // Title
-                Container(
-                  width: context.screenWidth * 0.8,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: title,
+                NotificationListener<ScrollNotification>(
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white.withOpacity(0.0),
+                          Colors.white,
+                          Colors.white,
+                          Colors.white.withOpacity(0.0),
+                        ],
+                        stops: [0.0, 0.05, 0.95, 1.0],
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SizedBox(height: context.extraLarge.value),
+                          child,
+                          SizedBox(height: context.extraLarge.value),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                
-                // Info button (if info text exists)
                 if (step.infoText.isNotEmpty)
-                  IconButton(
-                    icon: Icon(
-                      Icons.info_outline_rounded,
-                      color: context.textPrimary,
-                      size: context.screenWidth * 0.05,
-                    ),
-                    onPressed: () {
-                      print("Info button pressed");
-                      print(step.infoText);
-                      showDialog(
-                        
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(24.0),
-                              decoration: BoxDecoration(
-                                color: context.surface,
-                                borderRadius: BorderRadius.circular(28),
+                  Positioned(
+                    right: context.screenWidth * 0.03,
+                    bottom: 0,
+                    child: IconButton(
+                      icon: ShaderMask(
+                        shaderCallback: (Rect bounds) {
+                          return context.buttonGradient.createShader(bounds);
+                        },
+                        child: Icon(
+                          Icons.info_outline_rounded,
+                          color: Colors.white,
+                          size: context.screenWidth * 0.06,
+                        ),
+                      ),
+                      padding: EdgeInsets.all(12),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    step.infoTitle,
-                                    style: context.body.copyWith(
-                                      color: context.primaryPurple,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 24.0,
-                                      vertical: 12.0,
-                                    ),
-                                    child: Divider(
-                                      height: 1,
-                                      color: context.border,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                                    child: Text(
-                                      step.infoText,
+                              child: Container(
+                                padding: const EdgeInsets.all(24.0),
+                                decoration: BoxDecoration(
+                                  color: context.surface,
+                                  borderRadius: BorderRadius.circular(28),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      step.infoTitle,
                                       style: context.body.copyWith(
-                                        color: context.textSecondary,
+                                        color: context.primaryPurple,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: TextButton(
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0,
+                                        vertical: 12.0,
+                                      ),
+                                      child: Divider(
+                                        height: 1,
+                                        color: context.border,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 12.0),
                                       child: Text(
-                                        'Close',
+                                        step.infoText,
                                         style: context.body.copyWith(
                                           color: context.textSecondary,
                                         ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                      onPressed: () => Navigator.of(context).pop(),
                                     ),
-                                  ),
-                                ],
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: TextButton(
+                                        child: Text(
+                                          'Close',
+                                          style: context.body.copyWith(
+                                            color: context.textSecondary,
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
               ],
             ),
           ),
-          // Scrollable content
-          Expanded(
-            child: SingleChildScrollView(
-              child: child,
-            ),
-          ),
+          
           // Bottom navigation section
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: EdgeInsets.symmetric(vertical: context.extraLarge.value),
             child: Column(
               children: [
                 SurveyProgress(),
-                SizedBox(height: 16),
+                SizedBox(height: context.extraLarge.value),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -189,11 +222,11 @@ class StepView extends StatelessWidget {
         border: enabled ? 
           GradientBoxBorder(
             gradient: context.buttonGradient,
-            width: 2,
+            width: context.extraSmall.value,
           ) : 
           Border.all(
             color: context.border,
-            width: 2,
+            width: context.extraSmall.value,
           ),
       ),
       child: IconButton(
@@ -202,8 +235,8 @@ class StepView extends StatelessWidget {
           color: enabled ? Colors.white : context.border,
         ),
         onPressed: onPressed,
-        iconSize: 24,
-        padding: EdgeInsets.all(18),
+        iconSize: context.screenWidth * 0.065,
+        padding: EdgeInsets.all(context.extraLarge.value),
       ),
     );
   }

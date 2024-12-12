@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
                     },
                     themeData: Theme.of(context),
                     
-                    height: MediaQuery.of(context).size.height * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.65,
                   );
                 }
                 return const CircularProgressIndicator.adaptive();

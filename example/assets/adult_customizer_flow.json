@@ -8,7 +8,7 @@
         "user_input_story_place": "",
         "user_input_story_time": "",
         "user_input_story_idea": "",
-        "user_input_target_duration": 2.5,
+        "user_input_target_duration": 90,
         "user_input_language_complexity": 4,
         "user_input_narrator_voice": "",
         "user_input_audiobook_language_code": "en",
@@ -17,17 +17,6 @@
         "user_input_target_listener_age": ""
     },
     "rules": [
-        
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "q1"
-            },
-            "values": {
-                "POSITIVE": "cq1",
-                "NEGATIVE": "q2"
-            }
-        },
         {
             "type": "conditional",
             "triggerStepIdentifier": {
@@ -108,6 +97,15 @@
         {
             "type": "direct",
             "triggerStepIdentifier": {
+                "id": "c4"
+            },
+            "destinationStepIdentifier": {
+                "id": "c6"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
                 "id": "q61"
             },
             "destinationStepIdentifier": {
@@ -173,7 +171,7 @@
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "q17"
+                "id": "q16"
             },
             "destinationStepIdentifier": {
                 "id": "q18"
@@ -181,7 +179,6 @@
         }
     ],
     "steps": [
-       
         {
             "stepIdentifier": {
                 "id": "q2"
@@ -189,8 +186,7 @@
             "type": "question",
             "relatedParameter": "user_input_genre",
             "title": "What genre should your story be?",
-            "infoText": "Please select the genre of your story",
-            "infoTitle": "Genre",
+            "infoText": "yo",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [
@@ -432,10 +428,11 @@
                 "id": "c5"
             },
             "type": "question",
-            "title": "Please upload a picture of your character",
+            "title": "Please upload a picture of your character. (Wait until you see 'File selected' before continuing)",
             "relatedParameter": "character_image_url",
             "answerFormat": {
-                "type": "file"
+                "type": "file",
+                "buttonText": "Upload Image"
             }
         },
         {
@@ -480,7 +477,7 @@
                 "id": "c9"
             },
             "type": "question",
-            "title": "Saving Character",
+            "title": "Saving Character, this might take up to 2 minutes, please don't close the app or go a step back. If everything works fine you will be directed to your selected characters and can select the new one under 'Choose from your existing characters'.",
             "answerFormat": {
                 "type": "api_call",
                 "endpointUrl": "https://save-character-to-database-cf-6n5kxdz4pa-lz.a.run.app",
@@ -603,15 +600,15 @@
             },
             "type": "question",
             "relatedParameter": "user_input_target_duration",
-            "title": "How long should the audiobook circa be?",
+            "title": "How long should the audiobook be?",
             "answerFormat": {
                 "type": "scale",
-                "step": 0.5,
-                "minimumValue": 1,
-                "maximumValue": 4,
-                "defaultValue": 2.5,
-                "minimumValueDescription": "1h",
-                "maximumValueDescription": "4h"
+                "step": 15,
+                "minimumValue": 60,
+                "maximumValue": 240,
+                "defaultValue": 120,
+                "minimumValueDescription": "60 min",
+                "maximumValueDescription": "240 min"
             }
         },
         {
@@ -643,28 +640,41 @@
                 "type": "single_audio",
                 "textChoices": [
                     {
-                        "text": "Onyx",
-                        "value": "onyx"
+                        "text": "Lucas",
+                        "value": "lucas"
                     },
                     {
                         "text": "Nova",
                         "value": "nova"
                     },
                     {
-                        "text": "Echo",
-                        "value": "echo"
+                        "text": "Theo",
+                        "value": "theo"
+                    },
+                    {
+                        "text": "Eva",
+                        "value": "eva"
+                    },
+                    {
+                        "text": "Richard",
+                        "value": "richard"
                     }
                 ],
+                "premiumVoices": ["lucas", "nova", "theo"],
                 "buttonChoices": [],
                 "imageChoices": [
                     "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
                     "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_32-year-old_strict-looking_woman_recording_a_podcast_vie_e10097ee-289e-4638-a538-2021b5fd0714.png?alt=media&token=595b6713-9e3f-4afd-8f83-5564d705d4fb",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9"
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_28-year-old_strict_black_woman_recording_a_podcast_into__ea96538b-1cea-4a6f-bba8-c489889e7758.png?alt=media&token=365947c1-2d45-4b96-a69a-a88021717b48",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fjari1710_a_friendly_old_man_in_her_60s_recording_a_podcast_into_3d192fe0-920d-471b-a0dc-f37b6540b1b7.png?alt=media&token=bf1920f6-9293-4b2b-bac4-54d090033ac9"
                 ],
                 "audioChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fonyx_sample.mp3?alt=media&token=57876e7e-c973-4c73-b8b0-26b46c84b436",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ffable_sample.mp3?alt=media&token=c8be5b84-4241-450c-ab28-d38db3610a01",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fecho_sample.mp3?alt=media&token=a8eede16-6510-4c13-82c2-ec44b4d40a0b"
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample.mp3?alt=media&token=c7746f73-93b9-4c1e-8684-7a513126630d",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fnova_sample.mp3?alt=media&token=aed7dc10-7eed-4a9e-a80c-b3d57bfa927c",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ftheo_sample.mp3?alt=media&token=82609dae-40b6-4848-ba37-d7e022f03162",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Feva_sample.wav?alt=media&token=a1963a02-36c0-427b-ab0a-d21891e6a3e1",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Frichard_sample.wav?alt=media&token=817f87af-0868-4311-a482-d86839cc1bd4"
                 ]
             }
         },
@@ -686,22 +696,6 @@
                     {
                         "text": "German",
                         "value": "de"
-                    },
-                    {
-                        "text": "French",
-                        "value": "fr"
-                    },
-                    {
-                        "text": "Spanish",
-                        "value": "es"
-                    },
-                    {
-                        "text": "Italian",
-                        "value": "it"
-                    },
-                    {
-                        "text": "Finnish",
-                        "value": "fi"
                     }
                 ],
                 "buttonChoices": []
@@ -926,16 +920,16 @@
                 "type": "single_audio",
                 "textChoices": [
                     {
-                        "text": "Onyx",
-                        "value": "onyx"
+                        "text": "Lucas",
+                        "value": "lucas"
                     },
                     {
                         "text": "Nova",
                         "value": "nova"
                     },
                     {
-                        "text": "Echo",
-                        "value": "echo"
+                        "text": "Theo",
+                        "value": "theo"
                     }
                 ],
                 "buttonChoices": [],
@@ -945,9 +939,9 @@
                     "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9"
                 ],
                 "audioChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fonyx_sample.mp3?alt=media&token=57876e7e-c973-4c73-b8b0-26b46c84b436",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ffable_sample.mp3?alt=media&token=c8be5b84-4241-450c-ab28-d38db3610a01",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fecho_sample.mp3?alt=media&token=a8eede16-6510-4c13-82c2-ec44b4d40a0b"
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample.mp3?alt=media&token=c7746f73-93b9-4c1e-8684-7a513126630d",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fnova_sample.mp3?alt=media&token=aed7dc10-7eed-4a9e-a80c-b3d57bfa927c",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ftheo_sample.mp3?alt=media&token=82609dae-40b6-4848-ba37-d7e022f03162"
                 ]
             }
         },
@@ -960,12 +954,12 @@
             "title": "How long should the audiobook be?",
             "answerFormat": {
                 "type": "scale",
-                "step": 0.5,
-                "minimumValue": 1,
-                "maximumValue": 4,
-                "defaultValue": 2.5,
-                "minimumValueDescription": "1h",
-                "maximumValueDescription": "4h"
+                "step": 15,
+                "minimumValue": 60,
+                "maximumValue": 240,
+                "defaultValue": 90,
+                "minimumValueDescription": "60 min",
+                "maximumValueDescription": "240 min"
             }
         },
         {
