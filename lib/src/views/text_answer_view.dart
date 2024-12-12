@@ -134,6 +134,8 @@ class _TextAnswerViewState extends State<TextAnswerView> {
             width: width * 0.7,
             child: TextField(
               textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.multiline,
+
               maxLines: 8,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
               autofocus: true,
