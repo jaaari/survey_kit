@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:survey_kit/src/configuration/app_bar_configuration.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
+import 'package:survey_kit/src/kuluko_0.2_theme.dart';
 import 'package:survey_kit/src/navigator/navigable_task_navigator.dart';
 import 'package:survey_kit/src/navigator/ordered_task_navigator.dart';
 import 'package:survey_kit/src/navigator/task_navigator.dart';
@@ -16,6 +17,7 @@ import 'package:survey_kit/src/task/task.dart';
 import 'package:survey_kit/src/views/widget/survey_app_bar.dart';
 import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
 import 'package:survey_kit/src/widget/survey_progress_with_animation.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class SurveyKit extends StatefulWidget {
   final Task task;
@@ -125,7 +127,7 @@ class _SurveyPageState extends State<SurveyPage> {
       builder: (BuildContext context, SurveyState state) {
         if (state is PresentingSurveyState) {
           return Scaffold(
-            backgroundColor: Colors.red,
+            backgroundColor: context.background,
             resizeToAvoidBottomInset: false,
             appBar: null,
             body: AnimatedSwitcher(
