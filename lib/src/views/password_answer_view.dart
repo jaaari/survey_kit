@@ -5,6 +5,7 @@ import 'package:survey_kit/src/result/question/password_question_result.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class PasswordAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -88,11 +89,7 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
       ),
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                  fontWeight:
-                      Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).colorScheme.primary),
+              style: context.body,
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       isValid: _isValid || widget.questionStep.isOptional,
@@ -111,19 +108,11 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
               autofocus: true,
               decoration: textFieldInputDecoration(
                 hint: 'Enter Password',
-                borderColor: Theme.of(context).colorScheme.outlineVariant,
-                hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
-                  fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                  fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                ),
+                borderColor: context.border,
+                hintStyle: context.body.copyWith(color: context.textSecondary.withOpacity(0.5))
               ),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              ),
+              style: context.body,
             ),
           ),
           SizedBox(height: 10),
@@ -139,19 +128,11 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
               autofocus: true,
               decoration: textFieldInputDecoration(
                 hint: 'Confirm Password',
-                borderColor: Theme.of(context).colorScheme.outlineVariant,
-                hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
-                  fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                  fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                ),
+                borderColor: context.border,
+                hintStyle: context.body.copyWith(color: context.textSecondary.withOpacity(0.5))
               ),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              ),
+              style: context.body,
             ),
           ),
           SizedBox(
@@ -164,10 +145,7 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
                       'Password must be at least 6 characters',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                        fontSize: 14,
-                      ),
+                      style: context.caption.copyWith(color: context.primaryPurple),
                     ),
                   ),
                 ),
@@ -177,10 +155,7 @@ class _PasswordAnswerViewState extends State<PasswordAnswerView> {
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
                       'Passwords do not match',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                        fontSize: 14,
-                      ),
+                      style: context.caption.copyWith(color: context.primaryPurple),
                     ),
                   ),
                 ),

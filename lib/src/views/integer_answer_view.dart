@@ -5,6 +5,7 @@ import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class IntegerAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -74,11 +75,7 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
       title: widget.questionStep.title.isNotEmpty
           ? Text(
               widget.questionStep.title,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                fontWeight: Theme.of(context).textTheme.titleMedium?.fontWeight,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              style: context.body,
               textAlign: TextAlign.center,
             )
           : widget.questionStep.content,
@@ -88,7 +85,7 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
             autofocus: true,
             decoration: textFieldInputDecoration(
               hint: _integerAnswerFormat.hint,
-              borderColor: Theme.of(context).colorScheme.outlineVariant,
+              borderColor: context.border,
             ),
             controller: _controller,
             onChanged: (String value) {
@@ -96,11 +93,7 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
             },
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              )
+            style: context.body,
           ),
         ),
     );

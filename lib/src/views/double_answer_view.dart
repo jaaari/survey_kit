@@ -4,6 +4,7 @@ import 'package:survey_kit/src/result/question/double_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/decoration/input_decoration.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class DoubleAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -66,7 +67,7 @@ class _DoubleAnswerViewState extends State<DoubleAnswerView> {
       title: widget.questionStep.title.isNotEmpty
           ? Text(
               widget.questionStep.title,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: context.body,
               textAlign: TextAlign.center,
             )
           : widget.questionStep.content,

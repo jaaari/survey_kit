@@ -6,6 +6,8 @@ import 'package:survey_kit/src/result/question/agreement_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
+import 'package:flutter/gestures.dart';
 
 class AgreementAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -39,9 +41,6 @@ class _AgreementAnswerViewState extends State<AgreementAnswerView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final markDownStyleSheet = MarkdownStyleSheet.fromTheme(theme);
-
     return StepView(
       step: widget.questionStep,
       resultFunction: () => AgreementQuestionResult(
@@ -56,11 +55,7 @@ class _AgreementAnswerViewState extends State<AgreementAnswerView> {
       title: widget.questionStep.title.isNotEmpty
           ? Text(
               widget.questionStep.title,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              style: context.body,
               textAlign: TextAlign.center,
             )
           : widget.questionStep.content,
@@ -72,7 +67,7 @@ class _AgreementAnswerViewState extends State<AgreementAnswerView> {
               padding: const EdgeInsets.only(bottom: 32.0),
               child: Text(
                 widget.questionStep.text,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: context.body,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -83,7 +78,7 @@ class _AgreementAnswerViewState extends State<AgreementAnswerView> {
                     padding: const EdgeInsets.only(bottom: 32.0),
                     child: MarkdownBody(
                       data: _agreementAnswerFormat.markdownDescription!,
-                      styleSheet: markDownStyleSheet.copyWith(
+                      styleSheet: context.markdownStyle.copyWith(
                         textAlign: WrapAlignment.center,
                       ),
                       onTapLink: (text, href, title) =>
@@ -94,37 +89,49 @@ class _AgreementAnswerViewState extends State<AgreementAnswerView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Radio<BooleanResult>(
-                        groupValue: _result,
-                        value: BooleanResult.POSITIVE,
-                        onChanged: (v) {
-                          setState(() {
-                            _result = v;
-                          });
-                        }),
+                      groupValue: _result,
+                      value: BooleanResult.POSITIVE,
+                      onChanged: (_) {
+                        setState(() {
+                          _result = _result == BooleanResult.POSITIVE 
+                              ? null 
+                              : BooleanResult.POSITIVE;
+                        });
+                      }
+                    ),
                     SizedBox(
                       width: 16,
                     ),
                     Expanded(
-                        child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (_result == BooleanResult.POSITIVE) {
-                            _result = BooleanResult.NEGATIVE;
-                          } else {
-                            _result = BooleanResult.POSITIVE;
-                          }
-                        });
-                      },
-                      child: MarkdownBody(
-                        styleSheet: markDownStyleSheet.copyWith(
-                          p: theme.textTheme.bodySmall,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _result = _result == BooleanResult.POSITIVE 
+                                ? null 
+                                : BooleanResult.POSITIVE;
+                          });
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              
+                              TextSpan(
+                                text: "By clicking agree, you accept our ",
+                              ),
+                              TextSpan(
+                                text: "Terms of Service",
+                                style: context.body.copyWith(
+                                  color: context.primaryPurple,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => launchUrl(Uri.parse('https://example.com/terms')),
+                              ),
+                            ],
+                          ),
                         ),
-                        data:
-                            _agreementAnswerFormat.markdownAgreementText ?? '',
-                        onTapLink: (text, href, title) =>
-                            href != null ? launchUrl(Uri.parse(href)) : null,
                       ),
-                    )),
+                    ),
                   ],
                 )
               ],

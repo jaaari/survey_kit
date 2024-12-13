@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 import 'package:survey_kit/src/kuluko_0.2_theme.dart' show FigmaTheme, ColorsTypes;
 import 'package:survey_kit/src/kuluko_0.2_theme.dart' as theme;
+import 'package:flutter_markdown/flutter_markdown.dart';
 extension ThemeExtension on BuildContext {
   // Colors
   theme.IColor get primaryPurple => theme.Colors.primaryPurple;
@@ -101,4 +102,35 @@ extension ThemeExtension on BuildContext {
   // Screen padding
   double get topPadding => MediaQuery.of(this).padding.top;
   double get bottomPadding => MediaQuery.of(this).padding.bottom;
+
+  // Add markdown style getter
+  MarkdownStyleSheet get markdownStyle => MarkdownStyleSheet(
+    h1: h1.copyWith(color: textSecondary ),
+    h2: h2.copyWith(color: textSecondary),
+    h3: h3.copyWith(color: textSecondary),
+    p: body.copyWith(color: textSecondary),
+    a: body.copyWith(
+      color: primaryPurple,
+      
+    ),
+    blockquote: body.copyWith(
+      color: textSecondary,
+      
+    ),
+    code: caption.copyWith(
+      color: textPrimary,
+      backgroundColor: surface,
+      fontFamily: 'mono',
+    ),
+    codeblockPadding: EdgeInsets.all(standard.value),
+    blockquotePadding: EdgeInsets.all(standard.value),
+    blockquoteDecoration: BoxDecoration(
+      color: surface,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    codeblockDecoration: BoxDecoration(
+      color: surface,
+      borderRadius: BorderRadius.circular(8),
+    ),
+  );
 }

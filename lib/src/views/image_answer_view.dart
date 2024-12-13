@@ -10,6 +10,7 @@ import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:survey_kit/src/theme_extensions.dart';
+
 class ImageAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
   final ImageQuestionResult? result;
@@ -34,15 +35,13 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   String publicURL = '';
   bool isUploading = false;
   FirebaseStorage storage = FirebaseStorage.instance;
-  bool _mounted = true;
 
   @override
   void initState() {
     super.initState();
     _imageAnswerFormat = widget.questionStep.answerFormat as ImageAnswerFormat;
     _startDate = DateTime.now();
-    storage = FirebaseStorage.instance;
-     get_user_id();
+    get_user_id();
     get_firebase_storage_instance();
   }
 
@@ -51,25 +50,8 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     print("User ID: $user_id");
   }
 
-   void get_firebase_storage_instance() async {
-    try {
-      var storageInstance = GlobalStateManager().getData("firebase_storage");
-      if (storageInstance != null && storageInstance is FirebaseStorage) {
-        storage = storageInstance;
-      } else {
-        print("Warning: firebase_storage not found in GlobalStateManager, using default instance");
-       storage = FirebaseStorage.instance;
-   }
-    } catch (e) {
-      print("Error getting firebase_storage: $e");
-      storage = FirebaseStorage.instance;
-    }
-  }
-
-  @override
-  void dispose() {
-    _mounted = false;
-    super.dispose();
+  void get_firebase_storage_instance() async {
+    storage = GlobalStateManager().getData("firebase_storage") ?? FirebaseStorage.instance;
   }
 
   @override
@@ -117,7 +99,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                         isUploading 
                           ? 'Uploading...'
                           : _isValid 
-                            ? ''  // Empty text when showing checkmark
+                            ? ''
                             : 'Upload',
                         style: context.body.copyWith(
                           color: context.textPrimary,
@@ -215,7 +197,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
 
     if (picture != null) {
       _uploadImageToFirebase(picture);
-     }
+    }
   }
 
   Future<void> _openGallery() async {
@@ -227,7 +209,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
 
     if (picture != null) {
       _uploadImageToFirebase(picture);
-     }
+    }
   }
 
   Future<void> _uploadImageToFirebase(XFile picture) async {
@@ -245,28 +227,24 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       String downloadURL = await ref.getDownloadURL();
       print("Got download URL: $downloadURL");
       
-      if (_mounted) {
-        setState(() {
-          filePath = picture.path;
-          publicURL = downloadURL;
-          _isValid = true;
-          isUploading = false;
-        });
-        
-        print("Uploaded Image URL: $publicURL");
+      setState(() {
+        filePath = picture.path;
+        publicURL = downloadURL;
+        _isValid = true;
+        isUploading = false;
+      });
+      
+      print("Uploaded Image URL: $publicURL");
 
-        Map<String, dynamic> _resultMap = {
-          widget.questionStep.relatedParameter: publicURL,
-        };
-        GlobalStateManager().updateData(_resultMap);
-      }
+      Map<String, dynamic> _resultMap = {
+        widget.questionStep.relatedParameter: publicURL,
+      };
+      GlobalStateManager().updateData(_resultMap);
     } catch (e) {
-      if (_mounted) {
-        setState(() {
-          isUploading = false;
-        });
-      }
+      setState(() {
+        isUploading = false;
+      });
       print("Error uploading image: $e");
     }
-  } 
+  }
 }

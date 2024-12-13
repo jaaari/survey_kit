@@ -17,10 +17,11 @@
             "type": "question",
             "relatedParameter": "user_input_first_name",
             "title": "What is your first name?",
-            "text": "(This will be visible on your published audiobook)",
+            "infoTitle": "First name",
+            "infoText": "This will be visible on your published audiobook",
             "answerFormat": {
                 "type": "text",
-                "maxLines": 1
+                "lines": 1
             }
         },
         {
@@ -32,7 +33,7 @@
             "title": "What is your last name?",
             "answerFormat": {
                 "type": "text",
-                "maxLines": 1
+                "lines": 1
             }
         },
         {
@@ -44,7 +45,7 @@
             "title": "How old are you?",
             "answerFormat": {
                 "type": "integer",
-                "minimumValue": 18,
+                "minimumValue": 0,
                 "maximumValue": 100
             }
         },
@@ -57,7 +58,7 @@
             "title": "What is your email?",
             "answerFormat": {
                 "type": "text",
-                "maxLines": 1
+                "lines": 1
             }
         },
         {
@@ -78,6 +79,7 @@
             },
             "type": "question",
             "relatedParameter": "user_input_favorite_books",
+            "isOptional": true,
             "title": "What are some of your favorite books?",
             "text": "If you can't think of any, just leave it empty.",
             "answerFormat": {
@@ -99,8 +101,25 @@
                 "markdownDescription": "Please read our [Terms and Conditions](https://www.kuluko.com/terms) and confirm your acceptance by checking the box below.",
                 "markdownAgreementText": "I have read and accept the [Terms and Conditions](https://www.kuluko.com/terms) of Kuluko."
             }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q8"
+            },
+            "type": "completion",
+            "title": "Thank you for taking the time to fill out this form!",
+            "text": "Now have fun creating your first audiobook!",
+            "buttonText": "Let's go!",
+            "parameters": {
+                "user_id": "$user_id",
+                "user_input_first_name": "$user_input_first_name",
+                "user_input_last_name": "$user_input_last_name",
+                "user_input_age": "$user_input_age",
+                "user_input_favorite_books": "$user_input_favorite_books",
+                "user_input_email": "$user_input_email",
+                "user_input_password": "$user_input_password"}, 
+            "requestType": "POST",
+            "endpointUrl": "https://onboard-user-cf-6n5kxdz4pa-lz.a.run.app"
         }
-        
-            
     ]
 }
