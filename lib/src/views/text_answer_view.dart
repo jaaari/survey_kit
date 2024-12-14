@@ -136,9 +136,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
               textInputAction: _textAnswerFormat.lines == 1 
                   ? TextInputAction.done 
                   : TextInputAction.newline,
-              keyboardType: _textAnswerFormat.lines == 1
-                  ? TextInputType.text
-                  : TextInputType.multiline,
+              keyboardType: TextInputType.text,
               maxLines: _textAnswerFormat.lines ?? 8,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
               autofocus: true,
