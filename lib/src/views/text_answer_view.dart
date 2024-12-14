@@ -133,9 +133,7 @@ class _TextAnswerViewState extends State<TextAnswerView> {
           Container(
             width: width * 0.7,
             child: TextField(
-              textInputAction: _textAnswerFormat.lines == 1 
-                  ? TextInputAction.done 
-                  : TextInputAction.newline,
+              textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
               maxLines: _textAnswerFormat.lines ?? 8,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
