@@ -44,70 +44,62 @@ class _CompletionViewState extends State<CompletionView> {
   }
 
   Future<void> _completeForm() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+  setState(() {
+    _isLoading = true;
+    _errorMessage = null;
+  });
 
-    var headers = {'Content-Type': 'application/json'};
-    var url = Uri.parse(widget.completionStep.endpointUrl);
-    var resolvedParameters =
-        _resolveParameters(widget.completionStep.parameters);
-    var parameters = json.encode(resolvedParameters);
+  var headers = {'Content-Type': 'application/json'};
+  var url = Uri.parse(widget.completionStep.endpointUrl);
+  var resolvedParameters = _resolveParameters(widget.completionStep.parameters);
+  var parameters = json.encode(resolvedParameters);
 
-    try {
-      print(
-          'Making API call to ${widget.completionStep.endpointUrl} with parameters: $parameters');
-      http.Response response;
-      
-      if (widget.completionStep.requestType == "POST") {
-        print('Making POST request');
-        response = await http
-            .post(url, headers: headers, body: parameters)
-            .timeout(Duration(seconds: 5));
-      } else {
-        response = await http
-            .get(url, headers: headers)
-            .timeout(Duration(seconds: 5));
-      }
-
-      print('Response: ${response.body}');
-      if (response.statusCode == 200) {
-        Provider.of<SurveyController>(context, listen: false).nextStep(
-            context,
-            () => CompletionStepResult(widget.completionStep.stepIdentifier,
-                _startDate, DateTime.now()));
-      } else {
-        // Close the survey first
-        Navigator.of(context).pop();
-        // Then show the error snackbar
-        KSnackbar.showError(
-          context: context,
-          message: widget.completionStep.errorMessage ?? 'Failed to submit survey. Please try again.',
-        );
-      }
-    } on TimeoutException catch (_) {
-      // Close the survey first
-      Navigator.of(context).pop();
-      // Then show the timeout error
-      KSnackbar.showError(
-        context: context,
-        message: widget.completionStep.timeoutMessage ?? 'Request timed out. Please try again.',
-      );
-    } catch (e) {
-      // Close the survey first
-      Navigator.of(context).pop();
-      // Then show the general error
-      KSnackbar.showError(
-        context: context,
-        message: widget.completionStep.errorMessage ?? 'An error occurred. Please try again.',
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+  try {
+    print('Making API call to ${widget.completionStep.endpointUrl} with parameters: $parameters');
+    http.Response response;
+    
+    if (widget.completionStep.requestType == "POST") {
+      print('Making POST request');
+      response = await http.post(url, headers: headers, body: parameters);
+    } else {
+      response = await http.get(url, headers: headers);
     }
+
+    print('Response: ${response.body}');
+    if (response.statusCode == 200) {
+      Provider.of<SurveyController>(context, listen: false).nextStep(
+          context,
+          () => CompletionStepResult(widget.completionStep.stepIdentifier,
+              _startDate, DateTime.now()));
+    } else {
+      // Parse the error message from response
+      Map<String, dynamic> responseData = json.decode(response.body);
+      String errorMessage = responseData['message'] ?? 
+          widget.completionStep.errorMessage ?? 
+          'Failed to submit survey. Please try again.';
+      
+      // Close the survey first
+      Navigator.of(context).pop();
+      // Then show the error snackbar with the parsed message
+      KSnackbar.showError(
+        context: context,
+        message: errorMessage,
+      );
+    }
+  } catch (e) {
+    // Close the survey first
+    Navigator.of(context).pop();
+    // Then show the general error
+    KSnackbar.showError(
+      context: context,
+      message: e.toString(),  // Show the actual error message
+    );
+  } finally {
+    setState(() {
+      _isLoading = false;
+    });
   }
+}
 
   Map<String, dynamic> _resolveParameters(Map<String, dynamic> parameters) {
     var resolvedParameters = Map<String, dynamic>.from(parameters);

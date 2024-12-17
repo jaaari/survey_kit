@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
+
 class KSnackbar {
   static void show({
     required BuildContext context,
@@ -9,15 +10,22 @@ class KSnackbar {
   }) {
     // Remove any existing snackbars
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
-
+    
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-          style: context.body.copyWith(
-            color: context.textPrimary,
+        content: SizedBox(
+          height: context.screenHeight * 0.13, // Fixed height for the content
+          child: Center(
+            child: Text(
+              message,
+              style: context.body.copyWith(
+                color: context.textPrimary,
+              ),
+              textAlign: TextAlign.start,
+              maxLines: 2, // Limit to single line
+              overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+            ),
           ),
-          textAlign: TextAlign.center,
         ),
         backgroundColor: isError ? const Color.fromARGB(255, 244, 73, 54) : context.border,
         behavior: SnackBarBehavior.fixed,
@@ -31,11 +39,9 @@ class KSnackbar {
             topRight: Radius.circular(28),
           ),
         ),
-        padding: EdgeInsets.only(
-          top: context.medium.value,
-          bottom: context.medium.value + MediaQuery.of(context).viewPadding.bottom,
-          left: context.medium.value,
-          right: context.medium.value,
+        padding: EdgeInsets.symmetric(
+          vertical: context.medium.value, // Consistent vertical padding
+          horizontal: context.medium.value,
         ),
         duration: duration,
         elevation: 0,
