@@ -21,7 +21,7 @@ class KSnackbar {
               style: context.body.copyWith(
                 color: context.textPrimary,
               ),
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.center,
               maxLines: 2, // Limit to single line
               overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
             ),
