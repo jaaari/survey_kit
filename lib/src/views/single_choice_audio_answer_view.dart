@@ -174,31 +174,34 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
               style:context.body.copyWith(color: context.textPrimary),             
               textAlign: TextAlign.center)
           : widget.questionStep.content,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ..._choices.asMap().entries.map((entry) {
-            int idx = entry.key;
-            TextChoice tc = entry.value;
-            bool hasImage = idx < _imageChoices.length &&
-                _imageChoices[idx].isNotEmpty &&
-                _imageChoices[idx] != "";
-            return VoiceSelectionListTile(
-              text: tc.text,
-              imageURL: hasImage ? _imageChoices[idx] : "",
-              onTap: () {
-                setState(() {
-                  _selectedChoice = tc;
-                });
-                _onAnswerChanged(tc);
-                if (_audioChoices.isNotEmpty && idx < _audioChoices.length) {
-                  _playAudio(idx);
-                }
-              },
-              isSelected: _selectedChoice == tc,
-            );
-          }).toList(),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ..._choices.asMap().entries.map((entry) {
+              int idx = entry.key;
+              TextChoice tc = entry.value;
+              bool hasImage = idx < _imageChoices.length &&
+                  _imageChoices[idx].isNotEmpty &&
+                  _imageChoices[idx] != "";
+              return VoiceSelectionListTile(
+                text: tc.text,
+                imageURL: hasImage ? _imageChoices[idx] : "",
+                onTap: () {
+                  setState(() {
+                    _selectedChoice = tc;
+                  });
+                  _onAnswerChanged(tc);
+                  if (_audioChoices.isNotEmpty && idx < _audioChoices.length) {
+                    _playAudio(idx);
+                  }
+                },
+                isSelected: _selectedChoice == tc,
+              );
+            }).toList(),
+          ],
+        ),
       ),
     );
   }

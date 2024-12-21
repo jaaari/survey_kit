@@ -18,71 +18,56 @@ class VoiceSelectionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = context.screenWidth;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-      child: Stack(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: 100.0,
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: context.standard.value, horizontal: context.medium.value),
+        child: InkWell(
+          onTap: () => onTap.call(),
+          borderRadius: BorderRadius.circular(14.0),
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 14.0,
+              horizontal: 20.0,
+            ).copyWith(
+              top: isSelected ? 12.0 : 14.0,
+              bottom: isSelected ? 12.0 : 14.0,
+              left: isSelected ? 18.0 : 20.0,
+              right: isSelected ? 18.0 : 20.0,
+            ),
+            constraints: BoxConstraints(
+              minHeight: 100.0,
+              maxHeight: imageURL != "" ? 100.0 : double.infinity,
+            ),
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: context.card,
               borderRadius: BorderRadius.circular(14.0),
+              border: isSelected ? 
+                GradientBoxBorder(
+                  gradient: context.buttonGradient,
+                  width: 2,
+                ) : null,
+              image: imageURL != "" ? DecorationImage(
+                image: NetworkImage(imageURL),
+                fit: BoxFit.fitHeight,
+                alignment: Alignment.centerRight,
+              ) : null,
             ),
-            child: Row(
-              children: [
-                if (imageURL.isNotEmpty)
-                  Container(
-                    width: width * 0.25,
-                    height: width * 0.25,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(14.0),
-                        bottomLeft: Radius.circular(14.0),
-                      ),
-                      image: DecorationImage(
-                        image: NetworkImage(imageURL),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => onTap.call(),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(14.0),
-                      bottomRight: Radius.circular(14.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 14.0, horizontal: 20),
-                      child: Text(
-                        text,
-                        textAlign: TextAlign.left,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.body.copyWith(color: isSelected ? context.textPrimary : context.textSecondary),
-                      ),
-                    ),
-                  ),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                text,
+                style: context.body.copyWith(
+                  color: Color(isSelected ? context.textPrimary.value : context.textSecondary.value),
                 ),
-              ],
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.start,
+              ),
+              trailing: imageURL != "" ? Container(width: 100, color: Colors.transparent) : null,
+              onTap: () => onTap.call(),
             ),
           ),
-          if (isSelected)
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14.0),
-                  border: GradientBoxBorder(
-                    gradient: context.buttonGradient,
-                    width: 2,
-                  ),
-                ),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

@@ -96,7 +96,8 @@ class _APICallViewState extends State<APICallView> {
           var firstItem = responseData[key].first;
           if (firstItem is Map<String, dynamic> &&
               firstItem.containsKey('text') &&
-              firstItem.containsKey('value')) {
+              firstItem.containsKey('value') &&
+              firstItem.containsKey('character_name')) {
             data = responseData[key];
             break;
           }
@@ -106,9 +107,11 @@ class _APICallViewState extends State<APICallView> {
       if (data.isNotEmpty) {
         print("Updating local state with data: $data");
         setState(() {
-          _apiResponse = [
-            TextChoice.fromJson(data.first as Map<String, dynamic>)
-          ];
+          _apiResponse = data.map<TextChoice>((item) => TextChoice(
+            text: item['text'],
+            value: item['value'],
+            characterName: item['character_name'],
+          )).toList();
         });
         print("API call response: $_apiResponse");
       } else {

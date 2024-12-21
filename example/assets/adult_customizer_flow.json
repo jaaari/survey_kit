@@ -51,28 +51,26 @@
                 "id": "q5"
             },
             "values": {
-                "POSITIVE": "q6",
+                "POSITIVE": "a2",
                 "NEGATIVE": "q8"
-            }
-        },
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "q6"
-            },
-            "values": {
-                "choose_existing_characters": "a2",
-                "generate_character": "a3",
-                "create_character_manually": "c1"
             }
         },
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "a3"
+                "id": "a2"
             },
             "destinationStepIdentifier": {
                 "id": "q6"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q6"
+            },
+            "destinationStepIdentifier": {
+                "id": "q8"
             }
         },
         {
@@ -106,19 +104,19 @@
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "q61"
+                "id": "q11"
             },
             "destinationStepIdentifier": {
-                "id": "q6"
+                "id": "q15"
             }
         },
         {
             "type": "direct",
             "triggerStepIdentifier": {
-                "id": "q7"
+                "id": "q16"
             },
             "destinationStepIdentifier": {
-                "id": "q8"
+                "id": "q18"
             }
         },
         {
@@ -129,52 +127,6 @@
             "values": {
                 "POSITIVE": "q9",
                 "NEGATIVE": "a4"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q11"
-            },
-            "destinationStepIdentifier": {
-                "id": "q14"
-            }
-        },
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "cq3"
-            },
-            "values": {
-                "create_character": "c2"
-            }
-        },
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "cq4"
-            },
-            "values": {
-                "POSITIVE": "cq5",
-                "NEGATIVE": "a8"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "cq9"
-            },
-            "destinationStepIdentifier": {
-                "id": "q18"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q16"
-            },
-            "destinationStepIdentifier": {
-                "id": "q18"
             }
         }
     ],
@@ -287,40 +239,15 @@
                 "id": "q6"
             },
             "type": "question",
-            "title": "Here you see which characters you have already selected. Press the button to select or create more!",
-            "isOptional": true,
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [],
-                "dynamicTextChoices": "$selected_characters",
-                "buttonChoices": [
-                    {
-                        "text": "Choose from your existing characters",
-                        "value": "choose_existing_characters"
-                    },
-                    {
-                        "text": "Generate new character",
-                        "value": "generate_character"
-                    },
-                    {
-                        "text": "Create new character manually",
-                        "value": "create_character_manually"
-                    }
-                ]
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q7"
-            },
-            "type": "question",
+            "title": "Choose your main character",
             "relatedParameter": "user_input_main_character_id",
-            "title": "Choose your main character:",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [],
-                "dynamicTextChoices": "$selected_characters",
-                "buttonChoices": []
+                "dynamicTextChoices": "$existing_characters",
+                "buttonChoices": [],
+                "dynamicImageChoices": "$existing_characters_image_urls",
+                "dynamicCharacterNames": "$existing_characters.character_name"
             }
         },
         {
@@ -334,163 +261,6 @@
                 "endpointUrl": "https://get-existing-characters-cf-6n5kxdz4pa-lz.a.run.app",
                 "parameters": {
                     "creator_user_id": "$user_id"
-                },
-                "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q61"
-            },
-            "type": "question",
-            "title": "Choose from your existing characters",
-            "relatedParameter": "user_input_character_ids",
-            "relatedTextChoiceParameter": "selected_characters",
-            "answerFormat": {
-                "type": "multiple",
-                "textChoices": [],
-                "dynamicTextChoices": "$existing_characters",
-                "buttonChoices": [],
-                "dynamicImageChoices": "$existing_characters_image_urls"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "a3"
-            },
-            "type": "question",
-            "title": "Generating Character",
-            "relatedParameter": "user_input_character_ids",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://generate-character-adult-cf-6n5kxdz4pa-lz.a.run.app",
-                "parameters": {
-                    "creator_user_id": "$user_id",
-                    "user_input_genre": "$user_input_genre",
-                    "user_input_explicit": "$user_input_explicit",
-                    "user_input_character_ids": "$user_input_character_ids"
-                },
-                "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c1"
-            },
-            "type": "question",
-            "title": "What is the characters backstory?",
-            "relatedParameter": "character_backstory",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c2"
-            },
-            "type": "question",
-            "title": "Describe your characters personality",
-            "relatedParameter": "character_personality",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c3"
-            },
-            "type": "question",
-            "title": "Is your character real and you personally know him/her?",
-            "relatedParameter": "character_real",
-            "answerFormat": {
-                "type": "bool",
-                "positiveAnswer": "Yes",
-                "negativeAnswer": "No",
-                "result": "POSITIVE"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c4"
-            },
-            "type": "question",
-            "title": "How does your character look?",
-            "relatedParameter": "character_looks",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c5"
-            },
-            "type": "question",
-            "title": "Please upload a picture of your character. (Wait until you see 'File selected' before continuing)",
-            "relatedParameter": "character_image_url",
-            "answerFormat": {
-                "type": "file",
-                "buttonText": "Upload Image"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c6"
-            },
-            "type": "question",
-            "title": "What are your characters interest?",
-            "relatedParameter": "character_interests",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c7"
-            },
-            "type": "question",
-            "title": "How old is your character?",
-            "relatedParameter": "character_age",
-            "answerFormat": {
-                "type": "integer",
-                "minimumValue": 0,
-                "maximumValue": 100
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c8"
-            },
-            "type": "question",
-            "title": "What is your characters name?",
-            "relatedParameter": "character_name",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c9"
-            },
-            "type": "question",
-            "title": "Saving Character, this might take up to 2 minutes, please don't close the app or go a step back. If everything works fine you will be directed to your selected characters and can select the new one under 'Choose from your existing characters'.",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://save-character-to-database-cf-6n5kxdz4pa-lz.a.run.app",
-                "parameters": {
-                    "creator_user_id": "$user_id",
-                    "character_personality": "$character_personality",
-                    "character_looks": "$character_looks",
-                    "character_name": "$character_name",
-                    "character_age": "$character_age",
-                    "character_interests": "$character_interests",
-                    "character_backstory": "$character_backstory",
-                    "character_image_url": "$character_image_url",
-                    "character_real": "$character_real"
                 },
                 "requestType": "POST"
             }
@@ -596,23 +366,6 @@
         },
         {
             "stepIdentifier": {
-                "id": "q14"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_target_duration",
-            "title": "How long should the audiobook be?",
-            "answerFormat": {
-                "type": "scale",
-                "step": 15,
-                "minimumValue": 60,
-                "maximumValue": 240,
-                "defaultValue": 120,
-                "minimumValueDescription": "60 min",
-                "maximumValueDescription": "240 min"
-            }
-        },
-        {
-            "stepIdentifier": {
                 "id": "q15"
             },
             "type": "question",
@@ -703,82 +456,6 @@
         },
         {
             "stepIdentifier": {
-                "id": "cq1"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_target_listener_age",
-            "title": "How old is the child?",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [
-                    {
-                        "text": "0-3",
-                        "value": "0-3"
-                    },
-                    {
-                        "text": "4-6",
-                        "value": "4-6"
-                    },
-                    {
-                        "text": "7-9",
-                        "value": "7-9"
-                    },
-                    {
-                        "text": "10-12",
-                        "value": "10-12"
-                    }
-                ],
-                "buttonChoices": []
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "cq2"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_genre",
-            "title": "What kind of story do you want?",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [
-                    {
-                        "text": "Adventure",
-                        "value": "adventure"
-                    },
-                    {
-                        "text": "Fantasy",
-                        "value": "fantasy"
-                    },
-                    {
-                        "text": "Education",
-                        "value": "education"
-                    },
-                    {
-                        "text": "Science Fiction",
-                        "value": "science fiction"
-                    },
-                    {
-                        "text": "Mystery",
-                        "value": "mystery"
-                    },
-                    {
-                        "text": "Fairy Tale",
-                        "value": "fairy_tale"
-                    }
-                ],
-                "imageChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fadventure.webp?alt=media&token=8fae7b9c-19e4-47c7-b33c-e15ab5f45fc9",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffantasy.webp?alt=media&token=d9062a10-6928-4fb1-8ec9-bbbaf53f5179",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Flearning.webp?alt=media&token=e57fa484-fc58-4f73-aeb3-416f86170565",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fscience_fiction.webp?alt=media&token=2f03b151-a2dc-4f7e-be0e-eaa15bc28502",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Fmystery.webp?alt=media&token=9bc14b75-6d6e-4b31-bbec-1445df2c9ffb",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/children_genre_images%2Ffairy_tale.webp?alt=media&token=e3a6a373-db57-4397-8161-399a7ccb21d5"
-                ],
-                "buttonChoices": []
-            }
-        },
-        {
-            "stepIdentifier": {
                 "id": "a7"
             },
             "type": "question",
@@ -791,52 +468,6 @@
                     "creator_user_id": "$user_id"
                 },
                 "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "cq3"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_main_character_id",
-            "title": "Choose your main character:",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [],
-                "dynamicTextChoices": "$existing_characters",
-                "buttonChoices": [
-                    {
-                        "text": "Create new character",
-                        "value": "create_character"
-                    }
-                ],
-                "dynamicImageChoices": "$existing_characters_image_urls"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "cq4"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_lesson",
-            "title": "Should the story contain a lesson?",
-            "answerFormat": {
-                "type": "bool",
-                "positiveAnswer": "Yes",
-                "negativeAnswer": "No",
-                "result": "POSITIVE"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "cq5"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_lesson",
-            "title": "What lesson should the story contain?",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
             }
         },
         {
@@ -860,20 +491,6 @@
         },
         {
             "stepIdentifier": {
-                "id": "cq6"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_story_place",
-            "title": "Where should the story take place?",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [],
-                "dynamicTextChoices": "$generated_settings",
-                "buttonChoices": []
-            }
-        },
-        {
-            "stepIdentifier": {
                 "id": "a9"
             },
             "type": "question",
@@ -892,85 +509,6 @@
                     "wanted_number_of_ideas": 4
                 },
                 "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "cq7"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_story_idea",
-            "title": "Choose an idea for your story:",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [],
-                "dynamicTextChoices": "$generated_ideas",
-                "buttonChoices": []
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "cq8"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_narrator_voice",
-            "title": "Who do you want to narrate your audiobook?",
-            "text": "",
-            "answerFormat": {
-                "type": "single_audio",
-                "textChoices": [
-                    {
-                        "text": "Lucas",
-                        "value": "lucas"
-                    },
-                    {
-                        "text": "Nova",
-                        "value": "nova"
-                    },
-                    {
-                        "text": "Theo",
-                        "value": "theo"
-                    }
-                ],
-                "buttonChoices": [],
-                "imageChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_32-year-old_strict-looking_woman_recording_a_podcast_vie_e10097ee-289e-4638-a538-2021b5fd0714.png?alt=media&token=595b6713-9e3f-4afd-8f83-5564d705d4fb",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9"
-                ],
-                "audioChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample.mp3?alt=media&token=c7746f73-93b9-4c1e-8684-7a513126630d",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fnova_sample.mp3?alt=media&token=aed7dc10-7eed-4a9e-a80c-b3d57bfa927c",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ftheo_sample.mp3?alt=media&token=82609dae-40b6-4848-ba37-d7e022f03162"
-                ]
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "cq9"
-            },
-            "type": "question",
-            "relatedParameter": "user_input_target_duration",
-            "title": "How long should the audiobook be?",
-            "answerFormat": {
-                "type": "scale",
-                "step": 15,
-                "minimumValue": 60,
-                "maximumValue": 240,
-                "defaultValue": 90,
-                "minimumValueDescription": "60 min",
-                "maximumValueDescription": "240 min"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "c2"
-            },
-            "type": "question",
-            "title": "Creating Character (For now just a placeholder for multiple questions or audio input)",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
             }
         },
         {

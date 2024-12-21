@@ -159,8 +159,14 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
               bool hasImage = idx < _imageChoices.length && 
                   _imageChoices[idx].isNotEmpty && 
                   _imageChoices[idx] != "";
+                  
+              // Create the display text with character name if available
+              String displayText = tc.characterName != null 
+                  ? "${tc.characterName}\n${tc.text}"
+                  : tc.text;
+                  
               return SelectionListTile(
-                text: tc.text,
+                text: displayText,  // Pass the combined text
                 imageURL: hasImage ? _imageChoices[idx] : "",
                 onTap: () {
                   _onAnswerChanged(tc);

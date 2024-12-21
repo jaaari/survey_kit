@@ -70,28 +70,31 @@ class _BooleanAnswerViewState extends State<BooleanAnswerView> {
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       isValid: widget.questionStep.isOptional || _result != null,
-      child: Column(
-        children: [
-          if (widget.questionStep.text.isNotEmpty)
-            Padding(
-              padding: EdgeInsets.all(context.standard.value),
-              child: Text(
-                widget.questionStep.text,
-                style: context.body.copyWith(color: context.textPrimary),
-                textAlign: TextAlign.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+        child: Column(
+          children: [
+            if (widget.questionStep.text.isNotEmpty)
+              Padding(
+                padding: EdgeInsets.all(context.standard.value),
+                child: Text(
+                  widget.questionStep.text,
+                  style: context.body.copyWith(color: context.textPrimary),
+                  textAlign: TextAlign.center,
+                ),
               ),
+            SelectionListTile(
+              text: _answerFormat.positiveAnswer,
+              onTap: () => _onAnswerChanged(BooleanResult.POSITIVE),
+              isSelected: _result == BooleanResult.POSITIVE,
             ),
-          SelectionListTile(
-            text: _answerFormat.positiveAnswer,
-            onTap: () => _onAnswerChanged(BooleanResult.POSITIVE),
-            isSelected: _result == BooleanResult.POSITIVE,
-          ),
-          SelectionListTile(
-            text: _answerFormat.negativeAnswer,
-            onTap: () => _onAnswerChanged(BooleanResult.NEGATIVE),
-            isSelected: _result == BooleanResult.NEGATIVE,
-          ),
-        ],
+            SelectionListTile(
+              text: _answerFormat.negativeAnswer,
+              onTap: () => _onAnswerChanged(BooleanResult.NEGATIVE),
+              isSelected: _result == BooleanResult.NEGATIVE,
+            ),
+          ],
+        ),
       ),
     );
   }
