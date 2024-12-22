@@ -9,6 +9,8 @@ import 'package:survey_kit/src/views/widget/step_view.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
+
 
 class MultipleChoiceAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -52,15 +54,25 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
       _choices = _multipleChoiceAnswer.textChoices;
     } else if (_multipleChoiceAnswer.dynamicTextChoices != "") {
       var manager = GlobalStateManager();
-      // remove the $ sign from the dynamicTextChoices
       var dynamicChoices = manager
           .getData(_multipleChoiceAnswer.dynamicTextChoices.substring(1));
       print('Using dynamicTextChoices: $dynamicChoices');
       if (dynamicChoices != null && dynamicChoices is List) {
         print("Dynamic choices: $dynamicChoices");
         _choices = dynamicChoices
-            .map<TextChoice>((choice) => TextChoice.fromJson(choice))
+            .map<TextChoice>((choice) {
+              if (choice is Map<String, dynamic>) {
+                return TextChoice(
+                  text: choice['text'] as String,
+                  value: choice['value'] as String,
+                  characterName: choice['character_name'] as String?,
+                );
+              } else {
+                return TextChoice.fromJson(choice.toJson());
+              }
+            })
             .toList();
+        print('Choices after parsing: ${_choices.map((c) => {'text': c.text, 'value': c.value, 'character_name': c.characterName}).toList()}');
       }
     }
     // Select default choice if not set
@@ -106,7 +118,11 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
     if (widget.questionStep.relatedTextChoiceParameter.isNotEmpty) {
       _resultMap[widget.questionStep.relatedTextChoiceParameter] =
           _selectedChoices.map((choice) {
-        return {'text': choice.text, 'value': choice.value};
+        return {
+          'text': choice.text, 
+          'value': choice.value,
+          'character_name': choice.characterName
+        };
       }).toList();
     }
 
@@ -131,130 +147,119 @@ class _MultipleChoiceAnswerView extends State<MultipleChoiceAnswerView> {
       isValid: widget.questionStep.isOptional || _selectedChoices.isNotEmpty,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                  fontWeight:
-                      Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).colorScheme.primary),
+              style: context.body.copyWith(color: context.textPrimary),
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
-              child: Text(
-                widget.questionStep.text,
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
+            if (widget.questionStep.text.isNotEmpty)
+              Padding(
+                padding: EdgeInsets.all(context.standard.value),
+                child: Text(
+                  widget.questionStep.text,
+                  style: context.body.copyWith(color: context.textPrimary),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-            Column(
-              children: [
-                ..._choices
-                    .map(
-                      (TextChoice tc) => SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: SelectionListTile(
-                          imageURL: _imageChoices.isNotEmpty
-                              ? _imageChoices[_choices.indexOf(tc)]
-                              : "",
-                          text: tc.text,
-                          onTap: () {
-                            setState(
-                              () {
-                                if (_selectedChoices.contains(tc)) {
-                                  _selectedChoices.remove(tc);
-                                } else {
-                                  if (_multipleChoiceAnswer.maxAnswers >
-                                      _selectedChoices.length) {
-                                    _selectedChoices = [..._selectedChoices, tc];
-                                  }
-                                }
-                                _onAnswerChanged();
-                              },
-                            );
-                          },
-                          isSelected: _selectedChoices.contains(tc),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                if (_multipleChoiceAnswer.otherField) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                    child: ListTile(
-                      title: TextField(
-                        onChanged: (v) {
-                          int? currentIndex;
-                          final otherTextChoice = _selectedChoices
-                              .firstWhereIndexedOrNull((index, element) {
-                            final isOtherField = element.text == 'Other';
+            ..._choices.asMap().entries.map(
+              (entry) {
+                int idx = entry.key;
+                TextChoice tc = entry.value;
+                bool hasImage = idx < _imageChoices.length &&
+                    _imageChoices[idx].isNotEmpty &&
+                    _imageChoices[idx] != "";
+                
+                // Create the display text with character name if available
+                String displayText = tc.characterName != null 
+                    ? "${tc.characterName}\n${tc.text}"
+                    : tc.text;
+                    
+                return SelectionListTile(
+                  text: displayText,
+                  imageURL: hasImage ? _imageChoices[idx] : "",
+                  onTap: () {
+                    setState(() {
+                      if (_selectedChoices.contains(tc)) {
+                        _selectedChoices.remove(tc);
+                      } else {
+                        if (_multipleChoiceAnswer.maxAnswers >
+                            _selectedChoices.length) {
+                          _selectedChoices = [..._selectedChoices, tc];
+                        }
+                      }
+                      _onAnswerChanged();
+                    });
+                  },
+                  isSelected: _selectedChoices.contains(tc),
+                );
+              },
+            ).toList(),
+            if (_multipleChoiceAnswer.otherField) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: ListTile(
+                  title: TextField(
+                    onChanged: (v) {
+                      int? currentIndex;
+                      final otherTextChoice = _selectedChoices
+                          .firstWhereIndexedOrNull((index, element) {
+                        final isOtherField = element.text == 'Other';
 
-                            if (isOtherField) {
-                              currentIndex = index;
-                            }
+                        if (isOtherField) {
+                          currentIndex = index;
+                        }
 
-                            return isOtherField;
-                          });
+                        return isOtherField;
+                      });
 
-                          setState(() {
-                            if (v.isEmpty && otherTextChoice != null) {
-                              _selectedChoices.remove(otherTextChoice);
-                            } else if (v.isNotEmpty) {
-                              final updatedTextChoice =
-                                  TextChoice(text: 'Other', value: v);
-                              if (otherTextChoice == null) {
-                                _selectedChoices.add(updatedTextChoice);
-                              } else if (currentIndex != null) {
-                                _selectedChoices[currentIndex!] =
-                                    updatedTextChoice;
-                              }
-                            }
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Other',
-                          labelStyle: Theme.of(context).textTheme.headlineSmall,
-                          hintText: 'Write other information here',
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                        ),
-                      ),
+                      setState(() {
+                        if (v.isEmpty && otherTextChoice != null) {
+                          _selectedChoices.remove(otherTextChoice);
+                        } else if (v.isNotEmpty) {
+                          final updatedTextChoice =
+                              TextChoice(text: 'Other', value: v);
+                          if (otherTextChoice == null) {
+                            _selectedChoices.add(updatedTextChoice);
+                          } else if (currentIndex != null) {
+                            _selectedChoices[currentIndex!] =
+                                updatedTextChoice;
+                          }
+                        }
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Other',
+                      labelStyle: Theme.of(context).textTheme.headlineSmall,
+                      hintText: 'Write other information here',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
                     ),
                   ),
-                  Divider(
-                    color: Colors.grey,
-                  ),
-                ],
-                if (_multipleChoiceAnswer.buttonChoices.isNotEmpty) ...[
-                  ..._multipleChoiceAnswer.buttonChoices
-                      .map(
-                        (TextChoice bc) => SelectionListTile(
-                          text: bc.text,
-                          onTap: () {
-                            final surveyController =
-                                Provider.of<SurveyController>(context,
-                                    listen: false);
-                            final resultFunction =
-                                () => MultipleChoiceQuestionResult(
-                                      id: widget.questionStep.stepIdentifier,
-                                      startDate: _startDateTime,
-                                      endDate: DateTime.now(),
-                                      valueIdentifier: [bc]
-                                          .map((choices) => choices.value)
-                                          .join(','),
-                                      result: [bc],
-                                    );
-                            surveyController.nextStep(context, resultFunction);
-                          },
-                          isSelected: false,
-                        ),
-                      )
-                      .toList(),
-                ],
-              ],
-            ),
+                ),
+              ),
+            ],
+            if (_multipleChoiceAnswer.buttonChoices.isNotEmpty) ...[
+              ..._multipleChoiceAnswer.buttonChoices.map(
+                (TextChoice bc) => SelectionListTile(
+                  text: bc.text,
+                  onTap: () {
+                    final surveyController =
+                        Provider.of<SurveyController>(context, listen: false);
+                    final resultFunction = () => MultipleChoiceQuestionResult(
+                          id: widget.questionStep.stepIdentifier,
+                          startDate: _startDateTime,
+                          endDate: DateTime.now(),
+                          valueIdentifier: [bc].map((choices) => choices.value).join(','),
+                          result: [bc],
+                        );
+                    surveyController.nextStep(context, resultFunction);
+                  },
+                  isSelected: false,
+                ),
+              ).toList(),
+            ],
           ],
         ),
       ),

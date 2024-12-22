@@ -55,9 +55,9 @@ class _ScaleAnswerViewState extends State<ScaleAnswerView> {
         _onAnswerChanged(index.toDouble());
       },
       child: Container(
-        width: 45,
-        height: 45,
-        margin: EdgeInsets.symmetric(horizontal: 4),
+        width: context.screenWidth * 0.1,
+        height: context.screenWidth * 0.1,
+        margin: EdgeInsets.symmetric(horizontal: context.small.value),
         decoration: BoxDecoration(
           color: context.background,
           borderRadius: BorderRadius.circular(12),
@@ -108,7 +108,7 @@ class _ScaleAnswerViewState extends State<ScaleAnswerView> {
           children: [
             if (widget.questionStep.text.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.only(bottom: 32.0, left: 14.0, right: 14.0),
+                padding: EdgeInsets.only(bottom: context.extraLarge.value, left: context.small.value, right: context.small.value),
                 child: Text(
                   widget.questionStep.text,
                   style: context.body.copyWith(color: context.textSecondary),
@@ -119,10 +119,10 @@ class _ScaleAnswerViewState extends State<ScaleAnswerView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(7, (index) => _buildScaleBox(index)),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: context.medium.value),
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: 7 * 45 + 6 * 8, // 7 buttons * width + 6 gaps * margin
+                maxWidth: 7 * context.screenWidth * 0.1 + 6 * context.small.value, // 7 buttons * width + 6 gaps * margin
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

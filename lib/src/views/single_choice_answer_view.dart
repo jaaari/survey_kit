@@ -94,7 +94,13 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
       print('Using dynamicTextChoices: $dynamicChoices');
       if (dynamicChoices != null && dynamicChoices is List) {
         _choices += dynamicChoices
-            .map<TextChoice>((choice) => TextChoice.fromJson(choice))
+            .map<TextChoice>((choice) {
+              if (choice is Map<String, dynamic>) {
+                return TextChoice.fromJson(choice);
+              } else {
+                return TextChoice.fromJson(choice.toJson());
+              }
+            })
             .toList();
         print('Dynamic choices added: ${dynamicChoices.length}');
       } else {
@@ -166,7 +172,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
                   : tc.text;
                   
               return SelectionListTile(
-                text: displayText,  // Pass the combined text
+                text: displayText,  
                 imageURL: hasImage ? _imageChoices[idx] : "",
                 onTap: () {
                   _onAnswerChanged(tc);

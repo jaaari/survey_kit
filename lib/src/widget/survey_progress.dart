@@ -38,10 +38,7 @@ class _SurveyProgressState extends State<SurveyProgress> with SingleTickerProvid
     return BlocBuilder<SurveyPresenter, SurveyState>(builder: (context, state) {
       if (state is PresentingSurveyState) {
         // Debug print all steps and their types
-        print('All steps:');
-        state.steps.forEach((step) {
-          print('Step ID: ${step.stepIdentifier.id}, Type: ${step.type}');
-        });
+        
 
         // Find the completion step and get its question number
         final completionStep = state.steps.where((step) => step.type != "question").firstOrNull;

@@ -7,7 +7,8 @@ import 'package:survey_kit/survey_kit.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/kuluko_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:survey_kit/src/k_loading_deer.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
@@ -71,7 +72,9 @@ class _MyAppState extends State<MyApp> {
                     height: MediaQuery.of(context).size.height * 0.65,
                   );
                 }
-                return const CircularProgressIndicator.adaptive();
+                return KLoadingDeer(
+                  size: context.screenWidth * 0.3,
+                );
               },
             ),
           ),

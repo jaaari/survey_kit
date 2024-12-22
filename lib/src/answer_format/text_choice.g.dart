@@ -9,10 +9,12 @@ part of 'text_choice.dart';
 TextChoice _$TextChoiceFromJson(Map<String, dynamic> json) => TextChoice(
       text: json['text'] as String,
       value: json['value'] as String,
+      characterName: json['characterName'] as String?,
     );
 
 Map<String, dynamic> _$TextChoiceToJson(TextChoice instance) =>
     <String, dynamic>{
       'text': instance.text,
       'value': instance.value,
+      'characterName': instance.characterName,
     };

@@ -13,6 +13,7 @@ import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
 import 'dart:async';
 import 'package:survey_kit/src/k_snackbar.dart';
+import 'package:survey_kit/src/k_loading_deer.dart';
 
 class CompletionView extends StatefulWidget {
   final CompletionStep completionStep;
@@ -142,8 +143,8 @@ class _CompletionViewState extends State<CompletionView> {
                 ),
               ),
             if (_isLoading)
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(context.primaryPurple),
+              KLoadingDeer(
+                size: context.screenWidth * 0.3,
               )
             else
               Container(

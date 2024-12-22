@@ -18,6 +18,7 @@ import 'package:survey_kit/src/views/widget/survey_app_bar.dart';
 import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
 import 'package:survey_kit/src/widget/survey_progress_with_animation.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
+import 'package:survey_kit/src/k_loading_deer.dart';
 
 class SurveyKit extends StatefulWidget {
   final Task task;
@@ -153,11 +154,15 @@ class _SurveyPageState extends State<SurveyPage> {
           );
         } else if (state is SurveyResultState && state.currentStep != null) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: KLoadingDeer(
+              size: context.screenWidth * 0.3,
+            ),
           );
         }
         return Center(
-          child: CircularProgressIndicator(),
+          child: KLoadingDeer(
+            size: context.screenWidth * 0.3,
+          ),
         );
       },
     );

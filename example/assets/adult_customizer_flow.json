@@ -70,6 +70,15 @@
                 "id": "q6"
             },
             "destinationStepIdentifier": {
+                "id": "q7"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q7"
+            },
+            "destinationStepIdentifier": {
                 "id": "q8"
             }
         },
@@ -128,6 +137,15 @@
                 "POSITIVE": "q9",
                 "NEGATIVE": "a4"
             }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "q61"
+            },
+            "destinationStepIdentifier": {
+                "id": "q6"
+            }
         }
     ],
     "steps": [
@@ -138,7 +156,6 @@
             "type": "question",
             "relatedParameter": "user_input_genre",
             "title": "What genre should your story be?",
-            "infoText": "yo",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [
@@ -151,8 +168,8 @@
                         "value": "fantasy"
                     },
                     {
-                        "text": "Science Fiction",
-                        "value": "science fiction"
+                        "text": "Sci-fi",
+                        "value": "sci-fi"
                     },
                     {
                         "text": "Romance",
@@ -165,14 +182,6 @@
                     {
                         "text": "Horror",
                         "value": "horror"
-                    },
-                    {
-                        "text": "Comedy",
-                        "value": "comedy"
-                    },
-                    {
-                        "text": "Tragedy",
-                        "value": "tragedy"
                     },
                     {
                         "text": "Historical Fiction",
@@ -195,7 +204,9 @@
                 "id": "q5"
             },
             "type": "question",
-            "title": "Do you want to pick the story characters manually?",
+            "title": "Do you want to pick the characters for the story yourself?",
+            "infoText": "You can either choose characters from your own collection or you can let us handle the characters.",
+            "infoTitle": "Character Selection",
             "answerFormat": {
                 "type": "bool",
                 "positiveAnswer": "Yes",
@@ -239,12 +250,29 @@
                 "id": "q6"
             },
             "type": "question",
-            "title": "Choose your main character",
+            "title": "Choose the characters to include in your story:",
+            "relatedParameter": "user_input_character_ids",
+            "relatedTextChoiceParameter": "selected_characters",
+            "answerFormat": {
+                "type": "multiple",
+                "textChoices": [],
+                "dynamicTextChoices": "$existing_characters",
+                "buttonChoices": [],
+                "dynamicImageChoices": "$existing_characters_image_urls",
+                "dynamicCharacterNames": "$existing_characters.character_name"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q7"
+            },
+            "type": "question",
+            "title": "Choose your main character:",
             "relatedParameter": "user_input_main_character_id",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [],
-                "dynamicTextChoices": "$existing_characters",
+                "dynamicTextChoices": "$selected_characters",
                 "buttonChoices": [],
                 "dynamicImageChoices": "$existing_characters_image_urls",
                 "dynamicCharacterNames": "$existing_characters.character_name"
@@ -270,11 +298,13 @@
                 "id": "q8"
             },
             "type": "question",
-            "title": "Do you have a clear vision for the story?",
+            "title": "Do you already have an idea for the story?",
+            "infoText": "You can either create your own story idea or we can give you some options.",
+            "infoTitle": "Story Idea",
             "answerFormat": {
                 "type": "bool",
                 "positiveAnswer": "Yes, I have something in mind!",
-                "negativeAnswer": "No",
+                "negativeAnswer": "No, I need inspiration!",
                 "result": "POSITIVE"
             }
         },
@@ -310,7 +340,9 @@
             },
             "type": "question",
             "relatedParameter": "user_input_story_idea",
-            "title": "What is your vision?",
+            "title": "Whats your idea for the story?",
+            "infoText": "This is the main idea of your story. This is going to impact the story the most.",
+            "infoTitle": "Story Idea",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5,
@@ -344,6 +376,8 @@
             "type": "question",
             "relatedParameter": "user_input_story_idea",
             "title": "Choose an idea for your story:",
+            "infoText": "This is the main idea of your story. This is going to impact the story the most. You can edit this in the next step.",
+            "infoTitle": "Story Idea",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [],
@@ -413,7 +447,6 @@
                         "value": "richard"
                     }
                 ],
-                "premiumVoices": ["lucas", "nova", "theo"],
                 "buttonChoices": [],
                 "imageChoices": [
                     "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
@@ -426,8 +459,8 @@
                     "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample.mp3?alt=media&token=c7746f73-93b9-4c1e-8684-7a513126630d",
                     "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fnova_sample.mp3?alt=media&token=aed7dc10-7eed-4a9e-a80c-b3d57bfa927c",
                     "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ftheo_sample.mp3?alt=media&token=82609dae-40b6-4848-ba37-d7e022f03162",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Feva_sample.wav?alt=media&token=a1963a02-36c0-427b-ab0a-d21891e6a3e1",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Frichard_sample.wav?alt=media&token=817f87af-0868-4311-a482-d86839cc1bd4"
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Feva.wav?alt=media&token=a960c6a6-4be7-42d2-a0ef-a27c8d273d1d",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Frichard.wav?alt=media&token=bd3b06e6-0f94-4182-a532-e81a1ad0bf85"
                 ]
             }
         },
@@ -516,8 +549,8 @@
                 "id": "q18"
             },
             "type": "completion",
-            "text": "$user_input_story_idea",
-            "title": "All done! Do you want to generate your story now?",
+            "text": "Finish to generate your audiobook!",
+            "title": "All done!",
             "buttonText": "Generate Audiobook!",
             "parameters": {
                 "creator_user_id": "$user_id",
@@ -526,7 +559,6 @@
                 "user_input_story_place": "$user_input_story_place",
                 "user_input_story_time": "$user_input_story_time",
                 "user_input_story_idea": "$user_input_story_idea",
-                "user_input_target_duration": "$user_input_target_duration",
                 "user_input_language_complexity": "$user_input_language_complexity",
                 "user_input_narrator_voice": "$user_input_narrator_voice",
                 "user_input_audiobook_language_code": "$user_input_audiobook_language_code",
