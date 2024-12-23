@@ -11,6 +11,9 @@ import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:provider/provider.dart';
 import 'global_state_manager.dart';
+import 'package:survey_kit/src/k_loading_deer.dart';
+import 'package:survey_kit/src/theme_extensions.dart';
+
 
 class APICallView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -156,11 +159,11 @@ class _APICallViewState extends State<APICallView> {
         isValid: false,
         title: Text(
           widget.questionStep.title,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: context.body.copyWith(color: context.textPrimary),
           textAlign: TextAlign.center,
         ),
         child: _apiResponse.isEmpty
-            ? Center(child: Text('Loading...'))
+            ? Center(child: KLoadingDeer(size: context.screenWidth * 0.3,))
             : Center(
                 child: Text('Received ${_apiResponse.length} items from API')));
   }

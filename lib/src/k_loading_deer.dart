@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:survey_kit/src/theme_extensions.dart';
 
 class KLoadingDeer extends StatefulWidget {
   final bool isError;
