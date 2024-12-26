@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:survey_kit/src/answer_format/image_answer_format.dart';
+import 'package:survey_kit/src/kuluko_0.2_theme.dart' as custom_theme;
 import 'package:survey_kit/src/result/question/image_question_result.dart';
 import 'package:survey_kit/src/steps/predefined_steps/question_step.dart';
 import 'package:survey_kit/src/views/widget/step_view.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
+import 'package:survey_kit/src/theme_extensions.dart';
 
 class ImageAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -49,12 +51,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
   void get_firebase_storage_instance() async {
-    storage = GlobalStateManager().getData("firebase_storage");
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    storage = GlobalStateManager().getData("firebase_storage") ?? FirebaseStorage.instance;
   }
 
   @override
@@ -71,11 +68,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       isValid: _isValid || widget.questionStep.isOptional,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
-              style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
-                  fontWeight:
-                      Theme.of(context).textTheme.titleMedium?.fontWeight,
-                  color: Theme.of(context).colorScheme.primary),
+              style: context.body,
               textAlign: TextAlign.center)
           : widget.questionStep.content,
       child: Padding(
@@ -89,53 +82,50 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                   horizontal: 32.0,
                   vertical: 8.0,
                 ),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.surfaceContainerHigh),
-                    shape: WidgetStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    height: MediaQuery.of(context).size.height * 0.065,
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      gradient: context.buttonGradient,
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    child: ElevatedButton.icon(
+                      icon: _isValid 
+                        ? Icon(Icons.check, color: context.textPrimary)
+                        : Icon(Icons.upload, color: context.textPrimary),
+                      label: Text(
+                        isUploading 
+                          ? 'Uploading...'
+                          : _isValid 
+                            ? ''
+                            : 'Upload',
+                        style: context.body.copyWith(
+                          color: context.textPrimary,
+                        ),
+                      ),
+                      onPressed: _isValid ? null : () {
+                        _optionsDialogBox();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        minimumSize: Size(
+                          MediaQuery.of(context).size.width * 0.7,
+                          MediaQuery.of(context).size.height * 0.065,
+                        ),
+                        fixedSize: Size(
+                          MediaQuery.of(context).size.width * 0.7,
+                          MediaQuery.of(context).size.height * 0.065,
+                        ),
+                        padding: EdgeInsets.zero,
+                        shadowColor: Colors.transparent,
+                        elevation: 0,
                       ),
                     ),
-                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    _optionsDialogBox();
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.upload,
-                          size: 24.0,
-                          color: Theme.of(context).colorScheme.onSurface),
-                      SizedBox(width: 8.0),
-                      Text(_imageAnswerFormat.buttonText,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface)),
-                      filePath.isNotEmpty
-                          ? Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "File selected!",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : SizedBox(),
-                        isUploading
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          )
-                        : SizedBox(),
-                    ],
                   ),
                 ),
               ),
@@ -164,7 +154,7 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
                         builder: (context) => AlertDialog(
                           title: Text(
                             _imageAnswerFormat.hintTitle.toString(),
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: context.accentGreen),
                           ),
                           content: Image.network(
                             _imageAnswerFormat.hintImage.toString(),
@@ -223,7 +213,10 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
   Future<void> _uploadImageToFirebase(XFile picture) async {
-    isUploading = true;
+    setState(() {
+      isUploading = true;
+    });
+    
     String fileName = path.basename(picture.path);
     String firebasePath = 'profilePictures/$user_id/$fileName';
     Reference ref = storage.ref().child(firebasePath);
@@ -233,12 +226,14 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       await ref.putFile(File(picture.path));
       String downloadURL = await ref.getDownloadURL();
       print("Got download URL: $downloadURL");
+      
       setState(() {
         filePath = picture.path;
         publicURL = downloadURL;
         _isValid = true;
+        isUploading = false;
       });
-      isUploading = false;
+      
       print("Uploaded Image URL: $publicURL");
 
       Map<String, dynamic> _resultMap = {
@@ -246,6 +241,9 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       };
       GlobalStateManager().updateData(_resultMap);
     } catch (e) {
+      setState(() {
+        isUploading = false;
+      });
       print("Error uploading image: $e");
     }
   }
