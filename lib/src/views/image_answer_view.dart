@@ -189,67 +189,74 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
   Future<void> _openCamera() async {
-    var picture = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-    );
+  Navigator.pop(context); // Close the options dialog first
 
-    Navigator.pop(context);
+  var picture = await ImagePicker().pickImage(
+    source: ImageSource.camera,
+  );
 
-    if (picture != null) {
-      _uploadImageToFirebase(picture);
-    }
+  if (picture != null && mounted) {
+    await _uploadImageToFirebase(picture);
   }
+}
 
-  Future<void> _openGallery() async {
-    var picture = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
+Future<void> _openGallery() async {
+  Navigator.pop(context); // Close the options dialog first
 
-    Navigator.pop(context);
+  var picture = await ImagePicker().pickImage(
+    source: ImageSource.gallery,
+  );
 
-    if (picture != null) {
-      _uploadImageToFirebase(picture);
-    }
+  if (picture != null && mounted) {
+    await _uploadImageToFirebase(picture);
   }
+}
 
     Future<void> _uploadImageToFirebase(XFile picture) async {
-    if (!mounted) return;  // Add this check
-    
+  if (!mounted) return;
+
+  setState(() {
+    isUploading = true;
+    _isValid = false;  // Ensure we can't advance while uploading
+  });
+
+  String fileName = path.basename(picture.path);
+  String firebasePath = 'profilePictures/$user_id/$fileName';
+  Reference ref = storage.ref().child(firebasePath);
+
+  try {
+    print("Uploading image to Firebase Storage");
+    await ref.putFile(File(picture.path));
+    String downloadURL = await ref.getDownloadURL();
+    print("Got download URL: $downloadURL");
+
+    if (!mounted) return;
+
     setState(() {
-      isUploading = true;
+      filePath = picture.path;
+      publicURL = downloadURL;
+      _isValid = true;
+      isUploading = false;
     });
-    
-    String fileName = path.basename(picture.path);
-    String firebasePath = 'profilePictures/$user_id/$fileName';
-    Reference ref = storage.ref().child(firebasePath);
 
-    try {
-      print("Uploading image to Firebase Storage");
-      await ref.putFile(File(picture.path));
-      String downloadURL = await ref.getDownloadURL();
-      print("Got download URL: $downloadURL");
-      
-      if (!mounted) return;  // Add this check before setState
+    print("Uploaded Image URL: $publicURL");
+
+    Map<String, dynamic> _resultMap = {
+      widget.questionStep.relatedParameter: publicURL,
+    };
+    GlobalStateManager().updateData(_resultMap);
+
+    // Add a small delay to ensure the UI updates before allowing navigation
+    await Future.delayed(const Duration(milliseconds: 500));
+
+  } catch (e) {
+    print("Error uploading image: $e");
+    if (mounted) {
       setState(() {
-        filePath = picture.path;
-        publicURL = downloadURL;
-        _isValid = true;
-        isUploading = false;  // Move this inside setState
+        isUploading = false;
+        _isValid = false;
       });
-      
-      print("Uploaded Image URL: $publicURL");
-
-      Map<String, dynamic> _resultMap = {
-        widget.questionStep.relatedParameter: publicURL,
-      };
-      GlobalStateManager().updateData(_resultMap);
-    } catch (e) {
-      print("Error uploading image: $e");
-      if (mounted) {  // Add this check
-        setState(() {
-          isUploading = false;
-        });
-      }
     }
   }
+}
 }
