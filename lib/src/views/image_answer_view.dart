@@ -212,7 +212,9 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
     }
   }
 
-  Future<void> _uploadImageToFirebase(XFile picture) async {
+    Future<void> _uploadImageToFirebase(XFile picture) async {
+    if (!mounted) return;  // Add this check
+    
     setState(() {
       isUploading = true;
     });
@@ -227,11 +229,12 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       String downloadURL = await ref.getDownloadURL();
       print("Got download URL: $downloadURL");
       
+      if (!mounted) return;  // Add this check before setState
       setState(() {
         filePath = picture.path;
         publicURL = downloadURL;
         _isValid = true;
-        isUploading = false;
+        isUploading = false;  // Move this inside setState
       });
       
       print("Uploaded Image URL: $publicURL");
@@ -241,10 +244,12 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
       };
       GlobalStateManager().updateData(_resultMap);
     } catch (e) {
-      setState(() {
-        isUploading = false;
-      });
       print("Error uploading image: $e");
+      if (mounted) {  // Add this check
+        setState(() {
+          isUploading = false;
+        });
+      }
     }
   }
 }
