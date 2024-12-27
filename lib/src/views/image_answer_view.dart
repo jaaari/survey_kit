@@ -189,68 +189,35 @@ class _ImageAnswerViewState extends State<ImageAnswerView> {
   }
 
   Future<void> _openCamera() async {
-  Navigator.pop(context); // Close the options dialog first
-
-  var picture = await ImagePicker().pickImage(
-    source: ImageSource.camera,
-  );
-
-  if (picture != null && mounted) {
-    await _uploadImageToFirebase(picture);
-  }
-}
-
-Future<void> _openGallery() async {
-  Navigator.pop(context); // Close the options dialog first
-
-  var picture = await ImagePicker().pickImage(
-    source: ImageSource.gallery,
-  );
-
-  if (picture != null && mounted) {
-    await _uploadImageToFirebase(picture);
-  }
-}
-
-    Future<void> _uploadImageToFirebase(XFile picture) async {
-  if (!mounted) return;
-
-  setState(() {
-    isUploading = true;
-    _isValid = false;  // Ensure we can't advance while uploading
-  });
-
-  String fileName = path.basename(picture.path);
-  String firebasePath = 'profilePictures/$user_id/$fileName';
-  Reference ref = storage.ref().child(firebasePath);
+  print("=== CAMERA CAPTURE FLOW START ===");
+  print("Closing options dialog...");
+  Navigator.of(context, rootNavigator: true).pop();
 
   try {
-    print("Uploading image to Firebase Storage");
-    await ref.putFile(File(picture.path));
-    String downloadURL = await ref.getDownloadURL();
-    print("Got download URL: $downloadURL");
+    print("Launching camera picker...");
+    final XFile? picture = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
 
-    if (!mounted) return;
-
-    setState(() {
-      filePath = picture.path;
-      publicURL = downloadURL;
-      _isValid = true;
-      isUploading = false;
-    });
-
-    print("Uploaded Image URL: $publicURL");
-
-    Map<String, dynamic> _resultMap = {
-      widget.questionStep.relatedParameter: publicURL,
-    };
-    GlobalStateManager().updateData(_resultMap);
-
-    // Add a small delay to ensure the UI updates before allowing navigation
-    await Future.delayed(const Duration(milliseconds: 500));
-
-  } catch (e) {
-    print("Error uploading image: $e");
+    if (picture != null) {
+      print("Image captured successfully:");
+      print("- Path: ${picture.path}");
+      print("- Name: ${path.basename(picture.path)}");
+      
+      if (mounted) {
+        print("Widget is mounted, proceeding with upload...");
+        await _uploadImageToFirebase(picture);
+      } else {
+        print("WARNING: Widget is not mounted after image capture");
+      }
+    } else {
+      print("No image captured - user likely cancelled");
+    }
+  } catch (e, stackTrace) {
+    print("=== CAMERA CAPTURE ERROR ===");
+    print("Error: $e");
+    print("Stack trace: $stackTrace");
+    
     if (mounted) {
       setState(() {
         isUploading = false;
@@ -258,5 +225,141 @@ Future<void> _openGallery() async {
       });
     }
   }
+  print("=== CAMERA CAPTURE FLOW END ===\n");
+}
+
+Future<void> _openGallery() async {
+  print("=== GALLERY PICKER FLOW START ===");
+  print("Closing options dialog...");
+  Navigator.of(context, rootNavigator: true).pop();
+
+  try {
+    print("Launching gallery picker...");
+    final XFile? picture = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (picture != null) {
+      print("Image selected successfully:");
+      print("- Path: ${picture.path}");
+      print("- Name: ${path.basename(picture.path)}");
+      
+      if (mounted) {
+        print("Widget is mounted, proceeding with upload...");
+        await _uploadImageToFirebase(picture);
+      } else {
+        print("WARNING: Widget is not mounted after image selection");
+      }
+    } else {
+      print("No image selected - user likely cancelled");
+    }
+  } catch (e, stackTrace) {
+    print("=== GALLERY PICKER ERROR ===");
+    print("Error: $e");
+    print("Stack trace: $stackTrace");
+    
+    if (mounted) {
+      setState(() {
+        isUploading = false;
+        _isValid = false;
+      });
+    }
+  }
+  print("=== GALLERY PICKER FLOW END ===\n");
+}
+
+Future<void> _uploadImageToFirebase(XFile picture) async {
+  print("\n=== FIREBASE UPLOAD FLOW START ===");
+  print("Initial checks:");
+  print("- Widget mounted: $mounted");
+  print("- User ID: $user_id");
+
+  if (!mounted) {
+    print("WARNING: Widget not mounted, aborting upload");
+    return;
+  }
+
+  setState(() {
+    isUploading = true;
+    _isValid = false;
+  });
+  print("State updated - isUploading: true, _isValid: false");
+
+  String fileName = path.basename(picture.path);
+  String firebasePath = 'profilePictures/$user_id/$fileName';
+  Reference ref = storage.ref().child(firebasePath);
+  
+  print("\nUpload details:");
+  print("- File name: $fileName");
+  print("- Firebase path: $firebasePath");
+
+  try {
+    print("\nStarting file operations:");
+    final File file = File(picture.path);
+    
+    // Check if file exists
+    bool fileExists = await file.exists();
+    print("- File exists: $fileExists");
+    if (!fileExists) {
+      throw Exception('Image file does not exist at path: ${picture.path}');
+    }
+
+    print("Starting Firebase upload...");
+    await ref.putFile(file);
+    print("File upload completed successfully");
+
+    print("Retrieving download URL...");
+    String downloadURL = await ref.getDownloadURL();
+    print("Download URL obtained: $downloadURL");
+
+    if (!mounted) {
+      print("WARNING: Widget not mounted after upload, aborting state update");
+      return;
+    }
+
+    print("\nUpdating state and global data:");
+    setState(() {
+      filePath = picture.path;
+      publicURL = downloadURL;
+      _isValid = true;
+      isUploading = false;
+    });
+    print("State updated:");
+    print("- filePath: $filePath");
+    print("- publicURL: $publicURL");
+    print("- _isValid: true");
+    print("- isUploading: false");
+
+    Map<String, dynamic> _resultMap = {
+      widget.questionStep.relatedParameter: publicURL,
+    };
+    GlobalStateManager().updateData(_resultMap);
+    print("Global state updated with new URL");
+
+    print("Adding stability delay...");
+    await Future.delayed(const Duration(seconds: 1));
+    print("Delay completed");
+
+  } catch (e, stackTrace) {
+    print("\n=== FIREBASE UPLOAD ERROR ===");
+    print("Error: $e");
+    print("Stack trace: $stackTrace");
+    
+    if (mounted) {
+      setState(() {
+        isUploading = false;
+        _isValid = false;
+      });
+      print("State reset due to error");
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload image. Please try again.')),
+      );
+      print("Error snackbar displayed");
+    } else {
+      print("Widget not mounted, couldn't show error message");
+    }
+  }
+  print("=== FIREBASE UPLOAD FLOW END ===\n");
 }
 }
