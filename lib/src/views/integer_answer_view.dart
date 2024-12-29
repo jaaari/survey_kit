@@ -60,27 +60,29 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return StepView(
-      step: widget.questionStep,
-      resultFunction: () => IntegerQuestionResult(
-        id: widget.questionStep.stepIdentifier,
-        startDate: _startDate,
-        endDate: DateTime.now(),
-        valueIdentifier: _controller.text,
-        result: int.tryParse(_controller.text) ??
-            _integerAnswerFormat.defaultValue ??
-            null,
-      ),
-      isValid: _isValid || widget.questionStep.isOptional,
-      title: widget.questionStep.title.isNotEmpty
-          ? Text(
-              widget.questionStep.title,
-              style: context.body,
-              textAlign: TextAlign.center,
-            )
-          : widget.questionStep.content,
-      child: Container(
-          width: width * 0.4,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: StepView(
+        step: widget.questionStep,
+        resultFunction: () => IntegerQuestionResult(
+          id: widget.questionStep.stepIdentifier,
+          startDate: _startDate,
+          endDate: DateTime.now(),
+          valueIdentifier: _controller.text,
+          result: int.tryParse(_controller.text) ??
+              _integerAnswerFormat.defaultValue ??
+              null,
+        ),
+        isValid: _isValid || widget.questionStep.isOptional,
+        title: widget.questionStep.title.isNotEmpty
+            ? Text(
+                widget.questionStep.title,
+                style: context.body,
+                textAlign: TextAlign.center,
+              )
+            : widget.questionStep.content,
+        child: Container(
+          width: width * 0.25,
           child: TextField(
             autofocus: true,
             decoration: textFieldInputDecoration(
@@ -91,13 +93,14 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
             onChanged: (String value) {
               _checkValidation(value);
             },
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.datetime,
             textAlign: TextAlign.center,
             style: context.body,
             textInputAction: TextInputAction.done,
             onSubmitted: (_) => FocusScope.of(context).unfocus(),
           ),
         ),
+      ),
     );
   }
 }
