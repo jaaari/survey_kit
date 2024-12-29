@@ -80,7 +80,7 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
             )
           : widget.questionStep.content,
       child: Container(
-          width: width * 0.2, // Set your desired width here
+          width: width * 0.4,
           child: TextField(
             autofocus: true,
             decoration: textFieldInputDecoration(
@@ -94,6 +94,8 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
             style: context.body,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (_) => FocusScope.of(context).unfocus(),
           ),
         ),
     );
