@@ -183,7 +183,7 @@ class StepView extends StatelessWidget {
                         _surveyController.stepBack(context: context);
                       },
                     ),
-                    SizedBox(width: 16),
+                    SizedBox(width: context.extraLarge.value),
                     _buildIconButton(
                       context,
                       icon: Icons.arrow_forward,
@@ -216,9 +216,11 @@ class StepView extends StatelessWidget {
   Widget _buildIconButton(BuildContext context,
       {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {
     return Container(
+      width: context.screenWidth * 0.15,
+      height: context.screenWidth * 0.15,
       decoration: BoxDecoration(
         color: context.card,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(context.extraLarge.value),
         border: enabled ? 
           GradientBoxBorder(
             gradient: context.buttonGradient,
