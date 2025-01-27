@@ -2,19 +2,19 @@
     "id": "adult_customizer_flow",
     "type": "navigable",
     "initialValues": {
-        "user_input_target_audience_is_child": false,
-        "user_input_genre": "",
-        "user_input_explicit": false,
-        "user_input_story_place": "",
-        "user_input_story_time": "",
-        "user_input_story_idea": "",
-        "user_input_target_duration": 90,
-        "user_input_language_complexity": 4,
-        "user_input_narrator_voice": "",
-        "user_input_audiobook_language_code": "en",
-        "user_input_character_ids": "",
-        "user_input_main_character_id": "",
-        "user_input_target_listener_age": ""
+        "target_audience_is_child": false,
+        "genre": "",
+        "explicit": false,
+        "story_place": "",
+        "story_time": "",
+        "story_idea": "",
+        "target_duration": 90,
+        "language_complexity": 4,
+        "narrator_voice": "",
+        "audiobook_language_code": "en",
+        "character_ids": "",
+        "main_character_id": "",
+        "target_listener_age": ""
     },
     "rules": [
         {
@@ -154,7 +154,7 @@
                 "id": "q2"
             },
             "type": "question",
-            "relatedParameter": "user_input_genre",
+            "relatedParameter": "genre",
             "title": "What genre should your story be?",
             "answerFormat": {
                 "type": "single",
@@ -224,9 +224,9 @@
             "canGoBack": false,
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://check-if-user-is-adult-cf-6n5kxdz4pa-lz.a.run.app",
+                "endpointUrl": "https://kuluko.com/api/users/check-if-adult",
                 "parameters": {
-                    "creator_user_id": "$user_id"
+                    "user_id": "$user_id"
                 },
                 "requestType": "POST"
             }
@@ -237,7 +237,7 @@
             },
             "type": "question",
             "title": "Should your story be explicit?",
-            "relatedParameter": "user_input_explicit",
+            "relatedParameter": "explicit",
             "answerFormat": {
                 "type": "bool",
                 "positiveAnswer": "Yes please ;)",
@@ -251,7 +251,7 @@
             },
             "type": "question",
             "title": "Choose the characters to include in your story:",
-            "relatedParameter": "user_input_character_ids",
+            "relatedParameter": "character_ids",
             "relatedTextChoiceParameter": "selected_characters",
             "answerFormat": {
                 "type": "multiple",
@@ -268,7 +268,7 @@
             },
             "type": "question",
             "title": "Choose your main character:",
-            "relatedParameter": "user_input_main_character_id",
+            "relatedParameter": "main_character_id",
             "answerFormat": {
                 "type": "single",
                 "textChoices": [],
@@ -286,9 +286,9 @@
             "title": "Getting existing characters",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://get-existing-characters-cf-6n5kxdz4pa-lz.a.run.app",
+                "endpointUrl": "https://kuluko.com/api/characters/list",
                 "parameters": {
-                    "creator_user_id": "$user_id"
+                    "user_id": "$user_id"
                 },
                 "requestType": "POST"
             }
@@ -313,7 +313,7 @@
                 "id": "q9"
             },
             "type": "question",
-            "relatedParameter": "user_input_story_place",
+            "relatedParameter": "story_place",
             "title": "Where should the story take place?",
             "hint": "E.g. a quiet city, a forest, a spaceship, etc.",
             "answerFormat": {
@@ -326,7 +326,7 @@
                 "id": "q10"
             },
             "type": "question",
-            "relatedParameter": "user_input_story_time",
+            "relatedParameter": "story_time",
             "title": "When does your story happen?",
             "hint": "E.g. 2020, 19th century, future, etc.",
             "answerFormat": {
@@ -339,7 +339,7 @@
                 "id": "q11"
             },
             "type": "question",
-            "relatedParameter": "user_input_story_idea",
+            "relatedParameter": "story_idea",
             "title": "Whats your idea for the story?",
             "infoText": "This is the main idea of your story. This is going to impact the story the most.",
             "infoTitle": "Story Idea",
@@ -357,13 +357,13 @@
             "title": "Generating Ideas",
             "answerFormat": {
                 "type": "api_call",
-                "endpointUrl": "https://generate-ideas-adult-cf-6n5kxdz4pa-lz.a.run.app",
+                "endpointUrl": "https://kuluko.com/api/ideas/generate-multiple",
                 "parameters": {
-                    "creator_user_id": "$user_id",
-                    "user_input_genre": "$user_input_genre",
-                    "user_input_explicit": "$user_input_explicit",
-                    "user_input_character_ids": "$user_input_character_ids",
-                    "user_input_main_character_id": "$user_input_main_character_id",
+                    "user_id": "$user_id",
+                    "genre": "$genre",
+                    "explicit": "$explicit",
+                    "character_ids": "$character_ids",
+                    "main_character_id": "$main_character_id",
                     "wanted_number_of_ideas": 3
                 },
                 "requestType": "POST"
@@ -374,7 +374,7 @@
                 "id": "q12"
             },
             "type": "question",
-            "relatedParameter": "user_input_story_idea",
+            "relatedParameter": "story_idea",
             "title": "Choose an idea for your story:",
             "infoText": "This is the main idea of your story. This is going to impact the story the most. You can edit this in the next step.",
             "infoTitle": "Story Idea",
@@ -390,12 +390,12 @@
                 "id": "q13"
             },
             "type": "question",
-            "relatedParameter": "user_input_story_idea",
+            "relatedParameter": "story_idea",
             "title": "If you want you can edit the story here:",
             "answerFormat": {
                 "type": "text",
                 "maxLines": 5,
-                "placeholder": "$user_input_story_idea"
+                "placeholder": "$story_idea"
             }
         },
         {
@@ -403,7 +403,7 @@
                 "id": "q15"
             },
             "type": "question",
-            "relatedParameter": "user_input_language_complexity",
+            "relatedParameter": "language_complexity",
             "title": "How complex should the language be?",
             "answerFormat": {
                 "type": "scale",
@@ -420,47 +420,35 @@
                 "id": "q16"
             },
             "type": "question",
-            "relatedParameter": "user_input_narrator_voice",
+            "relatedParameter": "narrator_voice",
             "title": "Who do you want to narrate your audiobook?",
             "text": "",
             "answerFormat": {
                 "type": "single_audio",
                 "textChoices": [
                     {
+                        "text": "Bella",
+                        "value": "bella"
+                    },
+                    {
+                        "text": "Kira",    
+                        "value": "kira"
+                    },
+                    {
                         "text": "Lucas",
                         "value": "lucas"
-                    },
-                    {
-                        "text": "Nova",
-                        "value": "nova"
-                    },
-                    {
-                        "text": "Theo",
-                        "value": "theo"
-                    },
-                    {
-                        "text": "Eva",
-                        "value": "eva"
-                    },
-                    {
-                        "text": "Richard",
-                        "value": "richard"
                     }
                 ],
                 "buttonChoices": [],
                 "imageChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2F36guy.png?alt=media&token=a77511ea-61a1-480c-a806-9d1057e2244e",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_32-year-old_strict-looking_woman_recording_a_podcast_vie_e10097ee-289e-4638-a538-2021b5fd0714.png?alt=media&token=595b6713-9e3f-4afd-8f83-5564d705d4fb",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJ2ari_A_28-year-old_friendly_man_recording_a_podcast_into_a_micr_30293fa2-156a-4a78-96d2-fa817a5c9094.png?alt=media&token=26445323-bd58-4881-a08d-2f9d4da8c3b9",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2FJari_A_28-year-old_strict_black_woman_recording_a_podcast_into__ea96538b-1cea-4a6f-bba8-c489889e7758.png?alt=media&token=365947c1-2d45-4b96-a69a-a88021717b48",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fjari1710_a_friendly_old_man_in_her_60s_recording_a_podcast_into_3d192fe0-920d-471b-a0dc-f37b6540b1b7.png?alt=media&token=bf1920f6-9293-4b2b-bac4-54d090033ac9"
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fbella_final.jpg?alt=media&token=8eaf0fa0-8675-4b2f-b7f5-8f0758c5e0da",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fkira_final.jpg?alt=media&token=3d245755-bd77-4943-a12a-88539fab938e",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Flucas.jpg?alt=media&token=f5d8ca14-828f-4461-a706-2aa02701336e"
                 ],
                 "audioChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample.mp3?alt=media&token=c7746f73-93b9-4c1e-8684-7a513126630d",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fnova_sample.mp3?alt=media&token=aed7dc10-7eed-4a9e-a80c-b3d57bfa927c",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Ftheo_sample.mp3?alt=media&token=82609dae-40b6-4848-ba37-d7e022f03162",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Feva.wav?alt=media&token=a960c6a6-4be7-42d2-a0ef-a27c8d273d1d",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Frichard.wav?alt=media&token=bd3b06e6-0f94-4182-a532-e81a1ad0bf85"
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fbella_sample_compressed.mp3?alt=media&token=d7b48d73-1b2e-4869-bf64-33250cc9e912",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fkira_sample_compressed.mp3?alt=media&token=a14c56f4-6411-4c99-8d20-84944770d9fb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample_compressed.mp3?alt=media&token=febea67d-dd34-4008-acda-76ee7f4006fa"                 
                 ]
             }
         },
@@ -469,7 +457,7 @@
                 "id": "q17"
             },
             "type": "question",
-            "relatedParameter": "user_input_audiobook_language_code",
+            "relatedParameter": "audiobook_language_code",
             "title": "What language should the audiobook be in?",
             "text": "",
             "answerFormat": {
@@ -489,63 +477,6 @@
         },
         {
             "stepIdentifier": {
-                "id": "a7"
-            },
-            "type": "question",
-            "relatedParameter": "existing_characters",
-            "title": "Getting existing characters",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/get_existing_characters",
-                "parameters": {
-                    "creator_user_id": "$user_id"
-                },
-                "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "a8"
-            },
-            "type": "question",
-            "title": "Generating settings",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/suggest_story_place_children",
-                "parameters": {
-                    "creator_user_id": "$user_id",
-                    "user_input_genre": "$user_input_genre",
-                    "user_input_target_listener_age": "$user_input_target_listener_age",
-                    "wanted_number_of_settings": 3,
-                    "user_input_lesson": "$user_input_lesson"
-                },
-                "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "a9"
-            },
-            "type": "question",
-            "title": "Generating Ideas",
-            "relatedParameter": "generated_ideas",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/generate_ideas_children",
-                "parameters": {
-                    "creator_user_id": "$user_id",
-                    "user_input_genre": "$user_input_genre",
-                    "user_input_target_listener_age": "$user_input_target_listener_age",
-                    "user_input_lesson": "$user_input_lesson",
-                    "user_input_story_place": "$user_input_story_place",
-                    "user_input_main_character_id": "$user_input_main_character_id",
-                    "wanted_number_of_ideas": 4
-                },
-                "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
                 "id": "q18"
             },
             "type": "completion",
@@ -553,21 +484,21 @@
             "title": "All done!",
             "buttonText": "Generate Audiobook!",
             "parameters": {
-                "creator_user_id": "$user_id",
-                "user_input_genre": "$user_input_genre",
-                "user_input_explicit": "$user_input_explicit",
-                "user_input_story_place": "$user_input_story_place",
-                "user_input_story_time": "$user_input_story_time",
-                "user_input_story_idea": "$user_input_story_idea",
-                "user_input_language_complexity": "$user_input_language_complexity",
-                "user_input_narrator_voice": "$user_input_narrator_voice",
-                "user_input_audiobook_language_code": "$user_input_audiobook_language_code",
-                "user_input_character_ids": "$user_input_character_ids",
-                "user_input_main_character_id": "$user_input_main_character_id",
-                "user_input_target_listener_age": "$user_input_target_listener_age"
+                "user_id": "$user_id",
+                "genre": "$genre",
+                "explicit": "$explicit",
+                "story_place": "$story_place",
+                "story_time": "$story_time",
+                "story_idea": "$story_idea",
+                "language_complexity": "$language_complexity",
+                "narrator_voice": "$narrator_voice",
+                "language": "$audiobook_language_code",
+                "character_ids": "$character_ids",
+                "main_character_id": "$main_character_id",
+                "target_listener_age": "$target_listener_age"
             },
             "requestType": "POST",
-            "endpointUrl": "https://initiate-audiobook-cf-6n5kxdz4pa-lz.a.run.app"
+            "endpointUrl": "https://kuluko.com/api/audiobook/initiate-advanced"
         }
     ]
 }

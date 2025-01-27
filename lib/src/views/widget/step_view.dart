@@ -33,6 +33,7 @@ class StepView extends StatelessWidget {
     return Scaffold(
       backgroundColor: context.background,
       resizeToAvoidBottomInset: false,
+      
       body: Column(
         children: [
           SizedBox(height: context.extraLarge.value),
@@ -215,9 +216,11 @@ class StepView extends StatelessWidget {
 
   Widget _buildIconButton(BuildContext context,
       {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {
+    final buttonSize = context.screenWidth * 0.15;
+    
     return Container(
-      width: context.screenWidth * 0.15,
-      height: context.screenWidth * 0.15,
+      width: buttonSize,
+      height: buttonSize,
       decoration: BoxDecoration(
         color: context.card,
         borderRadius: BorderRadius.circular(context.extraLarge.value),
@@ -231,14 +234,12 @@ class StepView extends StatelessWidget {
             width: context.extraSmall.value,
           ),
       ),
-      child: IconButton(
-        icon: Icon(
+      child: Center(
+        child: Icon(
           icon,
           color: enabled ? Colors.white : context.border,
+          size: buttonSize * 0.4, // Proportional icon size
         ),
-        onPressed: onPressed,
-        iconSize: context.screenWidth * 0.065,
-        padding: EdgeInsets.all(context.extraLarge.value),
       ),
     );
   }
