@@ -234,11 +234,14 @@ class StepView extends StatelessWidget {
             width: context.extraSmall.value,
           ),
       ),
-      child: Center(
-        child: Icon(
-          icon,
-          color: enabled ? Colors.white : context.border,
-          size: buttonSize * 0.4, // Proportional icon size
+      child: GestureDetector(
+        onTap: enabled ? onPressed : null,
+        child: Center(
+          child: Icon(
+            icon,
+            color: enabled ? Colors.white : context.border,
+            size: buttonSize * 0.4,
+          ),
         ),
       ),
     );

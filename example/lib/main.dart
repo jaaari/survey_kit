@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
     GlobalStateManager().updateData(data);
 
     // Load the JSON file
-    final String taskJson = await rootBundle.loadString('assets/adult_customizer_flow.json');
+    final String taskJson = await rootBundle.loadString('assets/character_creation.json');
     print('Task JSON loaded: $taskJson');
 
     // Decode the JSON file
