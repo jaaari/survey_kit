@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:survey_kit/src/result/question_result.dart';
 import 'package:survey_kit/src/steps/step.dart' as surveystep;
-import 'package:survey_kit/src/widget/survey_progress.dart';
+import 'package:survey_kit/src/widgets/survey_progress.dart';
 
 class AnimatedSurveyProgress extends StatelessWidget {
   final double progress;

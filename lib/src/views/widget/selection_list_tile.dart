@@ -35,8 +35,8 @@ class SelectionListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(14.0),
           child: Container(
             padding: EdgeInsets.symmetric(
-              vertical: 14.0,
-              horizontal: 20.0,
+              vertical: context.extraSmall.value,
+              horizontal: context.standard.value,
             ).copyWith(
               top: isSelected ? 12.0 : 14.0,
               bottom: isSelected ? 12.0 : 14.0,
@@ -44,8 +44,8 @@ class SelectionListTile extends StatelessWidget {
               right: isSelected ? 18.0 : 20.0,
             ),
             constraints: BoxConstraints(
-              minHeight: 100.0,
-              maxHeight: imageURL != "" ? 100.0 : double.infinity,
+              minHeight: context.screenHeight * 0.14,
+              maxHeight: imageURL != "" ? context.screenHeight * 0.14 : double.infinity,
             ),
             alignment: Alignment.center,
             decoration: BoxDecoration(

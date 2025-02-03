@@ -15,8 +15,8 @@ import 'package:survey_kit/src/task/navigable_task.dart';
 import 'package:survey_kit/src/task/ordered_task.dart';
 import 'package:survey_kit/src/task/task.dart';
 import 'package:survey_kit/src/views/widget/survey_app_bar.dart';
-import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
-import 'package:survey_kit/src/widget/survey_progress_with_animation.dart';
+import 'package:survey_kit/src/widgets/survey_progress_configuration.dart';
+import 'package:survey_kit/src/widgets/survey_progress_with_animation.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
 import 'package:survey_kit/src/k_loading_deer.dart';
 

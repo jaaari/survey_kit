@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_kit/src/presenter/survey_presenter.dart';
 import 'package:survey_kit/src/presenter/survey_state.dart';
-import 'package:survey_kit/src/widget/survey_progress_configuration.dart';
+import 'package:survey_kit/src/widgets/survey_progress_configuration.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
 
 class SurveyProgress extends StatefulWidget {

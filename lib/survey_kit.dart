@@ -78,5 +78,5 @@ export 'src/views/time_answer_view.dart';
 export 'src/views/widget/selection_list_tile.dart';
 export 'src/views/widget/step_view.dart';
 export 'src/views/widget/survey_app_bar.dart';
-export 'src/widget/survey_progress.dart';
-export 'src/widget/survey_progress_configuration.dart';
+export 'src/widgets/survey_progress.dart';
+export 'src/widgets/survey_progress_configuration.dart';

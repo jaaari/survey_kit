@@ -31,7 +31,6 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
   List<String> _imageChoices = [];
   List<String> _audioChoices = [];
   bool isClicked = false;
-  AudioPlayer? _audioPlayer;
 
   @override
   void initState() {
@@ -80,7 +79,6 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
   @override
   void dispose() {
     GlobalStateManager().removeListener(_refreshChoices);
-    _audioPlayer?.dispose();
     super.dispose();
   }
 
@@ -148,14 +146,6 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
     print("GlobalStateManager data: ${GlobalStateManager().getAllData()}");
   }
 
-  void _playAudio(int index) async {
-    if (_audioPlayer != null) {
-      await _audioPlayer!.stop();
-    }
-    _audioPlayer = AudioPlayer();
-    await _audioPlayer!.play(UrlSource(_audioChoices[index]));
-  }
-
   @override
   Widget build(BuildContext context) {
     print("SingleChoiceAudioAnswerView: Building");
@@ -185,17 +175,16 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
               bool hasImage = idx < _imageChoices.length &&
                   _imageChoices[idx].isNotEmpty &&
                   _imageChoices[idx] != "";
+              
               return VoiceSelectionListTile(
                 text: tc.text,
                 imageURL: hasImage ? _imageChoices[idx] : "",
+                sample: _audioChoices.isNotEmpty && idx < _audioChoices.length ? _audioChoices[idx] : null,
                 onTap: () {
                   setState(() {
                     _selectedChoice = tc;
                   });
                   _onAnswerChanged(tc);
-                  if (_audioChoices.isNotEmpty && idx < _audioChoices.length) {
-                    _playAudio(idx);
-                  }
                 },
                 isSelected: _selectedChoice == tc,
               );

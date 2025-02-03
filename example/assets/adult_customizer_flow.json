@@ -151,6 +151,43 @@
     "steps": [
         {
             "stepIdentifier": {
+                "id": "q1"
+            },
+            "type": "question",
+            "relatedParameter": "narrator_voice",
+            "title": "Who do you want to narrate your audiobook?",
+            "text": "",
+            "answerFormat": {
+                "type": "single_audio",
+                "textChoices": [
+                    {
+                        "text": "Bella",
+                        "value": "bella"
+                    },
+                    {
+                        "text": "Kira",    
+                        "value": "kira"
+                    },
+                    {
+                        "text": "Lucas",
+                        "value": "lucas"
+                    }
+                ],
+                "buttonChoices": [],
+                "imageChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fbella_final.jpg?alt=media&token=8eaf0fa0-8675-4b2f-b7f5-8f0758c5e0da",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fkira_final.jpg?alt=media&token=3d245755-bd77-4943-a12a-88539fab938e",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Flucas.jpg?alt=media&token=f5d8ca14-828f-4461-a706-2aa02701336e"
+                ],
+                "audioChoices": [
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fbella_sample_compressed.mp3?alt=media&token=d7b48d73-1b2e-4869-bf64-33250cc9e912",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fkira_sample_compressed.mp3?alt=media&token=a14c56f4-6411-4c99-8d20-84944770d9fb",
+                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample_compressed.mp3?alt=media&token=febea67d-dd34-4008-acda-76ee7f4006fa"                 
+                ]
+            }
+        },
+        {
+            "stepIdentifier": {
                 "id": "q2"
             },
             "type": "question",
