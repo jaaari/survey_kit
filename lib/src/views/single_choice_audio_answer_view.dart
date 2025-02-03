@@ -176,8 +176,12 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
                   _imageChoices[idx].isNotEmpty &&
                   _imageChoices[idx] != "";
               
+              String textToDisplay = hasImage
+                  ? "${tc.text}\n${""}"
+                  : tc.text;
+
               return VoiceSelectionListTile(
-                text: tc.text,
+                text: textToDisplay,
                 imageURL: hasImage ? _imageChoices[idx] : "",
                 sample: _audioChoices.isNotEmpty && idx < _audioChoices.length ? _audioChoices[idx] : null,
                 onTap: () {

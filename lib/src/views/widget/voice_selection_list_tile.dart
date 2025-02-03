@@ -37,7 +37,7 @@ class _VoiceSelectionListTileState extends State<VoiceSelectionListTile> with Si
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 0),
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
@@ -76,9 +76,10 @@ class _VoiceSelectionListTileState extends State<VoiceSelectionListTile> with Si
     if (widget.sample != null) {
       try {
         await _audioPlayer.stop();
-        setState(() => _isPlaying = false);
         await _audioPlayer.setUrl(widget.sample!);
-        setState(() => _isPlaying = true);
+        setState(() {
+          _isPlaying = true;
+        });
         _animationController.forward();
         await _audioPlayer.play();
       } catch (e) {

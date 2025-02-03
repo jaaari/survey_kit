@@ -118,6 +118,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   void _onAnswerChanged(TextChoice tc) {
     setState(() {
       _selectedChoice = tc;
+      isClicked = true; // Prevent multiple rapid clicks
     });
     
     Map<String, dynamic> _resultMap = {};
@@ -135,6 +136,13 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
     }
 
     GlobalStateManager().updateData(_resultMap);
+    
+    // Optionally reset the click state after a short delay
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        isClicked = false;
+      });
+    });
   }
 
   @override
