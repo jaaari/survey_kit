@@ -218,24 +218,24 @@ class StepView extends StatelessWidget {
       {required IconData icon, required VoidCallback? onPressed, bool enabled = true}) {
     final buttonSize = context.screenWidth * 0.15;
     
-    return Container(
-      width: buttonSize,
-      height: buttonSize,
-      decoration: BoxDecoration(
-        color: context.card,
-        borderRadius: BorderRadius.circular(context.extraLarge.value),
-        border: enabled ? 
-          GradientBoxBorder(
-            gradient: context.buttonGradient,
-            width: context.extraSmall.value,
-          ) : 
-          Border.all(
-            color: context.border,
-            width: context.extraSmall.value,
-          ),
-      ),
-      child: GestureDetector(
-        onTap: enabled ? onPressed : null,
+    return GestureDetector(
+      onTap: enabled ? onPressed : null,
+      child: Container(
+        width: buttonSize,
+        height: buttonSize,
+        decoration: BoxDecoration(
+          color: context.card,
+          borderRadius: BorderRadius.circular(context.extraLarge.value),
+          border: enabled ? 
+            GradientBoxBorder(
+              gradient: context.buttonGradient,
+              width: context.extraSmall.value,
+            ) : 
+            Border.all(
+              color: context.border,
+              width: context.extraSmall.value,
+            ),
+        ),
         child: Center(
           child: Icon(
             icon,
