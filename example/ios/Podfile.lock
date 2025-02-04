@@ -122,7 +122,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player_avfoundation/darwin"
 
 SPEC CHECKSUMS:
-  audio_session: 94075f61f538dbe8f90f0cee58af3f1837ba7d2b
+  audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
   audioplayers_darwin: ccf9c770ee768abb07e26d90af093f7bab1c12ab
   camera_avfoundation: 04b44aeb14070126c6529e5ab82cc7c9fca107cf
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06

@@ -4,6 +4,7 @@ import 'package:survey_kit/src/views/global_state_manager.dart';
 import 'package:survey_kit/src/controller/survey_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:survey_kit/src/theme_extensions.dart';
+import 'package:survey_kit/src/views/widget/voice_selection_list_tile.dart';
 
 class SingleChoiceAnswerView extends StatefulWidget {
   final QuestionStep questionStep;
@@ -26,6 +27,7 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   List<TextChoice> _choices = [];
   List<String> _imageChoices = [];
   bool isClicked = false;
+  Function? _stopCurrentAudio;
 
   @override
   void initState() {
@@ -64,6 +66,9 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
 
   @override
   void dispose() {
+    if (_stopCurrentAudio != null) {
+      _stopCurrentAudio!();
+    }
     GlobalStateManager().removeListener(_refreshChoices);
     super.dispose();
   }
@@ -116,19 +121,24 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
   }
 
   void _onAnswerChanged(TextChoice tc) {
+    if (!mounted) return;
+    
+    // Stop any currently playing audio
+    if (_stopCurrentAudio != null) {
+      _stopCurrentAudio!();
+    }
+    
     setState(() {
       _selectedChoice = tc;
-      isClicked = true; // Prevent multiple rapid clicks
+      isClicked = true;
     });
     
     Map<String, dynamic> _resultMap = {};
     
-    // Update for relatedParameter
     if (widget.questionStep.relatedParameter.isNotEmpty) {
       _resultMap[widget.questionStep.relatedParameter] = tc.value;
     }
 
-    // Update for relatedTextChoiceParameter
     if (widget.questionStep.relatedTextChoiceParameter.isNotEmpty) {
       _resultMap[widget.questionStep.relatedTextChoiceParameter] = [
         {'text': tc.text, 'value': tc.value}
@@ -137,25 +147,33 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
 
     GlobalStateManager().updateData(_resultMap);
     
-    // Optionally reset the click state after a short delay
-    Future.delayed(Duration(milliseconds: 300), () {
-      setState(() {
-        isClicked = false;
+    if (mounted) {
+      Future.delayed(Duration(milliseconds: 300), () {
+        if (mounted) {
+          setState(() {
+            isClicked = false;
+          });
+        }
       });
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return StepView(
       step: widget.questionStep,
-      resultFunction: () => SingleChoiceQuestionResult(
-        id: widget.questionStep.stepIdentifier,
-        startDate: _startDate,
-        endDate: DateTime.now(),
-        valueIdentifier: _selectedChoice?.value ?? '',
-        result: _selectedChoice,
-      ),
+      resultFunction: () {
+        if (_stopCurrentAudio != null) {
+          _stopCurrentAudio!();
+        }
+        return SingleChoiceQuestionResult(
+          id: widget.questionStep.stepIdentifier,
+          startDate: _startDate,
+          endDate: DateTime.now(),
+          valueIdentifier: _selectedChoice?.value ?? '',
+          result: _selectedChoice,
+        );
+      },
       isValid: widget.questionStep.isOptional || _selectedChoice != null,
       title: widget.questionStep.title.isNotEmpty
           ? Text(widget.questionStep.title,
@@ -174,18 +192,20 @@ class _SingleChoiceAnswerViewState extends State<SingleChoiceAnswerView> {
                   _imageChoices[idx].isNotEmpty && 
                   _imageChoices[idx] != "";
                   
-              // Create the display text with character name if available
               String displayText = tc.characterName != null 
                   ? "${tc.characterName}\n${tc.text}"
                   : tc.text;
                   
-              return SelectionListTile(
+              return VoiceSelectionListTile(
                 text: displayText,  
                 imageURL: hasImage ? _imageChoices[idx] : "",
                 onTap: () {
                   _onAnswerChanged(tc);
                 },
                 isSelected: _selectedChoice == tc,
+                stopAudio: (stopFunc) {
+                  _stopCurrentAudio = stopFunc;
+                },
               );
             }).toList(),
           ],

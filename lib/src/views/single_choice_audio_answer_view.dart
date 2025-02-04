@@ -79,6 +79,7 @@ class _SingleChoiceAudioAnswerViewState extends State<SingleChoiceAudioAnswerVie
   @override
   void dispose() {
     GlobalStateManager().removeListener(_refreshChoices);
+    VoiceSelectionListTile.cleanup();
     super.dispose();
   }
 
