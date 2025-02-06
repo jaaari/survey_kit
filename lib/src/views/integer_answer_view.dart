@@ -50,9 +50,9 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
       _isValid = (text.isNotEmpty && int.tryParse(text) != null) || 
                  (text.isEmpty && widget.questionStep.isOptional);
     });
-    // Save the value to the global state manager
+    // Save the value to the global state manager, use 0 if empty
     final Map<String, dynamic> newData = {
-      widget.questionStep.relatedParameter: int.tryParse(text)
+      widget.questionStep.relatedParameter: text.isEmpty ? 0 : int.tryParse(text) ?? 0
     };
     GlobalStateManager().updateData(newData);
   }
@@ -70,9 +70,11 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
           startDate: _startDate,
           endDate: DateTime.now(),
           valueIdentifier: _controller.text,
-          result: int.tryParse(_controller.text) ??
-              _integerAnswerFormat.defaultValue ??
-              null,
+          result: _controller.text.isEmpty
+              ? 0
+              : int.tryParse(_controller.text) ??
+                _integerAnswerFormat.defaultValue ??
+                0,
         ),
         isValid: _isValid || widget.questionStep.isOptional,
         title: widget.questionStep.title.isNotEmpty
