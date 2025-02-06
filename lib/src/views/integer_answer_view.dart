@@ -47,11 +47,12 @@ class _IntegerAnswerViewState extends State<IntegerAnswerView> {
 
   void _checkValidation(String text) {
     setState(() {
-      _isValid = text.isNotEmpty && int.tryParse(text) != null;
+      _isValid = (text.isNotEmpty && int.tryParse(text) != null) || 
+                 (text.isEmpty && widget.questionStep.isOptional);
     });
     // Save the value to the global state manager
     final Map<String, dynamic> newData = {
-      widget.questionStep.relatedParameter: int.tryParse(text) ?? null
+      widget.questionStep.relatedParameter: int.tryParse(text)
     };
     GlobalStateManager().updateData(newData);
   }
