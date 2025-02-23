@@ -1,189 +1,27 @@
 {
-    "id": "adult_customizer_flow",
+    "id": "onboarding_flow",
     "type": "navigable",
     "initialValues": {
-        "target_audience_is_child": false,
-        "genre": "",
-        "explicit": false,
-        "story_place": "",
-        "story_time": "",
-        "story_idea": "",
-        "target_duration": 90,
-        "language_complexity": 4,
-        "narrator_voice": "",
-        "audiobook_language_code": "en",
-        "character_ids": "",
-        "main_character_id": "",
-        "target_listener_age": ""
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "password": "",
+        "favorite_books": "",
+        "age": "0"
     },
-    "rules": [
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "q2"
-            },
-            "values": {
-                "romance": "a1"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q3"
-            },
-            "destinationStepIdentifier": {
-                "id": "q5"
-            }
-        },
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "a1"
-            },
-            "values": {
-                "true": "q3",
-                "false": "q5"
-            }
-        },
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "q5"
-            },
-            "values": {
-                "POSITIVE": "a2",
-                "NEGATIVE": "q8"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "a2"
-            },
-            "destinationStepIdentifier": {
-                "id": "q6"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q6"
-            },
-            "destinationStepIdentifier": {
-                "id": "q7"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q7"
-            },
-            "destinationStepIdentifier": {
-                "id": "q8"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "c9"
-            },
-            "destinationStepIdentifier": {
-                "id": "q6"
-            }
-        },
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "c3"
-            },
-            "values": {
-                "POSITIVE": "c5",
-                "NEGATIVE": "c4"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "c4"
-            },
-            "destinationStepIdentifier": {
-                "id": "c6"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q11"
-            },
-            "destinationStepIdentifier": {
-                "id": "q15"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q16"
-            },
-            "destinationStepIdentifier": {
-                "id": "q18"
-            }
-        },
-        {
-            "type": "conditional",
-            "triggerStepIdentifier": {
-                "id": "q8"
-            },
-            "values": {
-                "POSITIVE": "q9",
-                "NEGATIVE": "a4"
-            }
-        },
-        {
-            "type": "direct",
-            "triggerStepIdentifier": {
-                "id": "q61"
-            },
-            "destinationStepIdentifier": {
-                "id": "q6"
-            }
-        }
-    ],
     "steps": [
         {
             "stepIdentifier": {
                 "id": "q1"
             },
             "type": "question",
-            "relatedParameter": "narrator_voice",
-            "title": "Who do you want to narrate your audiobook?",
-            "text": "",
+            "relatedParameter": "first_name",
+            "title": "What is your first name?",
+            "infoTitle": "First name",
+            "infoText": "This will be visible on your published audiobook. In the format, e.g. 'John D.",          
             "answerFormat": {
-                "type": "single_audio",
-                "textChoices": [
-                    {
-                        "text": "Bella",
-                        "value": "bella"
-                    },
-                    {
-                        "text": "Kira",    
-                        "value": "kira"
-                    },
-                    {
-                        "text": "Lucas",
-                        "value": "lucas"
-                    }
-                ],
-                "buttonChoices": [],
-                "imageChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fbella_final.jpg?alt=media&token=8eaf0fa0-8675-4b2f-b7f5-8f0758c5e0da",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fkira_final.jpg?alt=media&token=3d245755-bd77-4943-a12a-88539fab938e",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Flucas.jpg?alt=media&token=f5d8ca14-828f-4461-a706-2aa02701336e"
-                ],
-                "audioChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fbella_sample_compressed.mp3?alt=media&token=d7b48d73-1b2e-4869-bf64-33250cc9e912",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fkira_sample_compressed.mp3?alt=media&token=a14c56f4-6411-4c99-8d20-84944770d9fb",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample_compressed.mp3?alt=media&token=febea67d-dd34-4008-acda-76ee7f4006fa"                 
-                ]
+                "type": "text",
+                "lines": 1
             }
         },
         {
@@ -191,81 +29,13 @@
                 "id": "q2"
             },
             "type": "question",
-            "relatedParameter": "genre",
-            "title": "What genre should your story be?",
+            "relatedParameter": "last_name",
+            "title": "What is your last name?",
+            "infoTitle": "Last name",
+            "infoText": "This will be visible on your published audiobook. In the format, e.g. 'John D.", 
             "answerFormat": {
-                "type": "single",
-                "textChoices": [
-                    {
-                        "text": "Adventure",
-                        "value": "adventure"
-                    },
-                    {
-                        "text": "Fantasy",
-                        "value": "fantasy"
-                    },
-                    {
-                        "text": "Sci-fi",
-                        "value": "sci-fi"
-                    },
-                    {
-                        "text": "Romance",
-                        "value": "romance"
-                    },
-                    {
-                        "text": "Mystery",
-                        "value": "mystery"
-                    },
-                    {
-                        "text": "Horror",
-                        "value": "horror"
-                    },
-                    {
-                        "text": "Historical Fiction",
-                        "value": "historical fiction"
-                    },
-                    {
-                        "text": "Realism",
-                        "value": "realism"
-                    },
-                    {
-                        "text": "Thriller",
-                        "value": "thriller"
-                    }
-                ],
-                "buttonChoices": []
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q5"
-            },
-            "type": "question",
-            "title": "Do you want to pick the characters for the story yourself?",
-            "infoText": "You can either choose characters from your own collection or you can let us handle the characters.",
-            "infoTitle": "Character Selection",
-            "answerFormat": {
-                "type": "bool",
-                "positiveAnswer": "Yes",
-                "negativeAnswer": "No, choose for me!",
-                "result": "POSITIVE"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "a1"
-            },
-            "type": "question",
-            "relatedParameter": "is_adult",
-            "title": "Checking User Age",
-            "canGoBack": false,
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/users/check-if-adult",
-                "parameters": {
-                    "user_id": "$user_id"
-                },
-                "requestType": "POST"
+                "type": "text",
+                "lines": 1
             }
         },
         {
@@ -273,13 +43,37 @@
                 "id": "q3"
             },
             "type": "question",
-            "title": "Should your story be explicit?",
-            "relatedParameter": "explicit",
+            "isOptional": true,
+            "relatedParameter": "age",
+            "title": "How old are you?",
             "answerFormat": {
-                "type": "bool",
-                "positiveAnswer": "Yes please ;)",
-                "negativeAnswer": "No waay!",
-                "result": "POSITIVE"
+                "type": "integer",
+                "minimumValue": 0,
+                "maximumValue": 100
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q4"
+            },
+            "type": "question",
+            "relatedParameter": "email",
+            "title": "What is your email?",
+            "answerFormat": {
+                "type": "text",
+                "lines": 1
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "q5"
+            },
+            "type": "question",
+            "relatedParameter": "password",
+            "title": "Create a password",
+            "answerFormat": {
+                "type": "password",
+                "maxLines": 1
             }
         },
         {
@@ -287,16 +81,13 @@
                 "id": "q6"
             },
             "type": "question",
-            "title": "Choose the characters to include in your story:",
-            "relatedParameter": "character_ids",
-            "relatedTextChoiceParameter": "selected_characters",
+            "relatedParameter": "favorite_books",
+            "title": "What are some of your favorite books?",
+            "text": "If you can't think of any, just leave it empty.",
             "answerFormat": {
-                "type": "multiple",
-                "textChoices": [],
-                "dynamicTextChoices": "$existing_characters",
-                "buttonChoices": [],
-                "dynamicImageChoices": "$existing_characters_image_urls",
-                "dynamicCharacterNames": "$existing_characters.character_name"
+                "type": "text",
+                "maxLines": 3,
+                "hint": "Eg: Harry Potter, The Lord of the Rings, The Great Gatsby"
             }
         },
         {
@@ -304,30 +95,36 @@
                 "id": "q7"
             },
             "type": "question",
-            "title": "Choose your main character:",
-            "relatedParameter": "main_character_id",
+            "relatedParameter": "heard_from",
+            "title": "How did you hear about us?",
             "answerFormat": {
                 "type": "single",
-                "textChoices": [],
-                "dynamicTextChoices": "$selected_characters",
+                "textChoices": [
+                    {
+                        "text": "I saw an ad",
+                        "value": "ad"
+                    },
+                    {
+                        "text": "Social media",
+                        "value": "social_media"
+                    },
+                    {
+                        "text": "App store",
+                        "value": "app_store"
+                    },
+                    {
+                        "text": "Friends/family told me",
+                        "value": "word_of_mouth"
+                    },
+                    {
+                        "text": "Other",
+                        "value": "other"
+                    }
+                ],
+                "dynamicTextChoices": "",
                 "buttonChoices": [],
-                "dynamicImageChoices": "$existing_characters_image_urls",
-                "dynamicCharacterNames": "$existing_characters.character_name"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "a2"
-            },
-            "type": "question",
-            "title": "Getting existing characters",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/characters/list",
-                "parameters": {
-                    "user_id": "$user_id"
-                },
-                "requestType": "POST"
+                "dynamicImageChoices": "",
+                "dynamicCharacterNames": ""
             }
         },
         {
@@ -335,207 +132,34 @@
                 "id": "q8"
             },
             "type": "question",
-            "title": "Do you already have an idea for the story?",
-            "infoText": "You can either create your own story idea or we can give you some options.",
-            "infoTitle": "Story Idea",
+            "isOptional": false,
+            "title": "Terms and Conditions",
             "answerFormat": {
-                "type": "bool",
-                "positiveAnswer": "Yes, I have something in mind!",
-                "negativeAnswer": "No, I need inspiration!",
-                "result": "POSITIVE"
+                "type": "agreement",
+                "defaultValue": "NEGATIVE",
+                "markdownDescription": "Please read our [Terms and Conditions](https://www.kuluko.com/terms) and confirm your acceptance by checking the box below.",
+                "markdownAgreementText": "I have read and accept the [Terms and Conditions](https://www.kuluko.com/terms) of Kuluko."
             }
         },
         {
             "stepIdentifier": {
                 "id": "q9"
             },
-            "type": "question",
-            "relatedParameter": "story_place",
-            "title": "Where should the story take place?",
-            "hint": "E.g. a quiet city, a forest, a spaceship, etc.",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q10"
-            },
-            "type": "question",
-            "relatedParameter": "story_time",
-            "title": "When does your story happen?",
-            "hint": "E.g. 2020, 19th century, future, etc.",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q11"
-            },
-            "type": "question",
-            "relatedParameter": "story_idea",
-            "title": "Whats your idea for the story?",
-            "infoText": "This is the main idea of your story. This is going to impact the story the most.",
-            "infoTitle": "Story Idea",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5,
-                "placeholder": "A story about "
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "a4"
-            },
-            "type": "question",
-            "title": "Generating Ideas",
-            "answerFormat": {
-                "type": "api_call",
-                "endpointUrl": "https://kuluko.com/api/ideas/generate-multiple",
-                "parameters": {
-                    "user_id": "$user_id",
-                    "genre": "$genre",
-                    "explicit": "$explicit",
-                    "character_ids": "$character_ids",
-                    "main_character_id": "$main_character_id",
-                    "wanted_number_of_ideas": 3
-                },
-                "requestType": "POST"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q12"
-            },
-            "type": "question",
-            "relatedParameter": "story_idea",
-            "title": "Choose an idea for your story:",
-            "infoText": "This is the main idea of your story. This is going to impact the story the most. You can edit this in the next step.",
-            "infoTitle": "Story Idea",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [],
-                "dynamicTextChoices": "$generated_ideas",
-                "buttonChoices": []
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q13"
-            },
-            "type": "question",
-            "relatedParameter": "story_idea",
-            "title": "If you want you can edit the story here:",
-            "answerFormat": {
-                "type": "text",
-                "maxLines": 5,
-                "placeholder": "$story_idea"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q15"
-            },
-            "type": "question",
-            "relatedParameter": "language_complexity",
-            "title": "How complex should the language be?",
-            "answerFormat": {
-                "type": "scale",
-                "step": 1,
-                "minimumValue": 1,
-                "maximumValue": 10,
-                "defaultValue": 4,
-                "minimumValueDescription": "simple",
-                "maximumValueDescription": "fancy and complex"
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q16"
-            },
-            "type": "question",
-            "relatedParameter": "narrator_voice",
-            "title": "Who do you want to narrate your audiobook?",
-            "text": "",
-            "answerFormat": {
-                "type": "single_audio",
-                "textChoices": [
-                    {
-                        "text": "Bella",
-                        "value": "bella"
-                    },
-                    {
-                        "text": "Kira",    
-                        "value": "kira"
-                    },
-                    {
-                        "text": "Lucas",
-                        "value": "lucas"
-                    }
-                ],
-                "buttonChoices": [],
-                "imageChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fbella_final.jpg?alt=media&token=8eaf0fa0-8675-4b2f-b7f5-8f0758c5e0da",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Fkira_final.jpg?alt=media&token=3d245755-bd77-4943-a12a-88539fab938e",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/narrator_images%2Flucas.jpg?alt=media&token=f5d8ca14-828f-4461-a706-2aa02701336e"
-                ],
-                "audioChoices": [
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fbella_sample_compressed.mp3?alt=media&token=d7b48d73-1b2e-4869-bf64-33250cc9e912",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Fkira_sample_compressed.mp3?alt=media&token=a14c56f4-6411-4c99-8d20-84944770d9fb",
-                    "https://firebasestorage.googleapis.com/v0/b/audiobookgen.appspot.com/o/voice_samples%2Flucas_sample_compressed.mp3?alt=media&token=febea67d-dd34-4008-acda-76ee7f4006fa"                 
-                ]
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q17"
-            },
-            "type": "question",
-            "relatedParameter": "audiobook_language_code",
-            "title": "What language should the audiobook be in?",
-            "text": "",
-            "answerFormat": {
-                "type": "single",
-                "textChoices": [
-                    {
-                        "text": "English",
-                        "value": "en"
-                    },
-                    {
-                        "text": "German",
-                        "value": "de"
-                    }
-                ],
-                "buttonChoices": []
-            }
-        },
-        {
-            "stepIdentifier": {
-                "id": "q18"
-            },
             "type": "completion",
-            "text": "Finish to generate your audiobook!",
-            "title": "All done!",
-            "buttonText": "Generate Audiobook!",
+            "title": "All set!",
+            "text": "Finish to create your account and access all the features of Kuluko.",
+            "buttonText": "Finish",
             "parameters": {
-                "user_id": "$user_id",
-                "genre": "$genre",
-                "explicit": "$explicit",
-                "story_place": "$story_place",
-                "story_time": "$story_time",
-                "story_idea": "$story_idea",
-                "language_complexity": "$language_complexity",
-                "narrator_voice": "$narrator_voice",
-                "language": "$audiobook_language_code",
-                "character_ids": "$character_ids",
-                "main_character_id": "$main_character_id",
-                "target_listener_age": "$target_listener_age"
-            },
+                "first_name": "$first_name",
+                "last_name": "$last_name",
+                "age": "$age",
+                "email": "$email",
+                "password": "$password",
+                "favorite_books": "$favorite_books",
+                "heard_from": "$heard_from"
+            }, 
             "requestType": "POST",
-            "endpointUrl": "https://kuluko.com/api/audiobook/initiate-advanced"
+            "endpointUrl": "https://kuluko.com/api/users/create"
         }
     ]
 }

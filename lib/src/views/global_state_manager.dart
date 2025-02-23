@@ -14,7 +14,10 @@ class GlobalStateManager {
   final List<VoidCallback> _listeners = [];
 
   void updateData(Map<String, dynamic> newData) {
+    print('GlobalStateManager - Previous state: $_data');
     _data.addAll(newData);
+    print('GlobalStateManager - Updated state: $_data');
+    print('GlobalStateManager - Changed values: $newData');
     _notifyListeners();
   }
 
@@ -36,7 +39,7 @@ class GlobalStateManager {
   }
 
   void removeListener(VoidCallback listener) {
-    _listeners.remove(listener);
+    _listeners.remove(listener);  
   }
 
   void _notifyListeners() {
