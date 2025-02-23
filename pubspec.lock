@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: "37a42d06068e2fe3deddb2da079a8c4d105f241225ba27b7122b37e9865fd8f7"
+      sha256: "401dd18096f5eaa140404ccbbbf346f83c850e6f27049698a7ee75a3488ddb32"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.35"
+    version: "1.3.52"
   _macros:
     dependency: transitive
     description: dart
@@ -58,10 +58,10 @@ packages:
     dependency: transitive
     description:
       name: audio_session
-      sha256: a92eed06a93721bcc8a8b57d0a623e3fb9d2e4e11cef0a08ed448c73886700b7
+      sha256: "2b7fff16a552486d078bfc09a8cde19f426dc6d6329262b684182597bec5b1ac"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.24"
+    version: "0.1.25"
   audioplayers:
     dependency: "direct main"
     description:
@@ -394,10 +394,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: "26de145bb9688a90962faec6f838247377b0b0d32cc0abecd9a4e43525fc856c"
+      sha256: "6a4ea0f1d533443c8afc3d809cd36a4e2b8f2e2e711f697974f55bb31d71d1b8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.32.0"
+    version: "3.12.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -410,34 +410,34 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: fbc008cf390d909b823763064b63afefe9f02d8afdb13eb3f485b871afee956b
+      sha256: e47f5c2776de018fa19bc9f6f723df136bc75cdb164d64b65305babd715c8e41
       url: "https://pub.dev"
     source: hosted
-    version: "2.19.0"
+    version: "2.21.0"
   firebase_storage:
     dependency: "direct main"
     description:
       name: firebase_storage
-      sha256: b87029b506972987a827feaf296c21cd0fe1bb69c2595be1672253ba5205573e
+      sha256: "106a24e47cfd8a4c3cfb8fdc6624abd40fcc95198eee411e35fd8e3f203995bc"
       url: "https://pub.dev"
     source: hosted
-    version: "11.6.5"
+    version: "12.4.3"
   firebase_storage_platform_interface:
     dependency: transitive
     description:
       name: firebase_storage_platform_interface
-      sha256: "4e18662e6a66e2e0e181c06f94707de06d5097d70cfe2b5141bf64660c5b5da9"
+      sha256: "08629a44abb9c885c5c5844da22df80a12b49a0671713acad64e8ac447c64937"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.22"
+    version: "5.2.3"
   firebase_storage_web:
     dependency: transitive
     description:
       name: firebase_storage_web
-      sha256: "9523c455521b0497ee436be8614aab52f719309d16147a5b11091e44e4c5aa0a"
+      sha256: "1825db9e63121be02ec9b49a440e8348fc626a440e74b5b89b00f5ccd2f421d3"
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.22"
+    version: "3.10.10"
   fixnum:
     dependency: transitive
     description:
@@ -688,10 +688,10 @@ packages:
     dependency: "direct main"
     description:
       name: just_audio
-      sha256: a516a7ebb97beb7f6959e69c4b31441ff993d48499abea53febe9f9f7a86a0a8
+      sha256: f978d5b4ccea08f267dae0232ec5405c1b05d3f3cd63f82097ea46c015d5c09e
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.45"
+    version: "0.9.46"
   just_audio_platform_interface:
     dependency: transitive
     description:
